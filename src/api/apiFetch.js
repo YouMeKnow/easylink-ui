@@ -1,45 +1,62 @@
 // src/api/apiFetch.js
 import { getAuthSidecar } from "@/context/AuthContext";
 
+async function readBodySafe(res) {
+  // tries json -> text
+  const ct = res.headers.get("content-type") || "";
+  if (ct.includes("application/json")) {
+    try {
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+  try {
+    const text = await res.text();
+    return text || null;
+  } catch {
+    return null;
+  }
+}
+
+function makeHttpError(res, data) {
+  const message =
+    (data && typeof data === "object" && (data.message || data.error)) ||
+    (typeof data === "string" && data) ||
+    res.statusText ||
+    "Request failed";
+
+  const err = new Error(message);
+  err.status = res.status;
+  err.data = data;
+  err.url = res.url;
+  return err;
+}
+
 export async function apiFetch(input, init = {}) {
   const sc = getAuthSidecar();
-  let access = sc.getAccess?.();
-  if (!access) {
-    try {
-      access = localStorage.getItem("jwt") || null;
-    } catch {}
-  }
-
-  const url = typeof input === "string" ? input : input?.url || "";
+  const access =
+    sc.getAccess?.() ||
+    (typeof window !== "undefined" ? localStorage.getItem("jwt") : null); // <-- fallback
 
   const headers = new Headers(init.headers || {});
   const isFormData =
     typeof FormData !== "undefined" && init.body instanceof FormData;
-  if (!isFormData && !headers.has("Content-Type"))
+
+  if (!isFormData && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
-  if (access && !headers.has("Authorization"))
+  }
+
+  if (access && !headers.has("Authorization")) {
     headers.set("Authorization", `Bearer ${access}`);
+  }
 
   const res = await fetch(input, { ...init, headers, credentials: "include" });
 
-  const hasAuth = headers.has("Authorization");
-  // console.debug(
-  //   `[api] ${init.method || "GET"} ${url} -> ${res.status} ${
-  //     hasAuth ? "[AUTH]" : "[NO-AUTH]"
-  //   }`
-  // );
-
-  if (res.status === 401 || res.status === 403) {
-    try {
-      localStorage.removeItem("jwt");
-    } catch {}
-    try {
-      sc.forceLogout?.("expired");
-    } catch {}
-    const err = new Error("auth.session_expired");
-    err.status = res.status;
-    throw err;
+  if (!res.ok) {
+    const data = await readBodySafe(res);
+    throw makeHttpError(res, data);
   }
 
-  return res; 
+  return res;
 }

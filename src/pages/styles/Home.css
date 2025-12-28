@@ -212,7 +212,7 @@ body, .home {
 }
 
 .vibe-card:hover {
-  transform: translateY(-6px);
+  transform: none !important;   
   box-shadow: 0 12px 32px rgba(15, 18, 34, 0.1);
 }
 
@@ -294,7 +294,8 @@ body, .home {
   will-change: transform;
 }
 .feature:hover {
-  transform: translateY(-6px);
+  /* transform: translateY(-6px); */
+  transform: none !important;
   box-shadow: 0 12px 32px rgba(15,18,34,0.10);
   z-index: 2;
 }
@@ -320,6 +321,7 @@ body, .home {
   box-shadow: 0 12px 36px rgba(15,18,34,0.08);
   border-color: rgba(244,196,54,0.4);
 }
+
 
 .feature__icon {
   font-size: 26px;
@@ -353,7 +355,9 @@ body, .home {
   line-height: 1.55;
   color: #5b6280;
 }
-
+.feature {
+  pointer-events: none;
+}
 /* === CTA ROW === */
 .cta-row {
   display: flex;

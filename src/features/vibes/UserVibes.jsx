@@ -1,54 +1,30 @@
 // src/features/vibes/UserVibes.jsx
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getUserVibes, deleteVibe } from "@/api/vibeApi";
+import useUserVibes from "@/features/vibes/hooks/useUserVibes";
 import HeaderActions from "./components/HeaderActions";
 import VibesList from "./components/VibesList";
-import ShareModal from "./tools/ShareModal";
 import Loader from "./components/Loader";
 import { useTranslation } from "react-i18next";
 import "./styles/UserVibes.css";
+import ShareModal from "@/features/vibes/components/ShareModal";
 
 export default function UserVibes() {
   const { t } = useTranslation("myvibes");
   const { isAuthenticated } = useAuth();
 
-  const [vibes, setVibes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { vibes, loading, remove, setLoading } = useUserVibes({
+    enabled: isAuthenticated,
+  });
+
   const [shareVibe, setShareVibe] = useState(null);
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    if (!isAuthenticated) {
-      setVibes([]);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    (async () => {
-      try {
-        const data = await getUserVibes(); 
-        if (!cancelled) setVibes(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Error loading Vibes", err);
-        if (!cancelled) setVibes([]);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [isAuthenticated]);
 
   const handleDelete = async (vibeId) => {
     if (!window.confirm(t("delete_confirm"))) return;
     setLoading(true);
     try {
-      await deleteVibe(vibeId); 
-      setVibes((prev) => prev.filter((v) => v.id !== vibeId));
+      await remove(vibeId);
     } catch (err) {
       console.error(err);
       alert(t("toast_error") ?? "Error: " + (err?.message || "unknown"));
@@ -100,11 +76,7 @@ export default function UserVibes() {
         </div>
       ) : (
         <section className="vibes-grid" role="list" aria-label={t("list_aria", "Your vibes")}>
-          <VibesList
-            vibes={vibes}
-            onDelete={handleDelete}
-            onShare={handleShare}
-          />
+          <VibesList vibes={vibes} onDelete={handleDelete} onShare={handleShare} />
         </section>
       )}
 

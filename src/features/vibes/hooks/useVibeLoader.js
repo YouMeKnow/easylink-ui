@@ -1,12 +1,9 @@
 // src/features/vibes/hooks/useVibeLoader.js
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
-import { useNavigate, useLocation } from "react-router-dom";
 import { getVibe } from "@/api/vibeApi";
 import parseFields from "@/data/parseFields";
 
 const VIBE_CACHE = new Map(); // id -> { data, ts }
-
 const TTL_MS = 2 * 60 * 1000;
 
 function getCached(id) {
@@ -23,6 +20,7 @@ function setCached(id, data) {
   VIBE_CACHE.set(id, { data, ts: Date.now() });
 }
 
+// optional prefetch helper (keep if you use it somewhere)
 export function prefetchVibe(id, signal) {
   return getVibe(id, { signal })
     .then((data) => {
@@ -32,13 +30,16 @@ export function prefetchVibe(id, signal) {
     .catch(() => {});
 }
 
+/**
+ * Loads a Vibe by id.
+ * IMPORTANT: This hook does NOT do auth redirects.
+ * Protect the route with <AuthGuard> instead.
+ */
 export default function useVibeLoader(id) {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation(); 
   const cached = id ? getCached(id) : null;
+
   const [vibe, setVibe] = useState(cached || null);
-  const [loading, setLoading] = useState(!cached); 
+  const [loading, setLoading] = useState(!cached);
   const [refreshing, setRefreshing] = useState(false);
 
   const [name, setName] = useState(cached?.name || "");
@@ -51,19 +52,21 @@ export default function useVibeLoader(id) {
   const prevIdRef = useRef(id);
 
   useEffect(() => {
-    if (!id || !isAuthenticated) {
+    if (!id) {
       setVibe(null);
       setLoading(false);
       setRefreshing(false);
       return;
     }
+
     const ac = new AbortController();
+
     const hasCache = Boolean(getCached(id));
     if (hasCache) {
       setLoading(false);
       setRefreshing(true);
     } else {
-      setLoading(true);   
+      setLoading(true);
       setRefreshing(false);
     }
 
@@ -78,15 +81,13 @@ export default function useVibeLoader(id) {
         setVibe(data);
       } catch (err) {
         if (ac.signal.aborted) return;
-        const status = err?.status ?? err?.response?.status;
-        if (status === 401 || status === 403) {
-          const nextPath = `${location.pathname}${location.search || ""}`;
-          navigate(`/signin?next=${encodeURIComponent(nextPath)}`, {
-            replace: true,
-            state: { reason: "expired" },
-          });
-          return;
-        }
+
+        // No redirects here — just fail gracefully.
+        // Optionally you can clear vibe:
+        setVibe(null);
+
+        // If you want to debug:
+        // console.error("[useVibeLoader] failed to load vibe", err);
       } finally {
         if (!ac.signal.aborted) {
           setLoading(false);
@@ -96,25 +97,27 @@ export default function useVibeLoader(id) {
     })();
 
     return () => ac.abort();
-  }, [id, isAuthenticated, navigate]);
+  }, [id]);
 
-  
+  // derive editable fields from vibe
   useEffect(() => {
     if (!vibe) return;
+
     setName(vibe.name || "");
     setDescription(vibe.description || "");
     setVisible(Boolean(vibe.visible));
     setPublicCode(vibe.publicCode || "");
-    const { contacts, extraBlocks } = parseFields(vibe.fieldsDTO || []);
-    setContacts(contacts);
-    setExtraBlocks(extraBlocks);
+
+    const parsed = parseFields(vibe.fieldsDTO || []);
+    setContacts(parsed?.contacts || []);
+    setExtraBlocks(parsed?.extraBlocks || []);
   }, [vibe]);
 
   return {
     vibe,
     setVibe,
-    loading,     
-    refreshing,  
+    loading,
+    refreshing,
     name,
     description,
     contacts,

@@ -127,7 +127,9 @@ export default function CreateVibe() {
         )}
       </section>
       <section className="cv-form">
-        <Form mode="create" />
+        <div className="cv-form__inner">
+          <Form mode="create" />
+        </div>
       </section>
     </main>
   );

@@ -5,7 +5,7 @@ import { trackEvent } from "@/services/amplitude";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-export default function VibeCard({ vibe, onDelete, onShare }) {
+export default function MyVibesElementCard({ vibe, onDelete, onShare }) {
   const navigate = useNavigate();
   const { t } = useTranslation("myvibes"); // scoped ns
   const [imgErr, setImgErr] = React.useState(false);

@@ -13,7 +13,7 @@ export default function VibeFormRenderer({ type, initialData, onSave, onCancel }
 
   switch (type) {
     case "BUSINESS":
-      return <BusinessVibeForm {...props} />;
+      return <BusinessVibeForm {...props} />;P
     case "PERSONAL":
       return <PersonalVibeForm {...props} />;
     case "OTHER":

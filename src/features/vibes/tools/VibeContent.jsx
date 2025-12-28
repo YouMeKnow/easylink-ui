@@ -5,8 +5,7 @@ import AvatarPicker from "./AvatarPicker.jsx";
 import ContactsSection from "./ContactsSection.jsx";
 import QRBox from "./QRBox.jsx";
 import ExtraBlocksList from "./ExtraBlocksList.jsx";
-import ExtraBlock from "@/components/InfoBlocks/ExtraBlock";
-
+import "./VibeContent.css";
 export default function VibeContent({
   id,
   shareUrl,
@@ -16,8 +15,6 @@ export default function VibeContent({
   contacts,
   type,
   extraBlocks = [],
-  visible,
-  publicCode,
   editMode = false,
 
   onChangeName,
@@ -36,96 +33,84 @@ export default function VibeContent({
   const { t } = useTranslation("vibe_content");
 
   const slug = (type || "").toString().toLowerCase();
-  const pretty = slug
-    ? slug.charAt(0).toUpperCase() + slug.slice(1)
-    : t("default_type");
-  const typeLabel = slug ? t(`types.${slug}`, pretty) : t("default_type");
+  const pretty = slug ? slug.charAt(0).toUpperCase() + slug.slice(1) : t("default_type");
+  const typeLabel = slug ? t(`types.${slug}`, { defaultValue: pretty }) : t("default_type");
 
   return (
-    <div className="d-flex flex-column align-items-center">
-      {/* Photo */}
-      <AvatarPicker
-        name={name}
-        photo={photo}
-        editMode={editMode}
-        onChangePhoto={onChangePhoto}
-      />
-
-      {/* Name */}
-      {editMode ? (
-        <input
-          type="text"
-          value={name}
-          placeholder={t("your_name")}
-          onChange={(e) => onChangeName?.(e.target.value)}
-          className="form-control text-center fw-bold mb-0"
-          style={{ border: "none", background: "transparent" }}
+    <div className="vibe-content">
+      {/* LEFT */}
+      <div className="vibe-content__avatar">
+        <AvatarPicker
+          name={name}
+          photo={photo}
+          editMode={editMode}
+          onChangePhoto={onChangePhoto}
         />
-      ) : (
-        <h3 className="mb-0" style={{ fontWeight: 700 }}>
-          {name || t("your_name")}
-        </h3>
-      )}
-
-      {/* Type */}
-      <div
-        className="text-primary mb-2"
-        style={{ fontWeight: 600, textTransform: "uppercase" }}
-      >
-        {typeLabel}
       </div>
 
-      {/* Description */}
-      {editMode ? (
-        <textarea
-          value={description}
-          placeholder={t("default_description")}
-          onChange={(e) => onChangeDescription?.(e.target.value)}
-          rows={2}
-          className="form-control"
-          style={{ borderRadius: 14, textAlign: "center" }}
-        />
-      ) : (
-        <div className="w-100" style={{ textAlign: "center" }}>
-          {description || (
-            <span style={{ color: "#bbb" }}>{t("default_description")}</span>
+      {/* RIGHT */}
+      <div className="vibe-content__main">
+        <div className="vibe-content__head">
+          <div className="vibe-content__title">
+            {editMode ? (
+              <input
+                type="text"
+                value={name}
+                placeholder={t("your_name")}
+                onChange={(e) => onChangeName?.(e.target.value)}
+                className="form-control fw-bold vibe-content__name-input"
+              />
+            ) : (
+              <h3 className="mb-0 vibe-content__name">
+                {name || t("your_name")}
+              </h3>
+            )}
+          </div>
+
+          <div className="vibe-content__type text-primary">{typeLabel}</div>
+        </div>
+
+        <div className="vibe-content__desc">
+          {editMode ? (
+            <textarea
+              value={description}
+              placeholder={t("default_description")}
+              onChange={(e) => onChangeDescription?.(e.target.value)}
+              rows={2}
+              className="form-control vibe-content__desc-input"
+            />
+          ) : (
+            <p className={`vibe-content__desc-text ${description ? "" : "is-empty"}`}>
+              {description || t("default_description")}
+            </p>
           )}
         </div>
-      )}
 
-      {/* Divider */}
-      <div
-        style={{
-          width: "40%",
-          height: 2,
-          background: "#eee",
-          borderRadius: 99,
-          margin: "16px 0",
-        }}
-      />
+        <div className="vibe-content__section">
+          <ContactsSection
+            t={t}
+            contacts={contacts}
+            editMode={editMode}
+            onOpenContactPicker={onOpenContactPicker}
+            onRemoveContact={onRemoveContact}
+            onChangeContactValue={onChangeContactValue}
+            resumeEditAt={resumeEditAt}
+          />
+        </div>
 
-      {/* Contacts */}
-      <ContactsSection
-        t={t}
-        contacts={contacts}
-        editMode={editMode}
-        onOpenContactPicker={onOpenContactPicker}
-        onRemoveContact={onRemoveContact}
-        onChangeContactValue={onChangeContactValue}
-        resumeEditAt={resumeEditAt}
-      />
+        <div className="vibe-content__section">
+          <ExtraBlocksList
+            extraBlocks={extraBlocks}
+            editMode={editMode}
+            onBlockChange={onBlockChange}
+            onBlockRemove={onBlockRemove}
+            onOpenBlockPicker={onOpenBlockPicker}
+          />
+        </div>
 
-      <ExtraBlocksList
-        extraBlocks={extraBlocks}
-        editMode={editMode}
-        onBlockChange={onBlockChange}
-        onBlockRemove={onBlockRemove}
-        onOpenBlockPicker={onOpenBlockPicker}
-      />
-
-      {/* QR */}
-      <div className="mt-4 text-center">
-        <QRBox id={id} shareUrl={shareUrl} t={t} />
+        <div className="vibe-content__qr">
+          <QRBox id={id} shareUrl={shareUrl} t={t} />
+        </div>
       </div>
     </div>
   );

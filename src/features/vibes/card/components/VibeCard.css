@@ -1,0 +1,144 @@
+/* ===== Visibility / Share code block (VibeCard.jsx markup) ===== */
+
+.vibe-card__visibility {
+  margin: 0 0 12px;
+}
+
+.vibe-card__visibility-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8a8fa3;
+  margin-bottom: 6px;
+}
+
+.vibe-card__visibility-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Bootstrap form-check inside visibilityButton */
+.vibe-card__visibility-controls .form-check {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vibe-card__visibility-controls .form-check-input {
+  transform: scale(0.92);
+}
+
+.vibe-card__visibility-controls .form-check-label {
+  margin: 0;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Share code "button" */
+.vibe-card__code {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+
+  cursor: pointer;
+}
+
+.vibe-card__code:hover {
+  filter: brightness(0.98);
+}
+
+.vibe-card__code > span {
+  font-size: 16px;
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.vibe-card__code > strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 22px;
+  color: #3730a3;
+}
+.vibe-card{
+  border: none;
+  border-radius: 16px;          /* rounded-4 */
+  padding: 24px;                /* p-4 */
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.12);  /* shadow */
+  background: linear-gradient(135deg, #f6fafe 65%, #f8f4fd 100%);
+  max-width: 400px;            
+  margin: 0 auto;
+  position: relative;
+}
+
+.vibe-card__visibility{
+  margin-bottom: 16px;
+  padding: 0 16px;
+}
+
+.vibe-card__share-btn{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  border-radius: 999px;
+}
+
+.vibe-card__copied{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  background: rgba(34,197,94,.12);
+  border: 1px solid rgba(34,197,94,.28);
+  color: #16a34a;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .01em;
+
+  animation: copiedPop 1.2s ease-out forwards;
+}
+
+@keyframes copiedPop{
+  0%   { opacity:0; transform: translateY(-3px) scale(.98); }
+  15%  { opacity:1; transform: translateY(0) scale(1); }
+  80%  { opacity:1; }
+  100% { opacity:0; transform: translateY(-2px) scale(.99); }
+}
+
+.dark .vibe-card__copied{
+  background: rgba(34,197,94,.14);
+  border-color: rgba(34,197,94,.35);
+  color: #22c55e;
+}
+
+.vibe-card--constrained{
+  width: 100%;
+  max-width: var(--vibeCardMax, 420px);
+  margin: 0 auto;
+}
+
+@media (max-width: 600px){
+  .vibe-card--constrained{
+    max-width: 100%;
+  }
+}

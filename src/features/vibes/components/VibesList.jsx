@@ -1,5 +1,5 @@
 import React from "react";
-import VibeCard from "./VibeCard";
+import MyVibesElementCard from "./MyVibesElementCard";
 
 export default function VibesList({ vibes, onDelete, onShare }) {
   return (
@@ -14,7 +14,7 @@ export default function VibesList({ vibes, onDelete, onShare }) {
       >
         {vibes.map((vibe) => (
           <div key={vibe.id} style={{ flex: "0 1 260px" }}>
-            <VibeCard
+            <MyVibesElementCard
               vibe={vibe}
               onDelete={() => onDelete(vibe.id)}
               onShare={() => onShare(vibe)}

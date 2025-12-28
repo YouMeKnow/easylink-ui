@@ -5,7 +5,7 @@ export default function Loader() {
     <div
       className="d-flex flex-column align-items-center justify-content-center"
       style={{
-        minHeight: "500vh", 
+        minHeight: "70vh", 
       }}
     >
       <div className="spinner-border text-primary" role="status"></div>
