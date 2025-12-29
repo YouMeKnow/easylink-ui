@@ -129,3 +129,77 @@
   justify-self: start !important;
   grid-column: auto !important;
 }
+.profile .pc-card {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+}
+.profile .pc-icon {
+  color: var(--icon-text);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--v1) 18%, transparent),
+    color-mix(in oklab, var(--v2) 14%, transparent)
+  );
+}
+
+.profile .pc-desc {
+  color: var(--desc-text);
+}
+
+.profile .pc-card:hover {
+  transform: translateY(-4px);
+
+  background: color-mix(
+    in oklab,
+    var(--surface) 92%,
+    var(--bg0)
+  );
+
+  box-shadow:
+    0 16px 42px rgba(15, 18, 34, 0.16),
+    0 0 0 1px rgba(15, 18, 34, 0.06);
+
+  border-color: rgba(15, 18, 34, 0.18);
+}
+
+[data-theme="dark"] .profile .pc-card:hover {
+  transform: translateY(-4px);
+
+  background: color-mix(
+    in oklab,
+    var(--surface) 92%,
+    black
+  );
+
+  box-shadow:
+    0 20px 56px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.16);
+
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.profile .pc-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--v1), var(--v2));
+  opacity: 0;
+  transform: scaleX(0.6);
+  transition: opacity .2s ease, transform .25s ease;
+}
+
+.profile .pc-card:hover::before {
+  opacity: 0.9;
+  transform: scaleX(1);
+}
+
+.profile .pc-card:hover .pc-title {
+  color: var(--text);
+}
+
+.profile .pc-card:hover .pc-desc {
+  color: color-mix(in oklab, var(--text) 85%, transparent);
+}

@@ -9,6 +9,9 @@ import { trackEvent } from "@/services/amplitude";
 import "./Header.css";
 import HeaderMobileMenu from "./HeaderMobileMenu";
 import AccessCTA from "./AccessCTA"; 
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
+
+
 
 function Header() {
   const { isAuthenticated, logout } = useAuth();
@@ -18,6 +21,7 @@ function Header() {
   const { t: tc } = useTranslation("common"); 
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const { mode, setMode, resolved } = useTheme();
 
   const {
     requestEarlyAccess,
@@ -70,7 +74,7 @@ function Header() {
                 {!isAuthenticated && <Link to="/signin" onClick={() => trackEvent("Header Sign In Clicked")}>{t("log_in")}</Link>}
                 {isAuthenticated && <Link to="/profile" onClick={() => trackEvent("Header Profile Clicked")}>{t("profile")}</Link>}
                 <Link to="/about" onClick={() => trackEvent("Header About Clicked")}>{t("about")}</Link>
-                <Link to="/review" onClick={() => trackEvent("Header Review Clicked")}>{t("review")}</Link>
+                <Link to="/review" onClick={() => trackEvent("Header Review Clicked")}>{t("review")}</Link>                
                 {isAuthenticated && (
                   <Link
                     to="/"
@@ -83,7 +87,20 @@ function Header() {
 
               <div className="language-switcher">
                 <LanguageSwitcher />
+
+                {/* Theme toggle */}
+                <button
+                  className="theme-toggle"
+                  onClick={() =>
+                    setMode(resolved === "dark" ? "light" : "dark")
+                  }
+                  aria-label="Toggle theme"
+                  title="Toggle theme"
+                >
+                  {resolved === "dark" ? "🌙" : "☀️"}
+                </button>
               </div>
+
             </div>
 
             <button

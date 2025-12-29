@@ -23,17 +23,19 @@ main {
 
 /* ====== card ====== */
 .myvibe-card {
-  background: #fff;
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  color: var(--text);
+
   border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(40,48,70,0.10);
+  box-shadow: var(--shadow-sm);
   padding: 22px 20px 18px;
 
   width: 100%;
-  max-width: 460px;          
+  max-width: 460px;
   min-height: 180px;
-  margin-inline: auto;       
+  margin-inline: auto;
 
-  border: 1px solid rgba(0,0,0,0.05);
   cursor: pointer;
   opacity: 1;
 
@@ -41,10 +43,14 @@ main {
   transition:
     transform 0.18s cubic-bezier(.48,.07,.75,.95),
     box-shadow 0.20s cubic-bezier(.48,.07,.75,.95);
-  
+
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
 }
+
 
 @media (hover: hover) and (pointer: fine) {
   .myvibe-card:hover,

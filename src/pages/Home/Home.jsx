@@ -23,11 +23,10 @@ const fadeUp = {
 const scaleTap = { whileTap: { scale: 0.985 } };
 
 export default function Home() {
-  const { isAuthenticated } = useAuth?.() || { isAuthenticated: false };
+  const { isAuthenticated = false } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation?.("home") || { t: (k, d) => d ?? k };
+  const { t } = useTranslation("home");
   const reduce = useReducedMotion();
-
   const [tab, setTab] = useState("business");
   const TabPanel = useMemo(() => {
     if (tab === "personal") return PanelPersonal;
@@ -122,7 +121,7 @@ export default function Home() {
       </div>
       {/* Tabs section */}
       <motion.section
-        className="container-xxl px-3 px-md-4"
+        className="container-xxl px-3 px-md-4 home__explore"
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"

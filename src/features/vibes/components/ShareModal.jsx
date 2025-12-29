@@ -5,14 +5,9 @@ import { QRCodeCanvas } from "qrcode.react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/services/amplitude";
+import "./ShareModal.css";
 
-export default function ShareModal({
-  show,
-  onClose,
-  shareUrl,
-  copied,
-  onCopy,
-}) {
+export default function ShareModal({ show, onClose, shareUrl, copied, onCopy }) {
   const { t } = useTranslation("share_modal");
 
   useEffect(() => {
@@ -24,126 +19,116 @@ export default function ShareModal({
 
   if (!show) return null;
 
+  const handleCopy = (method) => {
+    onCopy?.(shareUrl);
+    trackEvent("Link Copied", { method });
+  };
+
+  const handleSharedClick = (method) => {
+    trackEvent("Share Clicked", { method });
+  };
+
   return createPortal(
     <div
-      className="vibe-share-backdrop"
+      className="shareModal__backdrop"
       role="dialog"
       aria-modal="true"
       aria-labelledby="share-modal-title"
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        background: "rgba(34,42,75,.22)",
-        zIndex: 1111,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
       onClick={onClose}
     >
-      <div
-        className="card shadow-lg p-4"
-        style={{
-          minWidth: 320,
-          maxWidth: 370,
-          borderRadius: 18,
-          position: "relative",
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="shareModal" onClick={(e) => e.stopPropagation()}>
         <button
           type="button"
-          className="btn-close position-absolute"
-          style={{ top: 10, right: 10 }}
+          className="shareModal__close"
           onClick={onClose}
           aria-label={t("close")}
-          title={t("close")}
-        />
-
-        <h5 id="share-modal-title">{t("title")}</h5>
-        <div className="text-muted" style={{ fontSize: 15 }}>
-          {t("subtitle")}
-        </div>
-
-        <input
-          className="form-control my-2"
-          value={shareUrl}
-          readOnly
-          onClick={(e) => {
-            e.target.select();
-            onCopy(shareUrl);
-            trackEvent("Link Copied", { method: "input_click" });
-          }}
-        />
-
-        <button
-          type="button"
-          className={`btn w-100 mb-2 ${copied ? "btn-success" : "btn-outline-primary"}`}
-          onClick={() => {
-            onCopy(shareUrl);
-            trackEvent("Link Copied", { method: "button" });
-          }}
         >
-          {copied ? (
-            <>
-              <span className="me-2">&#10003;</span> {t("copied_button")}
-            </>
-          ) : (
-            <>
-              <BsClipboard className="me-2" /> {t("copy_button")}
-            </>
-          )}
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 20 20"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 5l10 10M15 5l-10 10"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
         </button>
 
-        <div className="d-flex flex-column gap-2 mb-2">
+        <h3 id="share-modal-title" className="shareModal__title">
+          {t("title")}
+        </h3>
+        <div className="shareModal__subtitle">{t("subtitle")}</div>
+
+        <div className="shareModal__row">
+          <input
+            className="shareModal__input"
+            value={shareUrl}
+            readOnly
+            onClick={(e) => {
+              e.target.select();
+              handleCopy("input_click");
+            }}
+          />
+          <button
+            type="button"
+            className={`shareModal__copy ${copied ? "is-copied" : ""}`}
+            onClick={() => handleCopy("button")}
+          >
+            {copied ? (
+              <>
+                <span className="shareModal__check" aria-hidden="true">✓</span>
+                {t("copied_button")}
+              </>
+            ) : (
+              <>
+                <BsClipboard />
+                {t("copy_button")}
+              </>
+            )}
+          </button>
+        </div>
+
+        <div className="shareModal__actions">
           <a
+            className="shareModal__action is-telegram"
             href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline-primary d-flex align-items-center gap-2"
-            onClick={() => {
-              onCopy(false);
-              trackEvent("Share Clicked", { method: "telegram" });
-            }}
+            onClick={() => handleSharedClick("telegram")}
           >
             <FaTelegramPlane /> {t("telegram")}
           </a>
 
           <a
+            className="shareModal__action is-whatsapp"
             href={`https://wa.me/?text=${encodeURIComponent(shareUrl)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline-success d-flex align-items-center gap-2"
-            onClick={() => {
-              onCopy(false);
-              trackEvent("Share Clicked", { method: "whatsapp" });
-            }}
+            onClick={() => handleSharedClick("whatsapp")}
           >
             <FaWhatsapp /> {t("whatsapp")}
           </a>
 
           <a
+            className="shareModal__action is-instagram"
             href={`https://www.instagram.com/?url=${encodeURIComponent(shareUrl)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline-danger d-flex align-items-center gap-2"
-            onClick={() => {
-              onCopy(false);
-              trackEvent("Share Clicked", { method: "instagram" });
-            }}
+            onClick={() => handleSharedClick("instagram")}
           >
             <FaInstagram /> {t("instagram")}
           </a>
         </div>
 
-        <div className="text-center my-3">
-          <QRCodeCanvas value={shareUrl} size={112} />
-          <div style={{ fontSize: 12, color: "#888", marginTop: 7 }}>
-            {t("qr_note")}
+        <div className="shareModal__qr">
+          <div className="shareModal__qrFrame">
+            <QRCodeCanvas value={shareUrl} size={116} />
           </div>
+          <div className="shareModal__qrNote">{t("qr_note")}</div>
         </div>
       </div>
     </div>,

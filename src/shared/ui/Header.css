@@ -3,12 +3,19 @@
   max-width: 1280px;
   margin: 1.5rem auto 0;
   width: 100%;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+
+  background: var(--surface, rgba(255,255,255,.88));
+  border: 1px solid var(--stroke, rgba(0,0,0,.10));
+  box-shadow: var(--shadow-sm, 0 6px 22px rgba(15,18,34,.08));
+
   position: sticky;
   top: 0;
   z-index: 100;
   border-radius: 15px;
+
+  /* glass */
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
 }
 
 .header__container {
@@ -41,12 +48,15 @@
   height: auto;
   width: max-content;
   text-decoration: none;
-  color: #007bff;
+
+  /* was: #007bff */
+  color: var(--link);
   transition: color .2s;
+
   font-size: 2rem;
   font-weight: 700;
 }
-.header .logo:hover { color: #0056a3; }
+.header .logo:hover { color: var(--linkHover); }
 
 .header .logo img {
   width: 28px;
@@ -58,31 +68,33 @@
 .header .logo span { line-height: 1; }
 
 /* ------------------------------- CTA CENTER ------------------------------ */
-/* Access CTA is centered within the middle (1fr) grid column */
 .header .header__access {
   justify-self: center;
-  margin: 0; /* critical: remove any left margins so true centering works */
+  margin: 0;
   max-width: min(520px, 100%);
   overflow: hidden;
 }
 
 /* CTA focus/hover tweaks */
 .header .access-cta {
-  border: 1px solid rgba(255,255,255,.16);
+  border: 1px solid var(--stroke);
   outline: none;
 }
 .header .access-cta:hover {
-  border-color: rgba(255,255,255,.20) !important;
-  box-shadow: var(--shadow);
+  border-color: rgba(var(--accent-to), .28) !important;
+  box-shadow: var(--shadow-sm);
 }
 .header .access-cta:focus,
 .header .access-cta:focus-visible {
   outline: none !important;
-  border-color: currentColor !important; 
-  box-shadow: 0 0 0 3px var(--ring), var(--shadow) !important;
+  border-color: rgba(var(--accent-from), .35) !important;
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-from), .20),
+    0 0 0 2px rgba(var(--accent-to), .18),
+    var(--shadow-sm) !important;
 }
 .header .access-cta:active {
-  box-shadow: 0 4px 12px var(--shadow);
+  box-shadow: var(--shadow-sm);
 }
 .header .access-cta,
 .header .access-cta * {
@@ -90,7 +102,6 @@
 }
 
 /* ------------------------------- RIGHT SIDE ------------------------------ */
-/* Right side wraps nav + language switcher and sits in the right grid cell */
 .header__right {
   display: flex;
   align-items: center;
@@ -109,31 +120,43 @@
   flex-wrap: nowrap;
   gap: clamp(.6rem, 1.6vw, 1rem);
 }
+
 .header .nav a {
-  color: #333;
+  /* was: #333 */
+  color: var(--text);
+  opacity: .86;
+
   font-weight: 500;
   text-decoration: none;
-  transition: color .2s;
+  transition: color .2s, opacity .2s;
   display: inline-flex;
   align-items: center;
   line-height: 1;
 }
-.header .nav a:hover { color: #007bff; }
+
+.header .nav a:hover {
+  color: var(--link);
+  opacity: 1;
+}
 
 .header .logout-btn {
   background: none;
   border: none;
-  color: #333;
+
+  color: var(--text);
+  opacity: .86;
+
   font-weight: 500;
   cursor: pointer;
   padding: 0;
 }
 .header .logout-btn:hover {
-  color: #007bff;
+  color: var(--link);
+  opacity: 1;
   text-decoration: underline;
 }
 
-/* Language switcher container (no special styles required, but keep hook) */
+/* Language switcher container */
 .header .language-switcher {
   display: inline-flex;
   align-items: center;
@@ -144,12 +167,17 @@
   display: none;
   background: none;
   border: none;
+
   font-size: 2rem;
   cursor: pointer;
   padding: .25rem .5rem;
   margin-left: 1rem;
   z-index: 1000;
-  color: #333;
+
+  /* was: #333 */
+  color: var(--text);
+  opacity: .9;
+
   line-height: 1;
 }
 
@@ -179,27 +207,23 @@ html[lang="fr"] .header .nav a {
 @media (max-width: 768px) {
   .header__container { height: 85px; }
 
-  /* grid: logo | free | burger */
   .header__top {
     grid-template-columns: auto 1fr auto;
   }
 
-  /* hide right block (nav + language) */
   .header__right { display: none !important; }
 
-  /* center CTA between logo and burger */
   .header .header__access {
     justify-self: center;
     max-width: 100%;
     overflow: hidden;
-    transform: translateX(6px); 
+    transform: translateX(6px);
   }
 
   .access-cta { white-space: nowrap; }
   .access-cta__label { overflow: hidden; text-overflow: ellipsis; }
   .access-cta__badge { display: none !important; }
 
-  /* burger on the right */
   .header .burger-btn {
     display: block !important;
     font-size: 28px;
@@ -210,4 +234,30 @@ html[lang="fr"] .header .nav a {
 /* desktop hides burger */
 @media (min-width: 769px) {
   .header .burger-btn { display: none; }
+}
+
+/* Theme toggle */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 6px;
+  margin-left: 8px;
+
+  color: var(--text);
+  opacity: 0.8;
+
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.theme-toggle:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.header {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }

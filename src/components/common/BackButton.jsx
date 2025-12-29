@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import "./BackButton.css";
 
 export default function BackButton({
   to = "/",
@@ -43,7 +44,14 @@ export default function BackButton({
         aria-hidden="true"
         focusable="false"
       >
-        <path d="M12.5 4.5L7 10l5.5 5.5" />
+        <path
+          d="M12.5 4.5L7 10l5.5 5.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
 
       <span className="backbtn__text">{text}</span>

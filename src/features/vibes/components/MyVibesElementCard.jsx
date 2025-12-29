@@ -1,9 +1,9 @@
-// VibeCard.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { trackEvent } from "@/services/amplitude";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import "./MyVibesElementCard.css";
 
 export default function MyVibesElementCard({ vibe, onDelete, onShare }) {
   const navigate = useNavigate();
@@ -83,15 +83,7 @@ export default function MyVibesElementCard({ vibe, onDelete, onShare }) {
       <div style={{ position: "absolute", top: 8, right: 12, zIndex: 12 }}>
         <button
           type="button"
-          className="btn btn-light btn-sm d-flex align-items-center"
-          style={{
-            borderRadius: 20,
-            boxShadow: "0 1px 4px #d6d7fc",
-            fontWeight: 500,
-            fontSize: 15,
-            gap: 6,
-            transition: "all .14s",
-          }}
+          className="myvibe-card__share"
           onClick={(e) => {
             e.stopPropagation();
             trackEvent("Share Button Clicked", { location: "UserVibes", vibeId: vibe.id });
@@ -100,12 +92,20 @@ export default function MyVibesElementCard({ vibe, onDelete, onShare }) {
           title={t("share")}
           aria-label={t("share")}
         >
-          <svg width="18" height="18" fill="none" stroke="#4154ff" strokeWidth="2" viewBox="0 0 20 20" aria-hidden="true">
-            <circle cx="5" cy="10" r="2.1" />
-            <circle cx="15" cy="5" r="2.1" />
-            <circle cx="15" cy="15" r="2.1" />
-            <path d="M6.7 9l5.6-3.2M6.7 11l5.6 3.2" />
-          </svg>
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          aria-hidden="true"
+        >
+          <circle cx="5" cy="10" r="2.1" />
+          <circle cx="15" cy="5" r="2.1" />
+          <circle cx="15" cy="15" r="2.1" />
+          <path d="M6.7 9l5.6-3.2M6.7 11l5.6 3.2" />
+        </svg>
           {t("share")}
         </button>
       </div>

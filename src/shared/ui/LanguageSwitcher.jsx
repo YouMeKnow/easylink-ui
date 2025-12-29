@@ -1,81 +1,108 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import ReactCountryFlag from "react-country-flag";
+import "./LanguageSwitcher.css";
 
 const LANGUAGES = [
-  { code: "en", label: "English",  flag: <ReactCountryFlag countryCode="GB" svg style={{ width: "1.3em", height: "1.3em", marginRight: 6 }} /> },
-  { code: "ru", label: "Русский",  flag: <ReactCountryFlag countryCode="RU" svg style={{ width: "1.3em", height: "1.3em", marginRight: 6 }} /> },
-  { code: "fr", label: "Français", flag: <ReactCountryFlag countryCode="FR" svg style={{ width: "1.3em", height: "1.3em", marginRight: 6 }} /> },
+  { code: "en", label: "English", countryCode: "GB" },
+  { code: "ru", label: "Русский", countryCode: "RU" },
+  { code: "fr", label: "Français", countryCode: "FR" },
 ];
+
+function Chevron({ open }) {
+  return (
+    <svg
+      className={`ls__chev ${open ? "is-open" : ""}`}
+      width="16"
+      height="16"
+      viewBox="0 0 20 20"
+      aria-hidden="true"
+    >
+      <path
+        d="M5 7.5l5 5 5-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export default function LanguageSwitcher({ dropUp = false }) {
   const { i18n } = useTranslation();
   const [open, setOpen] = React.useState(false);
-  const currentLang = LANGUAGES.find(l => l.code === i18n.language) || LANGUAGES[0];
+  const ref = React.useRef(null);
 
-  // позиционирование меню: вверх или вниз
-  const menuPositionStyle = dropUp
-    ? { bottom: 40, top: "auto", marginBottom: 8 } // ⬆️ вверх от кнопки
-    : { top: 40, bottom: "auto", marginTop: 8 };   // ⬇️ вниз от кнопки
+  const current =
+    LANGUAGES.find((l) => l.code === i18n.language) || LANGUAGES[0];
+
+  // close on outside click + Esc
+  React.useEffect(() => {
+    const onDown = (e) => {
+      if (!open) return;
+      if (e.key === "Escape") setOpen(false);
+    };
+    const onClick = (e) => {
+      if (!open) return;
+      if (!ref.current?.contains(e.target)) setOpen(false);
+    };
+    window.addEventListener("keydown", onDown);
+    window.addEventListener("mousedown", onClick);
+    return () => {
+      window.removeEventListener("keydown", onDown);
+      window.removeEventListener("mousedown", onClick);
+    };
+  }, [open]);
+
+  const menuStyle = dropUp
+    ? { bottom: "calc(100% + 10px)", top: "auto" }
+    : { top: "calc(100% + 10px)", bottom: "auto" };
 
   return (
-    <div className="dropdown" style={{ minWidth: 80, marginLeft: 12, position: "relative" }}>
+    <div className="ls" ref={ref}>
       <button
-        className="btn btn-light dropdown-toggle d-flex align-items-center"
-        style={{
-          borderRadius: 16,
-          fontWeight: 500,
-          boxShadow: "0 2px 8px rgba(70,110,255,0.04)",
-          gap: 8,
-          padding: "5px 14px"
-        }}
-        onClick={() => setOpen(o => !o)}
-        aria-haspopup="true"
+        type="button"
+        className="ls__btn"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
         aria-expanded={open}
       >
-        {currentLang.flag} {currentLang.label}
+        <ReactCountryFlag
+          countryCode={current.countryCode}
+          svg
+          className="ls__flag"
+        />
+        <span className="ls__label">{current.label}</span>
+        <Chevron open={open} />
       </button>
 
       {open && (
-        <div
-          className="dropdown-menu show"
-          role="menu"
-          style={{
-            position: "absolute",
-            left: 0,
-            minWidth: 130,
-            borderRadius: 14,
-            boxShadow: "0 4px 24px #e6e9f7",
-            zIndex: 1000,
-            padding: 0,
-            background: "#fff",
-            overflow: "hidden",
-            ...menuPositionStyle
-          }}
-        >
-          {LANGUAGES.map(lang => (
-            <button
-              key={lang.code}
-              className="dropdown-item d-flex align-items-center"
-              style={{
-                fontWeight: i18n.language === lang.code ? "bold" : "normal",
-                gap: 8,
-                padding: "8px 16px",
-                background: i18n.language === lang.code ? "#eef2ff" : "#fff",
-                border: "none",
-                cursor: "pointer",
-                width: "100%",
-                textAlign: "left"
-              }}
-              onClick={() => {
-                i18n.changeLanguage(lang.code);
-                setOpen(false);
-              }}
-              role="menuitem"
-            >
-              {lang.flag} {lang.label}
-            </button>
-          ))}
+        <div className="ls__menu" role="menu" style={menuStyle}>
+          {LANGUAGES.map((lang) => {
+            const active = i18n.language === lang.code;
+            return (
+              <button
+                key={lang.code}
+                type="button"
+                className={`ls__item ${active ? "is-active" : ""}`}
+                onClick={() => {
+                  i18n.changeLanguage(lang.code);
+                  setOpen(false);
+                }}
+                role="menuitem"
+              >
+                <ReactCountryFlag
+                  countryCode={lang.countryCode}
+                  svg
+                  className="ls__flag"
+                />
+                <span className="ls__itemLabel">{lang.label}</span>
+                {active && <span className="ls__check" aria-hidden="true">✓</span>}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

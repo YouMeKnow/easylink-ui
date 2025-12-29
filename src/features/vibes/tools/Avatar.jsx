@@ -21,7 +21,7 @@ function Avatar({ name, photo, onChangePhoto }) {
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file && onChangePhoto) {
-      onChangePhoto(file); // 👈 передаём выбранный файл наружу
+      onChangePhoto(file);
     }
   };
 
