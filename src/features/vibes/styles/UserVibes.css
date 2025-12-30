@@ -1,13 +1,22 @@
+/* =========================
+   MyVibes.css 
+   - dark/light friendly (tokens)
+   - no blur+transform smearing
+   - keeps "glass" look via ::before
+   ========================= */
+
 main {
-  min-height: 70vh; 
+  min-height: 70vh;
 }
 
-.myvibes, .container.myvibes {
+.myvibes,
+.container.myvibes {
   padding-left: max(16px, env(safe-area-inset-left));
   padding-right: max(16px, env(safe-area-inset-right));
   padding-bottom: max(16px, env(safe-area-inset-bottom));
 }
 
+/* ====== grid ====== */
 .vibes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -16,52 +25,76 @@ main {
 
 @media (max-width: 768px) {
   .vibes-grid {
-    grid-template-columns: 1fr;  
+    grid-template-columns: 1fr;
     gap: 12px;
   }
 }
 
-/* ====== card ====== */
-.myvibe-card {
-  background: var(--surface);
-  border: 1px solid var(--stroke);
-  color: var(--text);
+/* ==========================================================
+   CARD (glass without "blurry on hover")
+   Key idea: blur lives on ::before, not on the moving element
+   ========================================================== */
 
-  border-radius: 18px;
-  box-shadow: var(--shadow-sm);
-  padding: 22px 20px 18px;
+.myvibe-card {
+  position: relative;
+  overflow: hidden;
 
   width: 100%;
   max-width: 460px;
   min-height: 180px;
   margin-inline: auto;
 
+  padding: 22px 20px 18px;
+  border-radius: 18px;
+
+  border: 1px solid var(--stroke);
+  color: var(--text);
+
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
   opacity: 1;
-
-  will-change: transform, box-shadow;
-  transition:
-    transform 0.18s cubic-bezier(.48,.07,.75,.95),
-    box-shadow 0.20s cubic-bezier(.48,.07,.75,.95);
 
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 
-  -webkit-backdrop-filter: blur(var(--blur));
-  backdrop-filter: blur(var(--blur));
+  will-change: transform, box-shadow;
+  transition:
+    transform 0.18s cubic-bezier(.48,.07,.75,.95),
+    box-shadow 0.20s cubic-bezier(.48,.07,.75,.95),
+    border-color 0.18s ease;
 }
 
+/* glass layer */
+.myvibe-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
 
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+
+  z-index: 0;
+}
+
+/* content above glass */
+.myvibe-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* hover/focus (NO rotate, optional tiny scale) */
 @media (hover: hover) and (pointer: fine) {
   .myvibe-card:hover,
   .myvibe-card:focus {
-    transform: translateY(-8px) scale(1.02) rotate(-0.4deg);
-    box-shadow: 0 12px 40px rgba(65,84,255,0.13), 0 2px 12px rgba(60,80,150,0.12);
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: var(--shadow-md);
     outline: none;
+    border-color: color-mix(in oklab, rgb(var(--accent-to)) 18%, var(--stroke));
   }
 }
 
-
+/* touch */
 @media (hover: none) {
   .myvibe-card:active {
     transform: scale(0.995);
@@ -69,11 +102,10 @@ main {
 }
 
 .myvibe-card:focus-visible {
-  box-shadow:
-    0 12px 40px rgba(65,84,255,0.13),
-    0 2px 12px rgba(60,80,150,0.12),
-    0 0 0 3px #d6e0ff;
   outline: none;
+  box-shadow: var(--shadow-md);
+  outline: 2px solid color-mix(in oklab, rgb(var(--accent-to)) 55%, transparent);
+  outline-offset: 3px;
 }
 
 /* ====== mobile settings ====== */
@@ -81,7 +113,6 @@ main {
   .myvibe-card {
     padding: 16px 12px 14px;
     font-size: 15px;
-    box-shadow: 0 2px 9px rgba(40,48,70,0.10);
     border-radius: 16px;
   }
 }
@@ -98,4 +129,24 @@ main {
   .myvibe-card {
     transition: none;
   }
+}
+
+/* ==========================================================
+   (Optional) Helpers for inner content if you want them here
+   Keep tokens; avoid hardcoded light colors
+   ========================================================== */
+
+/* Headings inside card */
+.myvibe-card h5 {
+  color: var(--text);
+}
+
+/* Bootstrap .text-muted override inside card */
+.myvibe-card .text-muted {
+  color: var(--text-weak) !important;
+}
+
+/* Type label (use accent rgb var) */
+.myvibe-card__type {
+  color: rgb(var(--accent-from));
 }

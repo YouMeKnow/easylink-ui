@@ -63,41 +63,99 @@
 }
 
 .vibe-card__code > strong {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+    monospace;
   font-size: 22px;
   color: #3730a3;
 }
-.vibe-card{
+
+/* ===== Card shell ===== */
+
+.vibe-card {
   border: none;
-  border-radius: 16px;          /* rounded-4 */
-  padding: 24px;                /* p-4 */
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.12);  /* shadow */
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.12);
   background: linear-gradient(135deg, #f6fafe 65%, #f8f4fd 100%);
-  max-width: 400px;            
+  max-width: 400px;
   margin: 0 auto;
   position: relative;
 }
 
-.vibe-card__visibility{
+.vibe-card__visibility {
   margin-bottom: 16px;
   padding: 0 16px;
 }
 
+/* ===== Share button (clean, centered, good UX) ===== */
+/* Share button — flush, circular, not floating */
 .vibe-card__share-btn{
   position: absolute;
   top: 16px;
   right: 16px;
   z-index: 5;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   padding: 0;
 
-  border-radius: 999px;
+  /* perfect circle */
+  border-radius: 9999px !important;
+  overflow: hidden; /* so background stays circular */
+  display: grid;
+  place-items: center;
+
+  /* looks embedded */
+  background: rgba(255,255,255,0.45);
+  border: 1px solid rgba(15,18,34,.10);
+
+  /* minimal shadow (no floating) */
+  box-shadow: 0 2px 10px rgba(15,18,34,.10);
+
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+
+  line-height: 0 !important;
+  font-size: 0 !important;
+
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
 }
+
+.vibe-card__share-btn:hover{
+  background: rgba(255,255,255,0.60);
+  border-color: rgba(15,18,34,.14);
+  box-shadow: 0 3px 12px rgba(15,18,34,.12);
+  transform: none; /* no lift */
+}
+
+.vibe-card__share-btn:active{
+  transform: scale(.97); /* press, not float */
+}
+
+.vibe-card__share-btn:focus-visible{
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(100,108,255,.22),
+    0 3px 12px rgba(15,18,34,.12);
+}
+
+/* wrapper we can shift precisely */
+.vibe-card__share-icn{
+  width: 20px;
+  height: 20px;
+  display: block;
+  transform: translateX(-2px); 
+}
+
+.vibe-card__share-icn > svg{
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: var(--share-icon, #627bf7);
+}
+
+/* ===== Copied pill ===== */
 
 .vibe-card__copied{
   display:inline-flex;
@@ -130,6 +188,8 @@
   border-color: rgba(34,197,94,.35);
   color: #22c55e;
 }
+
+/* ===== Optional constrained width helper ===== */
 
 .vibe-card--constrained{
   width: 100%;

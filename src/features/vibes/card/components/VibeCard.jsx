@@ -11,6 +11,7 @@ import VibeContent from "@/features/vibes/tools/VibeContent";
 import { trackEvent } from "@/services/amplitude";
 import isUuid from "@/shared/lib/isUuid"; 
 import "./VibeCard.css";
+import { Share2 } from "lucide-react";
 
 export default function VibeCard({
   id,
@@ -119,8 +120,7 @@ export default function VibeCard({
       {canShare && (
         <button
           type="button"
-          className="btn btn-light shadow-sm vibe-card__share-btn"
-          style={{ borderRadius: 999 }}
+          className="btn vibe-card__share-btn"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -129,7 +129,9 @@ export default function VibeCard({
           title={t("vibe.share", "Share")}
           aria-label={t("vibe.share", "Share")}
         >
-          <BsShareFill size={20} style={{ color: "#627bf7" }} />
+          <span className="vibe-card__share-icn">
+            <Share2 size={20} aria-hidden="true" />
+          </span>
         </button>
       )}
 

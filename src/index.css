@@ -92,7 +92,7 @@
   --link: #8ea2ff;
   --linkHover: #b0baff;
 
-  --share-icon: #8aa2ff
+  --share-icon: #8aa2ff;
 
   --btn-bg: rgba(255, 255, 255, 0.10);
   --btn-text: rgba(255, 255, 255, 0.92);
@@ -160,8 +160,4 @@ button:focus-visible {
   border-radius: var(--radius);
   backdrop-filter: blur(var(--blur));
   -webkit-backdrop-filter: blur(var(--blur));
-}
-
-.share-icon {
-  fill: var(--share-icon);
 }

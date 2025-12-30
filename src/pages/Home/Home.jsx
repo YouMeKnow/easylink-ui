@@ -122,10 +122,9 @@ export default function Home() {
       {/* Tabs section */}
       <motion.section
         className="container-xxl px-3 px-md-4 home__explore"
-        variants={fadeUp}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
+        animate="visible"
+        variants={fadeUp}
       >
         <div className="glass p-3 p-md-4">
           <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3">
