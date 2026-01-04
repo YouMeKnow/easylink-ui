@@ -7,7 +7,6 @@ export default function EmailVerified() {
   const [countdown, setCountdown] = useState(4);
 
   useEffect(() => {
-    // 🎉 конфетти при входе
     confetti({
       particleCount: 100,
       spread: 70,

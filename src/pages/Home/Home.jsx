@@ -14,7 +14,7 @@ import "../styles/Home.css";
 import BusinessVibeDemo from "@/features/vibes/forms/business/BusinessVibeDemo";
 import PersonalVibeDemo from "@/features/vibes/forms/personal/PersonalVibeDemo";
 import EventVibeDemo from "@/features/vibes/forms/events/EventVibeDemo";
-
+import VibeSearch from "@/components/common/VibeSearch";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -23,11 +23,10 @@ const fadeUp = {
 const scaleTap = { whileTap: { scale: 0.985 } };
 
 export default function Home() {
-  const { isAuthenticated } = useAuth?.() || { isAuthenticated: false };
+  const { isAuthenticated = false } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation?.("home") || { t: (k, d) => d ?? k };
+  const { t } = useTranslation("home");
   const reduce = useReducedMotion();
-
   const [tab, setTab] = useState("business");
   const TabPanel = useMemo(() => {
     if (tab === "personal") return PanelPersonal;
@@ -117,13 +116,15 @@ export default function Home() {
         </motion.button>
       </motion.section>
 
+      <div className="hero__search">
+        <VibeSearch autoFocus={false} />
+      </div>
       {/* Tabs section */}
       <motion.section
-        className="container-xxl px-3 px-md-4"
-        variants={fadeUp}
+        className="container-xxl px-3 px-md-4 home__explore"
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
+        animate="visible"
+        variants={fadeUp}
       >
         <div className="glass p-3 p-md-4">
           <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3">

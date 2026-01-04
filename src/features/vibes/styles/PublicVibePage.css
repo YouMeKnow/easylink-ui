@@ -1,0 +1,43 @@
+.public-vibe-layout {
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  padding: 24px 16px;
+}
+
+.public-vibe-layout__left {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.public-vibe-layout__right {
+  width: 420px;
+  max-width: 100%;
+}
+
+/* mobile */
+@media (max-width: 900px) {
+  .public-vibe-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .public-vibe-layout__left,
+  .public-vibe-layout__right {
+    width: 100%;
+    max-width: 420px;
+  }
+}
+/* centered loading block for public pages */
+.public-loading {
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* spinner follows theme text color */
+.public-spinner {
+  color: var(--text);
+  opacity: 0.9;
+}

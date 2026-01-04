@@ -3,16 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { useEventVibeForm } from "./useEventVibeForm";
-import { VibePreviewPane } from "@/components/common/preview";
+import VibeCard from "@/features/vibes/card/components/VibeCard";
 import ContactTypeModal from "@/features/vibes/components/Modals/ContactTypeModal";
+
+// helper: UUID v1-5
+const isUUID = (s) =>
+  typeof s === "string" &&
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    s
+  );
 
 function EventInfoBlockModal({ t, extraBlocks, onClose, onSelect }) {
   const OPTIONS = React.useMemo(
-    () => ([
+    () => [
       { key: "date",      label: t("date"),      placeholder: t("modal_info_title") },
       { key: "location",  label: t("location"),  placeholder: t("info.location_ph") },
       { key: "organizer", label: t("organizer"), placeholder: t("info.organizer_ph") },
-    ]),
+    ],
     [t]
   );
 
@@ -80,6 +87,8 @@ export default function EventVibeForm({
     handleSubmit,
   } = useEventVibeForm({ navigate, initialData, mode, onSave });
 
+  const safeId = mode === "edit" && isUUID(initialData?.id) ? initialData.id : undefined;
+
   return (
     <div
       className="d-flex flex-column gap-3 align-items-center justify-content-start w-100"
@@ -108,16 +117,16 @@ export default function EventVibeForm({
         </button>
       </div>
 
-      {/* editing — preview in editMode */}
-      <VibePreviewPane
-        id={mode === "edit" ? initialData?.id : undefined} 
+      <VibeCard
+        id={safeId}
         name={name}
         description={description}
         photo={photo}
         contacts={contacts}
         extraBlocks={extraBlocks}
         type="OTHER"
-        editMode={mode === "edit"}    
+        editMode={true}
+        ownerActionsEnabled={Boolean(safeId)}
         onChangeName={setName}
         onChangeDescription={setDescription}
         onChangePhoto={setPhoto}

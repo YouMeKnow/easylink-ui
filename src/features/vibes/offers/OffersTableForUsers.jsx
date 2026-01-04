@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import useOffers from "./useGetOfferByVibeId";
+import useOffers from "./useGetOffersByVibeId";
 import "../interactions/Interactions.css";
 import { useTranslation } from "react-i18next";
 import PageLayout from "../../../components/common/PageLayout";

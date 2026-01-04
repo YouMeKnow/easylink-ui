@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { useStartAuthForm } from "./hooks/useStartAuthForm";
 import { AnimatePresence } from "framer-motion";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 
 import StepsNav from "./components/StepsNav";
 import ProgressBar from "./components/ProgressBar";
@@ -17,7 +15,7 @@ function StartAuth({ questions, setQuestions }) {
   const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const redirectTo = params.get("redirectTo");
+  const redirectTo = params.get("redirectTo") || params.get("next");
   const subscribe = params.get("subscribe");
 
   const { t: tNs } = useTranslation("auth");

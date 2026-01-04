@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import useGetOfferByVibeId from "../offers/useGetOfferByVibeId";
+import useGetOffersByVibeId from "../offers/useGetOffersByVibeId";
 
 export default function MyOffers() {
   const { t } = useTranslation("interactions");
@@ -9,7 +9,7 @@ export default function MyOffers() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("jwt");
-  const offers = useGetOfferByVibeId(id, token);
+  const offers = useGetOffersByVibeId(id, token);
 
   return (
     <div className="container py-5" style={{ maxWidth: 900 }}>

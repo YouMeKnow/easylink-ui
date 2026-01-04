@@ -21,7 +21,7 @@
 .vibe-header .btn-main,
 .vibe-header .btn-light-outline {
   border-radius: 20px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 15px;
   line-height: 1;
   display: inline-flex;
@@ -205,7 +205,7 @@
   color: #000;
 
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
 
   border: 1px solid #ddd;

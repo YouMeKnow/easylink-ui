@@ -1,71 +1,166 @@
-/* @import "bootstrap/dist/css/bootstrap.min.css"; */
+/* index.css */
 
+/* base */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color: #000;
-  background-color: #fff;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* fallback */
+  color-scheme: light;
+
+  /* brand accents (profile vibe) */
+  --accent-from: 255, 138, 181; /* #ff8ab5 */
+  --accent-to: 99, 102, 241; /* #6366f1 */
+
+
+
+
+  /* LIGHT tokens */
+  --bg0: #ffffff;
+  --bg1: #f8fafc;
+
+  --text: #0f1222;
+  --text-weak: #5b6280;
+
+  /* glass surface */
+  --surface: rgba(255, 255, 255, 0.88);
+  --stroke: rgba(15, 18, 34, 0.10);
+
+  --blur: 10px;
+  --radius: 18px;
+
+  --shadow-sm: 0 6px 22px rgba(15, 18, 34, 0.10);
+  --shadow-md: 0 16px 48px rgba(15, 18, 34, 0.14);
+
+  /* links */
+  --link: #646cff;
+  --linkHover: #535bf2;
+
+  /* default button */
+  --btn-bg: #111318;
+  --btn-text: #ffffff;
+  --btn-border: transparent;
+  --btn-hover-border: #646cff;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* explicit LIGHT */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg0: #ffffff;
+  --bg1: #f8fafc;
+
+  --text: #0f1222;
+  --text-weak: #5b6280;
+
+  --stroke: rgba(15, 18, 34, 0.14);      
+  --surface: rgba(255, 255, 255, 0.82); 
+
+  --shadow-sm: 0 6px 22px rgba(15, 18, 34, 0.10);
+  --shadow-md: 0 16px 48px rgba(15, 18, 34, 0.14);
+
+  --link: #646cff;
+  --linkHover: #535bf2;
+
+  --share-icon: #4154ff; 
+
+  --btn-bg: #111318;
+  --btn-text: #ffffff;
+  --btn-border: transparent;
+  --btn-hover-border: #646cff;
 }
 
+/* explicit DARK (profile dark vibe) */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg0: #0f1222;
+  --bg1: #121429;
+
+  --text: #e7e9f5;
+  --text-weak: #aab1c6;
+
+  --surface: rgba(18, 20, 41, 0.75); 
+  --stroke: rgba(255, 255, 255, 0.14);
+
+  --shadow-sm: 0 12px 40px rgba(0, 0, 0, 0.55);
+  --shadow-md: 0 18px 64px rgba(0, 0, 0, 0.62);
+
+  --link: #8ea2ff;
+  --linkHover: #b0baff;
+
+  --share-icon: #8aa2ff;
+
+  --btn-bg: rgba(255, 255, 255, 0.10);
+  --btn-text: rgba(255, 255, 255, 0.92);
+  --btn-border: rgba(255, 255, 255, 0.14);
+  --btn-hover-border: rgba(255, 255, 255, 0.28);
+}
+
+/* page base */
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #fff;
-  color: #000;
+
+  background: var(--bg0);
+  color: var(--text);
 }
 
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* global backdrop like profile (optional, but you said you like it) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(1200px 700px at 20% -10%, rgba(var(--accent-from), .18), transparent 55%),
+    radial-gradient(1100px 600px at 110% 20%, rgba(var(--accent-to), .16), transparent 55%),
+    linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
 }
 
+/* links */
+a {
+  font-weight: 500;
+  color: var(--link);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--linkHover);
+}
+
+/* default button (your custom ones can override) */
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid var(--btn-border);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--btn-hover-border);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
 }

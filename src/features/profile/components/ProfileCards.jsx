@@ -13,7 +13,6 @@ import { IconBarChart, IconPlus, IconShield, IconZap } from "@/pages/Home/icons/
  * }>
  */
 
-// ключи -> компоненты иконок
 const iconMap = {
   "bar-chart": IconBarChart,
   "plus": IconPlus,

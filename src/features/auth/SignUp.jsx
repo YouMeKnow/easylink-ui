@@ -18,7 +18,7 @@ function SignUp() {
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const redirectTo = params.get("redirectTo");
+  const redirectTo = params.get("redirectTo") || params.get("next");
   const subscribe = params.get("subscribe");
 
   const form = useSignUpForm(navigate, t, redirectTo, subscribe);
