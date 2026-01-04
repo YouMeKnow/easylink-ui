@@ -11,13 +11,21 @@ import useVibeLoader from "@/features/vibes/hooks/useVibeLoader";
 import BusinessCustomerCard from "@/features/vibes/components/BusinessCustomerCard";
 import VibeCard from "@/features/vibes/card/components/VibeCard";
 
+import PublicSubscribePanel from "@/features/profile/components/PublicSubscribePanel";
 import { trackEvent } from "@/services/amplitude";
+
+import "@/features/vibes/styles/PublicVibePage.css";
 
 export default function PublicVibePage() {
   const { t } = useTranslation("vibe");
   const { id } = useParams();
+
   const { accessToken } = useAuth();
-  const token = accessToken;
+  const token =
+    accessToken ??
+    (typeof window !== "undefined" ? localStorage.getItem("jwt") : null);
+
+  const authed = Boolean(token);
 
   const {
     vibe,
@@ -28,16 +36,18 @@ export default function PublicVibePage() {
     extraBlocks,
     visible,
     publicCode,
-    subscriberVibeId,
+    subscriberVibes,
+    subscriberCount,
+    reload,
   } = useVibeLoader(id, token);
 
   if (loading) {
     return (
-      <PageLayout title={t("Vibe", { defaultValue: "Vibe" })}>
-        <div className="d-flex justify-content-center py-5">
-          <div className="spinner-border text-primary" role="status" />
-        </div>
-      </PageLayout>
+    <PageLayout title={t("Vibe", { defaultValue: "Vibe" })}>
+      <div className="public-loading">
+        <div className="spinner-border public-spinner" role="status" aria-label="Loading" />
+      </div>
+    </PageLayout>
     );
   }
 
@@ -60,41 +70,58 @@ export default function PublicVibePage() {
     extraBlocks,
     visible,
     publicCode,
-    subscriberVibeId,
   };
 
   const vibeId = vibe?.id;
 
   return (
     <PageLayout title={t("Vibe", { defaultValue: "Vibe" })}>
-      <div style={{ maxWidth: 420, margin: "0 auto" }}>
-        {vibe.type === "BUSINESS" ? (
-          <BusinessCustomerCard {...commonProps} />
-        ) : (
-          <VibeCard
-            id={vibeId}
-            name={name}
-            description={description}
-            photo={vibe?.photo}
-            contacts={contacts}
-            extraBlocks={extraBlocks}
-            type={vibe?.type || "OTHER"}
-            visible={visible}
-            publicCode={publicCode}
-            editMode={false}
-            ownerActionsEnabled={false}
-            shareEnabled={true}
-            onShare={({ vibeId: vid, shareUrl }) => {
-              trackEvent("Vibe Share Button Clicked", {
-                vibeId: vid,
-                location: "PublicVibePage",
-                shareUrl,
-                type: vibe?.type || "OTHER",
-              });
-            }}
+      <div className="public-vibe-layout">
+        <aside className="public-vibe-layout__left">
+          <PublicSubscribePanel
+            t={t}
+            vibeId={vibeId}
+            subscriberCount={subscriberCount}
+            subscriberVibes={subscriberVibes}
+            authed={authed}
+            onRefresh={reload}
           />
-        )}
+        </aside>
+
+        <main className="public-vibe-layout__right">
+          {vibe.type === "BUSINESS" ? (
+            <BusinessCustomerCard
+              {...commonProps}
+              subscriberVibes={subscriberVibes}
+              onRefresh={reload}
+            />
+          ) : (
+            <VibeCard
+              id={vibeId}
+              name={name}
+              description={description}
+              photo={vibe?.photo}
+              contacts={contacts}
+              extraBlocks={extraBlocks}
+              type={vibe?.type || "OTHER"}
+              visible={visible}
+              publicCode={publicCode}
+              editMode={false}
+              ownerActionsEnabled={false}
+              shareEnabled={true}
+              onShare={({ vibeId: vid, shareUrl }) => {
+                trackEvent("Vibe Share Button Clicked", {
+                  vibeId: vid,
+                  location: "PublicVibePage",
+                  shareUrl,
+                  type: vibe?.type || "OTHER",
+                });
+              }}
+            />
+          )}
+        </main>
       </div>
+
     </PageLayout>
   );
 }

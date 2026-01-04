@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { trackEvent } from "@/services/amplitude";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import SmartImage from "@/shared/ui/SmartImage";
 import "./MyVibesElementCard.css";
 
 export default function MyVibesElementCard({ vibe, onDelete, onShare }) {
@@ -113,20 +114,21 @@ export default function MyVibesElementCard({ vibe, onDelete, onShare }) {
       {/* Avatar */}
       <div className="d-flex justify-content-center mb-2 mt-1">
         {vibe?.photo && !imgErr ? (
-          <img
-            src={vibe.photo}
-            alt={t("avatar_alt", { name: vibe?.name || t("untitled") })}
-            loading="lazy"
-            onError={() => setImgErr(true)}
-            style={{
-              width: 62,
-              height: 62,
-              borderRadius: "50%",
-              objectFit: "cover",
-              background: "#f7f8fa",
-              boxShadow: "0 1px 7px rgba(0,0,0,0.07)",
-            }}
-          />
+         <SmartImage
+          src={vibe.photo}
+          alt={t("avatar_alt", { name: vibe?.name })}
+          fallback={
+            <div className="avatar-fallback">
+              {vibe?.name?.[0]?.toUpperCase() || "?"}
+            </div>
+          }
+          style={{
+            width: 62,
+            height: 62,
+            borderRadius: "50%",
+            objectFit: "cover",
+          }}
+        />
         ) : (
           <div
             style={{

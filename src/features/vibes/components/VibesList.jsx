@@ -12,15 +12,18 @@ export default function VibesList({ vibes, onDelete, onShare }) {
           gap: "24px 20px",
         }}
       >
-        {vibes.map((vibe) => (
-          <div key={vibe.id} style={{ flex: "0 1 260px" }}>
+        {vibes.map((vibe, idx) => (
+          <div
+            key={`${vibe.id ?? "noid"}-${idx}`}
+            style={{ flex: "0 1 260px" }}
+          >
             <MyVibesElementCard
               vibe={vibe}
               onDelete={() => onDelete(vibe.id)}
               onShare={() => onShare(vibe)}
             />
           </div>
-        ))}    
+        ))}
       </div>
     </div>
   );

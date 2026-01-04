@@ -42,7 +42,9 @@ export default function BusinessOwnerCard({
     { enabled: ownerActionsEnabled }
   );
 
-  const offers = useGetOffersByVibeId(vibeId, { enabled: ownerActionsEnabled });
+  const { offers = [], loading: loadingOffers } = useGetOffersByVibeId(vibeId, {
+    enabled: ownerActionsEnabled,
+  });
 
   const itemIds = useMemo(
     () => (Array.isArray(items) ? items.map((x) => x.id) : []),
@@ -98,46 +100,48 @@ export default function BusinessOwnerCard({
               shareEnabled={true}
             />
           )}
-          renderOffers={() => (
-            <>
-              {offers?.length ? (
-                <div className="d-grid gap-3">
-                  {offers.map((offer) => (
-                    <OfferCard
-                      key={offer.id}
-                      offer={offer}
-                      onDoubleClick={() => {
-                        if (!returnState) return;
-                        navigate(`/offers/${offer.id}`, {
-                          state: { ...returnState, returnTab: "offers" },
-                        });
-                      }}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="alert alert-info text-center">
-                  {t("No offers yet", { defaultValue: "No offers yet" })}
-                </div>
-              )}
-
-              <div className="text-center mt-3">
-                <button
-                  type="button"
-                  className="btn btn-outline-primary"
-                  disabled={!returnState}
-                  onClick={() => {
-                    if (!returnState) return;
-                    navigate("/offers/new", {
-                      state: { ...returnState, returnTab: "offers" },
-                    });
-                  }}
-                >
-                  + {t("Add Offer", { defaultValue: "Add Offer" })}
-                </button>
+         renderOffers={() => (
+          <>
+            {loadingOffers ? (
+              <div className="d-flex justify-content-center py-4">
+                <div className="spinner-border" role="status" />
               </div>
-            </>
-          )}
+            ) : offers.length ? (
+              <div className="d-grid gap-3">
+                {offers.map((offer) => (
+                  <OfferCard
+                    key={offer.id}
+                    offer={offer}
+                    onDoubleClick={() => {
+                      if (!returnState) return;
+                      navigate(`/offers/${offer.id}`, {
+                        state: { ...returnState, returnTab: "offers" },
+                      });
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="alert alert-info text-center">
+                {t("No offers yet", { defaultValue: "No offers yet" })}
+              </div>
+            )}
+
+            <div className="text-center mt-3">
+              <button
+                type="button"
+                className="btn btn-outline-primary"
+                disabled={!returnState}
+                onClick={() => {
+                  if (!returnState) return;
+                  navigate("/offers/new", { state: { ...returnState, returnTab: "offers" } });
+                }}
+              >
+                + {t("Add Offer", { defaultValue: "Add Offer" })}
+              </button>
+            </div>
+          </>
+        )}
           renderMenu={() => (
             <MenuTab
               t={t}

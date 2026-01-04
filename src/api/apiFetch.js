@@ -34,14 +34,25 @@ function makeHttpError(res, data) {
 }
 
 export async function apiFetch(input, init = {}) {
-  const sc = getAuthSidecar();
-  const access =
-    sc.getAccess?.() ||
-    (typeof window !== "undefined" ? localStorage.getItem("jwt") : null); // <-- fallback
+  const {
+    auth = "auto", 
+    token = null,  
+    ...restInit
+  } = init;
 
-  const headers = new Headers(init.headers || {});
+  const sc = getAuthSidecar();
+
+  const access =
+    auth === "force"
+      ? token
+      : auth === "off"
+      ? null
+      : sc.getAccess?.() ||
+        (typeof window !== "undefined" ? localStorage.getItem("jwt") : null);
+
+  const headers = new Headers(restInit.headers || {});
   const isFormData =
-    typeof FormData !== "undefined" && init.body instanceof FormData;
+    typeof FormData !== "undefined" && restInit.body instanceof FormData;
 
   if (!isFormData && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
@@ -51,7 +62,15 @@ export async function apiFetch(input, init = {}) {
     headers.set("Authorization", `Bearer ${access}`);
   }
 
-  const res = await fetch(input, { ...init, headers, credentials: "include" });
+  if (auth === "off" && headers.has("Authorization")) {
+    headers.delete("Authorization");
+  }
+
+  const res = await fetch(input, {
+    ...restInit,
+    headers,
+    credentials: "include",
+  });
 
   if (!res.ok) {
     const data = await readBodySafe(res);

@@ -16,7 +16,10 @@
 
   /* brand accents (profile vibe) */
   --accent-from: 255, 138, 181; /* #ff8ab5 */
-  --accent-to: 244, 196, 54;    /* #f4c436 */
+  --accent-to: 99, 102, 241; /* #6366f1 */
+
+
+
 
   /* LIGHT tokens */
   --bg0: #ffffff;

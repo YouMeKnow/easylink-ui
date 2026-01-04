@@ -33,6 +33,7 @@ export default function useGetOffersByVibeId(vibeId, opts = {}) {
           signal: ac.signal,
         });
         const data = await res.json();
+
         setOffers(Array.isArray(data) ? data : []);
       } catch (e) {
         if (e?.status === 401 || e?.status === 403) {

@@ -14,9 +14,8 @@ import OfferCard from "@/features/vibes/offers/OfferCard";
 
 import useQueryTab from "@/shared/router/useQueryTab";
 
-import SelectVibeModal from "@/features/vibes/interactions/SelectVibeModal";
+import SelectVibeModalWithLogic from "@/features/VibeViewForCustomers/SelectVibeModalWithLogic";
 import { trackEvent } from "@/services/amplitude";
-import { QRCodeCanvas } from "qrcode.react";
 
 export default function BusinessCustomerCard({
   t,
@@ -27,7 +26,10 @@ export default function BusinessCustomerCard({
   extraBlocks,
   visible,
   publicCode,
-  subscriberVibeId,
+
+  // from parent (PublicVibePage via useVibeLoader)
+  subscriberVibes = [],
+  onRefresh,
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,7 +40,6 @@ export default function BusinessCustomerCard({
     typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
 
   const [showModal, setShowModal] = useState(false);
-  const [subscribed, setSubscribed] = useState(false);
 
   const [activeTab, setActiveTab] = useQueryTab({
     key: "tab",
@@ -46,68 +47,65 @@ export default function BusinessCustomerCard({
     fallback: "main",
   });
 
-  // subscribe state
-  useEffect(() => {
-    const normalized =
-      subscriberVibeId === "null" || subscriberVibeId === ""
-        ? null
-        : subscriberVibeId;
-    setSubscribed(Boolean(normalized));
-  }, [subscriberVibeId]);
+  // same logic as PublicSubscribePanel
+  const alreadySubscribedVibeIds = useMemo(() => {
+    if (!Array.isArray(subscriberVibes)) return [];
+    return subscriberVibes.map((v) => v?.id).filter(Boolean);
+  }, [subscriberVibes]);
 
-  // open modal after redirect
+  const isSubscribed = alreadySubscribedVibeIds.length > 0;
+
+  // auto-open modal after sign-in redirect (?subscribe=true)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get("subscribe") === "true" && token) {
-      setShowModal(true);
-      params.delete("subscribe");
-      params.delete("redirectTo");
-      const next = params.toString();
-      navigate(`${location.pathname}${next ? `?${next}` : ""}`, {
-        replace: true,
-      });
-    }
+
+    if (params.get("subscribe") !== "true") return;
+
+    // wait until token appears (auth finishes)
+    if (!token) return;
+
+    setShowModal(true);
+
+    // clean URL
+    params.delete("subscribe");
+    params.delete("redirectTo");
+    const next = params.toString();
+    navigate(`${location.pathname}${next ? `?${next}` : ""}`, { replace: true });
   }, [location.search, token, navigate, location.pathname]);
 
   const handleOpenModal = () => {
     if (!vibeId) return;
+
     if (!token) {
       navigate(`/signin?redirectTo=/view/${vibeId}&subscribe=true`);
       return;
     }
+
     setShowModal(true);
   };
 
   const handleSubscribed = () => {
-    setSubscribed(true);
     setShowModal(false);
+    onRefresh?.(); // refetch real subscriberVibes from server
   };
-
-  const shareUrl = useMemo(() => {
-    if (typeof window === "undefined") return "";
-    return vibeId
-      ? `${window.location.origin}/view/${vibeId}`
-      : window.location.href;
-  }, [vibeId]);
 
   // load data (customer)
   const { items, loading: loadingItems } = useItemsByVibeId(vibeId, {
     enabled: Boolean(vibeId),
   });
 
-  const offers = useGetOffersByVibeId(vibeId, { enabled: Boolean(vibeId) });
+  const { offers = [] } = useGetOffersByVibeId(vibeId, {
+    enabled: Boolean(vibeId),
+  });
+
+  const activeOffers = useMemo(() => offers.filter((o) => o?.active), [offers]);
 
   const itemIds = useMemo(
     () => (Array.isArray(items) ? items.map((x) => x.id) : []),
     [items]
   );
 
-  const setTab = useCallback(
-    (tab) => {
-      setActiveTab(tab);
-    },
-    [setActiveTab]
-  );
+  const setTab = useCallback((tab) => setActiveTab(tab), [setActiveTab]);
 
   const baseProps = {
     id: vibeId,
@@ -123,24 +121,15 @@ export default function BusinessCustomerCard({
     ownerActionsEnabled: false,
   };
 
-  // Actions row (customer): QR + Subscribe (share button is in VibeCard)
   const actions = (
-    <div className="d-flex justify-content-center align-items-center gap-3 flex-wrap mt-3">
-      <div className="text-center">
-        <QRCodeCanvas value={shareUrl} size={60} />
-        <div style={{ fontSize: 12, color: "#aaa" }}>
-          {t("Share QR code", { defaultValue: "Share QR code" })}
-        </div>
-      </div>
-
+    <div className="d-flex justify-content-center mt-3">
       <button
         type="button"
-        className="btn btn-primary"
+        className={isSubscribed ? "btn btn-outline-primary" : "btn btn-primary"}
         onClick={handleOpenModal}
-        disabled={subscribed}
       >
-        {subscribed
-          ? t("Subscribed", { defaultValue: "Subscribed" })
+        {isSubscribed
+          ? t("Manage", { defaultValue: "Manage" })
           : t("Subscribe", { defaultValue: "Subscribe" })}
       </button>
     </div>
@@ -150,103 +139,82 @@ export default function BusinessCustomerCard({
     <VibeCard
       {...baseProps}
       shareEnabled={true}
-      onShare={({ vibeId: vid, shareUrl: url }) => {
+      onShare={({ vibeId: vid, shareUrl }) => {
         trackEvent("Vibe Share Button Clicked", {
           vibeId: vid,
           name,
           publicCode,
           location: "BusinessCustomerCard",
-          shareUrl: url,
+          shareUrl,
         });
       }}
       cardBody={
-        <>
-          <BusinessTabsInCard
-            t={t}
-            activeTab={activeTab}
-            onTabChange={setTab}
-            renderMain={() => (
-              <>
-                <VibeContent
-                  id={vibeId}
-                  name={name}
-                  description={description}
-                  photo={vibe?.photo}
-                  contacts={contacts}
-                  extraBlocks={extraBlocks}
-                  type="BUSINESS"
-                  editMode={false}
-                />
-
-                {actions}
-
-                {showModal && (
-                  <SelectVibeModal
-                    t={t}
-                    availableVibes={availableVibes}
-                    selectedMyVibeId={selectedMyVibeId}
-                    setSelectedMyVibeId={setSelectedMyVibeId}
-                    onConfirm={handleConfirm}
-                    onCancel={onCancel}
-                    loading={submitting}
-                    error={error}
-                    onSubscribed={handleSubscribed}
-                  />
-                )}
-              </>
-            )}
-            renderOffers={() => (
-              <>
-                {offers?.filter((o) => o.active)?.length ? (
-                  <div className="d-grid gap-3">
-                    {offers
-                      .filter((o) => o.active)
-                      .map((offer) => (
-                        <OfferCard
-                          key={offer.id}
-                          offer={offer}
-                          onDoubleClick={() => {
-                            trackEvent("Offer Clicked", {
-                              offerId: offer.id,
-                              origin: "vibe_view_offers",
-                              ownerVibeId: vibeId,
-                              viewerVibeId: subscriberVibeId || null,
-                              path: window.location.pathname,
-                              ts: Date.now(),
-                            });
-
-                            navigate(`/view-offer-form/${offer.id}`, {
-                              state: {
-                                origin: "vibe_view_offers",
-                                ownerVibeId: vibeId,
-                                viewerVibeId: subscriberVibeId || null,
-                              },
-                            });
-                          }}
-                        />
-                      ))}
-                  </div>
-                ) : (
-                  <div className="alert alert-info text-center">
-                    {t("No offers yet", { defaultValue: "No offers yet" })}
-                  </div>
-                )}
-              </>
-            )}
-            renderMenu={() => (
-              <MenuTab
-                t={t}
-                loadingItems={loadingItems}
-                items={items}
-                itemIds={itemIds}
-                vibeId={vibeId}
-                // customer view: no add/edit
-                onAddItem={null}
-                onEditItem={null}
+        <BusinessTabsInCard
+          t={t}
+          activeTab={activeTab}
+          onTabChange={setTab}
+          renderMain={() => (
+            <>
+              <VibeContent
+                id={vibeId}
+                name={name}
+                description={description}
+                photo={vibe?.photo}
+                contacts={contacts}
+                extraBlocks={extraBlocks}
+                type="BUSINESS"
+                editMode={false}
               />
-            )}
-          />
-        </>
+
+              {actions}
+
+              {showModal && (
+                <SelectVibeModalWithLogic
+                  t={t}
+                  targetVibeId={vibeId}
+                  alreadySubscribedVibeIds={alreadySubscribedVibeIds}
+                  onSubscribed={handleSubscribed}
+                  onCancel={() => setShowModal(false)}
+                />
+              )}
+            </>
+          )}
+          renderOffers={() =>
+            activeOffers.length ? (
+              <div className="d-grid gap-3">
+                {activeOffers.map((offer) => (
+                  <OfferCard
+                    key={offer.id}
+                    offer={offer}
+                    onDoubleClick={() => {
+                      navigate(`/view-offer-form/${offer.id}`, {
+                        state: {
+                          origin: "vibe_view_offers",
+                          ownerVibeId: vibeId,
+                        },
+                      });
+                    }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="alert alert-info text-center">
+                {t("No offers yet", { defaultValue: "No offers yet" })}
+              </div>
+            )
+          }
+          renderMenu={() => (
+            <MenuTab
+              t={t}
+              loadingItems={loadingItems}
+              items={items}
+              itemIds={itemIds}
+              vibeId={vibeId}
+              onAddItem={null}
+              onEditItem={null}
+            />
+          )}
+        />
       }
     />
   );

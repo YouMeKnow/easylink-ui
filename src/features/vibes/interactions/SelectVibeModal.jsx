@@ -1,4 +1,7 @@
-import React, { useEffect, useMemo, useCallback } from "react";
+// src/features/vibes/interactions/SelectVibeModal.jsx
+import React, { useCallback, useEffect, useMemo } from "react";
+import "@/features/vibes/styles/SelectVibeModal.css";
+import SmartImage from "@/shared/ui/SmartImage";
 
 function resolvePhotoUrl(photo) {
   if (!photo) return "/default-avatar.png";
@@ -16,115 +19,202 @@ export default function SelectVibeModal({
   onCancel,
   loading = false,
   error = null,
+
+  // keep prop name for compatibility, treat as "subscribed ids"
+  disabledVibeIds = [],
 }) {
   const canConfirm = Boolean(selectedMyVibeId) && !loading;
+
+  const isSubscribedId = useCallback(
+    (id) => (disabledVibeIds || []).some((x) => String(x) === String(id)),
+    [disabledVibeIds]
+  );
+
+  const selectedIsSubscribed = useMemo(() => {
+    if (!selectedMyVibeId) return false;
+    return isSubscribedId(selectedMyVibeId);
+  }, [selectedMyVibeId, isSubscribedId]);
+
+  const title = useMemo(
+    () =>
+      t?.("Select your Vibe", { defaultValue: "Select your Vibe" }) ??
+      "Select your Vibe",
+    [t]
+  );
+
+  const subtitle = useMemo(
+    () =>
+      t?.("Choose a vibe to subscribe / unsubscribe", {
+        defaultValue: "Choose a vibe to subscribe / unsubscribe",
+      }) ?? "Choose a vibe to subscribe / unsubscribe",
+    [t]
+  );
+
+  const hint = useMemo(() => {
+    if (!selectedMyVibeId) {
+      return (
+        t?.("Select a vibe to continue.", { defaultValue: "Select a vibe to continue." }) ||
+        "Select a vibe to continue."
+      );
+    }
+    return selectedIsSubscribed
+      ? t?.("This will unsubscribe the selected vibe.", {
+          defaultValue: "This will unsubscribe the selected vibe.",
+        }) || "This will unsubscribe the selected vibe."
+      : t?.("This will subscribe the selected vibe.", {
+          defaultValue: "This will subscribe the selected vibe.",
+        }) || "This will subscribe the selected vibe.";
+  }, [t, selectedMyVibeId, selectedIsSubscribed]);
+
+  const confirmLabel = useMemo(() => {
+    if (loading) {
+      return t?.("Working…", { defaultValue: "Working…" }) || "Working…";
+    }
+    return selectedIsSubscribed
+      ? t?.("Unsubscribe", { defaultValue: "Unsubscribe" }) || "Unsubscribe"
+      : t?.("Subscribe", { defaultValue: "Subscribe" }) || "Subscribe";
+  }, [t, loading, selectedIsSubscribed]);
 
   const onKeyDown = useCallback(
     (e) => {
       if (e.key === "Escape") onCancel?.();
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && canConfirm) onConfirm?.();
     },
-    [onCancel]
+    [onCancel, onConfirm, canConfirm]
   );
 
   useEffect(() => {
     document.addEventListener("keydown", onKeyDown);
-    // (по желанию) lock scroll
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = prevOverflow;
     };
   }, [onKeyDown]);
 
-  const title = useMemo(
-    () => t?.("Select your Vibe to subscribe with", { defaultValue: "Select your Vibe to subscribe with" })
-      ?? "Select your Vibe to subscribe with",
-    [t]
-  );
-
   return (
     <div
-      className="modal-backdrop d-flex justify-content-center align-items-center"
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.5)",
-        zIndex: 1050,
-      }}
+      className="svm"
       role="dialog"
       aria-modal="true"
       aria-label={title}
       onMouseDown={(e) => {
-        // клик по фону закрывает, клик внутри — нет
         if (e.target === e.currentTarget) onCancel?.();
       }}
     >
-      <div
-        className="modal-content p-4 shadow rounded bg-white"
-        style={{ maxWidth: 520, width: "92%" }}
-        onMouseDown={(e) => e.stopPropagation()}
-      >
-        <h5 className="mb-3">{title}</h5>
+      <div className="svm__modal" onMouseDown={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="svm__header">
+          <div className="svm__headText">
+            <div className="svm__title">{title}</div>
+            <div className="svm__subtitle">{subtitle}</div>
+          </div>
 
-        {error ? (
-          <div className="alert alert-danger py-2">{String(error)}</div>
-        ) : null}
-
-        <ul className="list-group mb-3" style={{ maxHeight: 360, overflowY: "auto" }}>
-          {availableVibes.length ? (
-            availableVibes.map((vibe) => (
-              <li
-                key={vibe.id}
-                className={`list-group-item d-flex align-items-center gap-2 ${
-                  selectedMyVibeId === vibe.id ? "active" : ""
-                }`}
-                onClick={() => setSelectedMyVibeId?.(vibe.id)}
-                style={{ cursor: "pointer" }}
-              >
-                <img
-                  src={resolvePhotoUrl(vibe.photo)}
-                  alt="avatar"
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    flex: "0 0 auto",
-                  }}
-                />
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                    {vibe.name || t?.("Unnamed Vibe", { defaultValue: "Unnamed Vibe" }) || "Unnamed Vibe"}
-                  </div>
-                  <div style={{ fontSize: 12, color: "#666" }}>
-                    {vibe.description
-                      ? vibe.description.slice(0, 60) + (vibe.description.length > 60 ? "…" : "")
-                      : t?.("No description", { defaultValue: "No description" }) || "No description"}
-                  </div>
-                  <div style={{ fontSize: 10, textTransform: "uppercase", color: "#999" }}>
-                    {vibe.type || "Vibe"}
-                  </div>
-                </div>
-              </li>
-            ))
-          ) : (
-            <li className="list-group-item text-muted">
-              {t?.("No vibes available", { defaultValue: "No vibes available" }) || "No vibes available"}
-            </li>
-          )}
-        </ul>
-
-        <div className="d-flex justify-content-end gap-2">
-          <button className="btn btn-secondary" onClick={onCancel} disabled={loading}>
-            {t?.("Cancel", { defaultValue: "Cancel" }) || "Cancel"}
+          <button
+            type="button"
+            className="svm__closeBtn"
+            onClick={onCancel}
+            disabled={loading}
+            aria-label={t?.("Close", { defaultValue: "Close" }) || "Close"}
+          >
+            ✕
           </button>
-          <button className="btn btn-primary" onClick={onConfirm} disabled={!canConfirm}>
-            {loading
-              ? t?.("Confirming…", { defaultValue: "Confirming…" }) || "Confirming…"
-              : t?.("Confirm", { defaultValue: "Confirm" }) || "Confirm"}
-          </button>
+        </div>
+
+        {/* Body */}
+        <div className="svm__body">
+          {error ? <div className="svm__error">{String(error)}</div> : null}
+
+          <div className="svm__listWrap">
+            {availableVibes.length ? (
+              <div className="svm__grid">
+                {availableVibes.map((v) => {
+                  const active = String(selectedMyVibeId) === String(v.id);
+                  const subscribed = isSubscribedId(v.id);
+
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      className={`svm__card ${active ? "is-active" : ""}`}
+                      onClick={() => setSelectedMyVibeId?.(v.id)}
+                    >
+                      <div className="svm__avatarWrap">
+                        <SmartImage
+                          src={v.photo}
+                          alt="avatar"
+                          className="svm__avatarImg"
+                          fallback={
+                            <div className="avatar-fallback">
+                              {(v?.name?.[0] || "?").toUpperCase()}
+                            </div>
+                          }
+                        />
+                      </div>
+                      <div className="svm__cardBody">
+                        <div className="svm__row">
+                          <div className="svm__name">
+                            {v.name ||
+                              t?.("Unnamed Vibe", { defaultValue: "Unnamed Vibe" }) ||
+                              "Unnamed Vibe"}
+                          </div>
+
+                          <span className={`svm__badge ${subscribed ? "is-on" : "is-off"}`}>
+                            {subscribed
+                              ? t?.("Subscribed", { defaultValue: "Subscribed" }) || "Subscribed"
+                              : t?.("Available", { defaultValue: "Available" }) || "Available"}
+                          </span>
+                        </div>
+
+                        <div className="svm__desc">
+                          {v.description
+                            ? v.description.slice(0, 72) +
+                              (v.description.length > 72 ? "…" : "")
+                            : t?.("No description", { defaultValue: "No description" }) ||
+                              "No description"}
+                        </div>
+
+                        <div className="svm__meta">{v.type || "Vibe"}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="svm__empty">
+                {t?.("No vibes available", { defaultValue: "No vibes available" }) ||
+                  "No vibes available"}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="svm__footer">
+          <div className="svm__hint">{hint}</div>
+
+          <div className="svm__actions">
+            <button
+              type="button"
+              className="svm__btn svm__btn--ghost"
+              onClick={onCancel}
+              disabled={loading}
+            >
+              {t?.("Cancel", { defaultValue: "Cancel" }) || "Cancel"}
+            </button>
+
+            <button
+              type="button"
+              className={`svm__btn ${
+                selectedIsSubscribed ? "svm__btn--danger" : "svm__btn--primary"
+              }`}
+              onClick={onConfirm}
+              disabled={!canConfirm}
+            >
+              {confirmLabel}
+            </button>
+          </div>
         </div>
       </div>
     </div>

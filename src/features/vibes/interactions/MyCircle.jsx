@@ -22,15 +22,15 @@ export default function MyCircle() {
         >
           {t("back")}
         </button>
-        <h2 className="fw-bold mx-auto mb-0" style={{ letterSpacing: ".02em" }}>
-          My Circle
-        </h2>
+       <h2 className="fw-bold mx-auto mb-0">
+        {t("myCircle")}
+      </h2>
       </div>
 
       {/* Content */}
       <div className="card p-4 shadow" style={{ borderRadius: 18 }}>
         <h5 className="mb-3" style={{ color: "#476dfe" }}>
-          {t("circle")}
+          {t("sections.following")}
         </h5>
         <VibeCircleList vibes={following} t={t} />
       </div>
