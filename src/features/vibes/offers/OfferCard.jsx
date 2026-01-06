@@ -1,15 +1,14 @@
+// src/features/vibes/offers/OfferCard.jsx
 import React, { useMemo } from "react";
 import "@/features/vibes/styles/OfferCard.css";
 
 export default function OfferCard({
   offer,
+  onOpen,
   onEdit,
   onDelete,
-  onDoubleClick,
   selected,
   onSelect,
-
-  // NEW: кто видит кнопки управления
   canManage = false,
 }) {
   const formatDate = (isoString) =>
@@ -37,10 +36,13 @@ export default function OfferCard({
       ? `${offer.currentDiscount}%`
       : `$${offer.currentDiscount}`;
 
-  const onCardClick = () => onSelect?.(offer);
-  const onCardDoubleClick = () =>
-    onDoubleClick ? onDoubleClick(offer) : onEdit?.(offer);
+  const onCardClick = () => {
+    if (onOpen) return onOpen(offer);
+    if (canManage) return onEdit?.(offer);
+    return onSelect?.(offer);
+  };
 
+  // ✅ железно глушим клики внутри карточки
   const stopAll = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -71,13 +73,8 @@ export default function OfferCard({
       tabIndex={0}
       aria-pressed={selected}
       onClick={onCardClick}
-      onDoubleClick={canManage ? onCardDoubleClick : undefined}
       onKeyDown={onKeyDown}
-      title={
-        canManage
-          ? "Click to select • Double-click to edit • Press E to edit"
-          : "Click to view"
-      }
+      title={canManage ? "Click to open • Press E to edit" : "Click to open"}
     >
       <div className="offer-card__bar" />
 
@@ -109,12 +106,13 @@ export default function OfferCard({
             )}
           </div>
 
-          {/* actions: only for owner/admin */}
           {canManage && (
             <div className="offer-card__actions">
               <button
                 type="button"
                 className="btn btn-sm btn-outline-primary"
+                // ✅ ВАЖНО: capture чтобы карточка не словила клик
+                onClickCapture={stopAll}
                 onMouseDown={stopAll}
                 onClick={(e) => {
                   stopAll(e);
@@ -127,6 +125,8 @@ export default function OfferCard({
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"
+                // ✅ ВАЖНО: capture чтобы карточка не словила клик
+                onClickCapture={stopAll}
                 onMouseDown={stopAll}
                 onClick={(e) => {
                   stopAll(e);

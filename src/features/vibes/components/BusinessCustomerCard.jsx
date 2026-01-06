@@ -186,8 +186,8 @@ export default function BusinessCustomerCard({
                   <OfferCard
                     key={offer.id}
                     offer={offer}
-                    onDoubleClick={() => {
-                      navigate(`/view-offer-form/${offer.id}`, {
+                    onOpen={(o) => {
+                      navigate(`/view-offer-form/${o.id}`, {
                         state: {
                           origin: "vibe_view_offers",
                           ownerVibeId: vibeId,

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/services/amplitude";
-import { useNotifications } from "@/features/notifications/hooks/useNotifications";
+import { useNotificationsState } from "@/features/notifications/context/NotificationsContext";
 
 import "@/features/notifications/styles/NotificationBell.css";
 
@@ -23,7 +23,7 @@ export default function NotificationBell() {
     markRead,
     markAllRead,
     setOpen,
-  } = useNotifications({ enabled: isAuthenticated, limit: 6 });
+  } = useNotificationsState();
 
   const openAll = () => {
     trackEvent("Header Notifications View All");

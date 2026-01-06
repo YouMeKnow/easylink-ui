@@ -1,8 +1,10 @@
-import React, { useMemo, useState } from "react";
+// src/features/notifications/pages/NotificationsPage.jsx
+import React, { useEffect, useMemo, useState } from "react";
 import PageLayout from "@/components/common/PageLayout";
 import { useAuth } from "@/context/AuthContext";
-import { useNotifications } from "@/features/notifications/hooks/useNotifications";
 import { useNavigate } from "react-router-dom";
+
+import { useNotificationsState } from "@/features/notifications/context/NotificationsContext";
 
 import "./styles/NotificationsPage.css";
 
@@ -28,13 +30,17 @@ function formatRelative(dateLike) {
 export default function NotificationsPage() {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
   const [tab, setTab] = useState("all"); // all | unread
 
-  // добавил markRead — если хук его отдаёт, при клике будем помечать прочитанным
-  const { items, loading, unreadCount, markAllRead, markRead } = useNotifications({
-    enabled: isAuthenticated,
-    limit: 50,
-  });
+  const { items, loading, unreadCount, markAllRead, markRead, loadWithLimit } =
+    useNotificationsState();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadWithLimit?.(50);
+    }
+  }, [isAuthenticated, loadWithLimit]);
 
   const filtered = useMemo(() => {
     if (tab === "unread") return items.filter((x) => !x.read);
@@ -45,16 +51,14 @@ export default function NotificationsPage() {
     const link = (n?.link ?? "").trim();
     if (!link) return;
 
-    // помечаем прочитанным (если есть)
     try {
       if (!n.read && typeof markRead === "function") {
         await markRead(n.id);
       }
     } catch {
-      // даже если не получилось — всё равно переходим
     }
 
-    // абсолютный URL или внутр. роут
+
     if (/^https?:\/\//i.test(link)) {
       window.location.href = link;
       return;
@@ -119,7 +123,11 @@ export default function NotificationsPage() {
                 return (
                   <div
                     key={n.id}
-                    className={"np-item " + (!n.read ? "is-unread" : "") + (!hasLink ? " is-disabled" : "")}
+                    className={
+                      "np-item " +
+                      (!n.read ? "is-unread" : "") +
+                      (!hasLink ? " is-disabled" : "")
+                    }
                     role={hasLink ? "button" : undefined}
                     tabIndex={hasLink ? 0 : -1}
                     style={{ cursor: hasLink ? "pointer" : "default" }}
@@ -154,7 +162,9 @@ export default function NotificationsPage() {
               <div className="np-emptyCard">
                 <div className="np-emptyIcon">✨</div>
                 <div className="np-emptyTitle">No notifications yet</div>
-                <div className="np-emptyText">When something happens, it will appear here.</div>
+                <div className="np-emptyText">
+                  When something happens, it will appear here.
+                </div>
               </div>
             </div>
           )}

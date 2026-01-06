@@ -1,8 +1,13 @@
-// src/context/AuthContext.js
+// src/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+
+import {
+  restartNotificationsStream,
+  stopNotificationsStream,
+} from "@/features/notifications/realtime/notificationsStream";
 
 function decodeExp(token) {
   try {
@@ -45,6 +50,9 @@ export function AuthProvider({ children }) {
         setAccessToken(jwt);
         sidecar.getAccess = () => jwt;
         scheduleExpiryLogout(jwt);
+
+        // if user already has jwt on refresh, start SSE
+        restartNotificationsStream();
       }
     } catch {}
     setAuthReady(true);
@@ -84,9 +92,19 @@ export function AuthProvider({ children }) {
 
     clearTimer();
     if (token) scheduleExpiryLogout(token);
+
+    // ✅ start/restart SSE right after successful login
+    if (token) {
+      restartNotificationsStream();
+    } else {
+      stopNotificationsStream();
+    }
   }
 
   function logout(reason = "manual") {
+    // ✅ stop SSE immediately so no reconnect/401 spam after logout
+    stopNotificationsStream();
+
     clearTimer();
     setAccessToken(null);
     setCookieBased(false);
