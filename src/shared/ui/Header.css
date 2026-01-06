@@ -260,7 +260,7 @@
 .topbar__iconBtn svg{
   width: 18px;
   height: 18px;
-  display: block;      /* убирает лишние baseline-отступы */
+  display: block;      
 }
 .topbar__burger{
   display: none;
@@ -281,4 +281,172 @@
     display: inline-grid;
     place-items: center;
   }
+}
+
+/* Notifications button */
+.topbar__notifBtn {
+  position: relative;
+}
+
+/* Small badge (unread count) */
+.topbar__badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+
+  /* uses your theme tokens if you have them; fallback safe */
+  background: var(--danger, #ef4444);
+  color: #fff;
+  border: 2px solid var(--surface, #fff);
+}
+
+.topbar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === Notifications popover === */
+.topbar__notifWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.topbar__notifBtn {
+  position: relative;
+}
+
+.notifPop {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(360px, calc(100vw - 24px));
+  border-radius: 16px;
+  padding: 10px;
+  z-index: 2000;
+
+  background: color-mix(in oklab, var(--surface, #fff) 92%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke, #e5e7eb) 70%, transparent);
+  box-shadow: var(--shadow-md, 0 20px 50px rgba(0,0,0,.18));
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.notifPop__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 6px 10px;
+}
+
+.notifPop__title {
+  font-weight: 800;
+  letter-spacing: .01em;
+  color: var(--text, #111827);
+}
+
+.notifPop__allBtn {
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+  color: var(--primary, #2563eb);
+  cursor: pointer;
+}
+
+.notifPop__allBtn:hover {
+  background: color-mix(in oklab, var(--surface, #fff) 70%, transparent);
+}
+
+.notifPop__list {
+  display: grid;
+  gap: 8px;
+}
+
+.notifPop__empty {
+  padding: 16px 12px;
+  text-align: center;
+  color: color-mix(in oklab, var(--text, #111827) 55%, transparent);
+}
+
+.notifItem {
+  width: 100%;
+  text-align: left;
+  border: 1px solid color-mix(in oklab, var(--stroke, #e5e7eb) 70%, transparent);
+  background: color-mix(in oklab, var(--surface, #fff) 88%, transparent);
+  border-radius: 14px;
+  padding: 10px 10px;
+  cursor: pointer;
+
+  transition: transform .12s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.notifItem:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm, 0 10px 20px rgba(0,0,0,.12));
+}
+
+.notifItem--unread {
+  border-color: color-mix(in oklab, var(--primary, #2563eb) 35%, var(--stroke, #e5e7eb));
+}
+
+.notifItem__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.notifItem__title {
+  font-weight: 800;
+  color: var(--text, #111827);
+  font-size: 13px;
+}
+
+.notifItem__time {
+  font-size: 11px;
+  color: color-mix(in oklab, var(--text, #111827) 55%, transparent);
+  white-space: nowrap;
+}
+
+.notifItem__body {
+  font-size: 12px;
+  color: color-mix(in oklab, var(--text, #111827) 70%, transparent);
+}
+
+/* badge (если у тебя уже есть — оставь один вариант) */
+.topbar__badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  background: var(--danger, #ef4444);
+  color: #fff;
+  border: 2px solid var(--surface, #fff);
 }

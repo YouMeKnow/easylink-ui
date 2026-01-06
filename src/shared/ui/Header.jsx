@@ -2,27 +2,27 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
+
 import LanguageSwitcher from "@/shared/ui/LanguageSwitcher";
 import { useEarlyAccess } from "@/components/common/hooks/useEarlyAccess";
 import { useEarlyAccessCheckable } from "@/components/common/hooks/useEarlyAccessCheckable";
 import { trackEvent } from "@/services/amplitude";
+import NotificationBell from "@/features/notifications/NotificationBell";
+
 import "./Header.css";
 import HeaderMobileMenu from "./HeaderMobileMenu";
-import AccessCTA from "./AccessCTA"; 
-import { ThemeProvider, useTheme } from "@/context/ThemeContext";
-
-
+import AccessCTA from "./AccessCTA";
+import { useTheme } from "@/context/ThemeContext";
 
 function Header() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
-
   const { t } = useTranslation("header");
-  const { t: tc } = useTranslation("common"); 
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const { mode, setMode, resolved } = useTheme();
+  const { setMode, resolved } = useTheme();
 
+  // Early Access
   const {
     requestEarlyAccess,
     loading: loadingSubscribe,
@@ -47,6 +47,7 @@ function Header() {
     logout();
     setSubscribedAfterRequest(false);
     setSubscribedStatus(false);
+    setMenuOpen(false);
     navigate("/");
   };
 
@@ -61,26 +62,57 @@ function Header() {
               <span>YMK</span>
             </Link>
 
-            {/* (optional) можно оставить CTA на десктопе слева */}
             <div className="topbar__cta">
               <AccessCTA
                 subscribed={subscribed}
                 loading={loadingSubscribe}
-                onClick={() => (isAuthenticated ? requestEarlyAccess() : navigate("/signin"))}
+                onClick={() =>
+                  isAuthenticated ? requestEarlyAccess() : navigate("/signin")
+                }
               />
             </div>
           </div>
 
           {/* CENTER */}
           <nav className="topbar__nav">
-            <Link to="/" onClick={() => trackEvent("Header Home Clicked")}>{t("home")}</Link>
-            {!isAuthenticated && <Link to="/signup" onClick={() => trackEvent("Header Sign Up Clicked")}>{t("sign_up")}</Link>}
-            {!isAuthenticated && <Link to="/signin" onClick={() => trackEvent("Header Sign In Clicked")}>{t("log_in")}</Link>}
-            {isAuthenticated && <Link to="/profile" onClick={() => trackEvent("Header Profile Clicked")}>{t("profile")}</Link>}
-            <Link to="/about" onClick={() => trackEvent("Header About Clicked")}>{t("about")}</Link>
-            <Link to="/review" onClick={() => trackEvent("Header Review Clicked")}>{t("review")}</Link>
+            <Link to="/" onClick={() => trackEvent("Header Home Clicked")}>
+              {t("home")}
+            </Link>
+
+            {!isAuthenticated && (
+              <Link to="/signup" onClick={() => trackEvent("Header Sign Up Clicked")}>
+                {t("sign_up")}
+              </Link>
+            )}
+
+            {!isAuthenticated && (
+              <Link to="/signin" onClick={() => trackEvent("Header Sign In Clicked")}>
+                {t("log_in")}
+              </Link>
+            )}
+
             {isAuthenticated && (
-              <Link to="/" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
+              <Link to="/profile" onClick={() => trackEvent("Header Profile Clicked")}>
+                {t("profile")}
+              </Link>
+            )}
+
+            <Link to="/about" onClick={() => trackEvent("Header About Clicked")}>
+              {t("about")}
+            </Link>
+
+            <Link to="/review" onClick={() => trackEvent("Header Review Clicked")}>
+              {t("review")}
+            </Link>
+
+            {isAuthenticated && (
+              <Link
+                to="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLogout();
+                }}
+              >
                 {t("log_out")}
               </Link>
             )}
@@ -89,8 +121,10 @@ function Header() {
           {/* RIGHT */}
           <div className="topbar__right">
             <LanguageSwitcher />
+            <NotificationBell />
 
-            <button className="topbar__iconBtn"
+            <button
+              className="topbar__iconBtn"
               onClick={() => setMode(resolved === "dark" ? "light" : "dark")}
               aria-label="Toggle theme"
               title="Toggle theme"
@@ -112,7 +146,7 @@ function Header() {
       <HeaderMobileMenu
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
-        isAuthenticated={isAuthenticated}     
+        isAuthenticated={isAuthenticated}
         handleLogout={handleLogout}
         trackEvent={trackEvent}
       />

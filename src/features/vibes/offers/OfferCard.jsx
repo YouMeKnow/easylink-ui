@@ -1,62 +1,144 @@
+import React, { useMemo } from "react";
+import "@/features/vibes/styles/OfferCard.css";
 
 export default function OfferCard({
   offer,
   onEdit,
   onDelete,
   onDoubleClick,
-  vibeId,
   selected,
   onSelect,
+
+  // NEW: кто видит кнопки управления
+  canManage = false,
 }) {
-  const formatDate = (isoString) => {
-    return new Date(isoString).toLocaleString("en-US", {
+  const formatDate = (isoString) =>
+    new Date(isoString).toLocaleString("en-US", {
       dateStyle: "medium",
       timeStyle: "short",
     });
+
+  const now = Date.now();
+  const start = new Date(offer.startTime).getTime();
+  const end = new Date(offer.endTime).getTime();
+
+  const isExpired = end < now;
+  const isUpcoming = start > now;
+
+  const status = useMemo(() => {
+    if (!offer.active) return { label: "Disabled", tone: "neutral" };
+    if (isExpired) return { label: "Expired", tone: "muted" };
+    if (isUpcoming) return { label: "Scheduled", tone: "info" };
+    return { label: "Active", tone: "success" };
+  }, [offer.active, isExpired, isUpcoming]);
+
+  const discountText =
+    offer.discountType === "PERCENTAGE"
+      ? `${offer.currentDiscount}%`
+      : `$${offer.currentDiscount}`;
+
+  const onCardClick = () => onSelect?.(offer);
+  const onCardDoubleClick = () =>
+    onDoubleClick ? onDoubleClick(offer) : onEdit?.(offer);
+
+  const stopAll = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.nativeEvent?.stopImmediatePropagation) {
+      e.nativeEvent.stopImmediatePropagation();
+    }
   };
 
-  const isExpired = new Date(offer.endTime) < new Date();
+  const onKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onCardClick();
+    }
+    if (canManage && (e.key === "e" || e.key === "E")) onEdit?.(offer);
+    if (canManage && (e.key === "Delete" || e.key === "Backspace"))
+      onDelete?.(offer);
+  };
 
   return (
     <div
-      className="w-100 border rounded p-3 shadow-sm d-flex align-items-start gap-3"
-      style={{
-        backgroundColor: selected ? "#ffeef0" : "#f8f8f8ff",
-        cursor: "pointer",
-        opacity: offer.active ? 1 : 0.5,
-        borderLeft: isExpired ? "4px solid #ccc" : "4px solid #198754",
-      }}
-      onDoubleClick={() =>
-        onDoubleClick ? onDoubleClick(offer) : onEdit?.(offer)
+      className={[
+        "offer-card",
+        selected ? "is-selected" : "",
+        !offer.active ? "is-disabled" : "",
+        isExpired ? "is-expired" : "",
+      ].join(" ")}
+      role="button"
+      tabIndex={0}
+      aria-pressed={selected}
+      onClick={onCardClick}
+      onDoubleClick={canManage ? onCardDoubleClick : undefined}
+      onKeyDown={onKeyDown}
+      title={
+        canManage
+          ? "Click to select • Double-click to edit • Press E to edit"
+          : "Click to view"
       }
     >
-      <div className="flex-grow-1">
-        <div className="d-flex align-items-center justify-content-between mb-1">
-          <p className="fw-bold fs-6 mb-0">{offer.title}</p>
-          <span
-            className={`badge ms-2 ${
-              offer.active ? "bg-success" : "bg-secondary"
-            }`}
-          >
-            {offer.active ? "Active" : "Disabled"}
-          </span>
+      <div className="offer-card__bar" />
+
+      <div className="offer-card__body">
+        <div className="offer-card__top">
+          <div className="offer-card__title-wrap">
+            <div className="offer-card__title">{offer.title}</div>
+            <div className="offer-card__subtitle">
+              {formatDate(offer.startTime)} → {formatDate(offer.endTime)}
+            </div>
+          </div>
+
+          <div className="offer-card__badges">
+            <span className={`offer-badge tone-${status.tone}`}>
+              {status.label}
+            </span>
+            {offer.discountType === "DYNAMIC" && (
+              <span className="offer-badge tone-warning">Dynamic</span>
+            )}
+          </div>
         </div>
 
-        <p className="mb-1 text-muted">
-          {formatDate(offer.startTime)} – {formatDate(offer.endTime)}
-        </p>
+        <div className="offer-card__bottom">
+          <div className="offer-card__meta">
+            <span className="offer-card__label">Discount</span>
+            <span className="offer-card__value">{discountText}</span>
+            {isUpcoming && (
+              <span className="offer-card__hint">Starts later</span>
+            )}
+          </div>
 
-        <p className="mb-0 small">
-          Discount:{" "}
-          <strong>
-            {offer.discountType === "PERCENTAGE"
-              ? `${offer.currentDiscount}%`
-              : `$${offer.currentDiscount}`}
-          </strong>{" "}
-          {offer.discountType === "DYNAMIC" && "(dynamic)"}
-        </p>
+          {/* actions: only for owner/admin */}
+          {canManage && (
+            <div className="offer-card__actions">
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-primary"
+                onMouseDown={stopAll}
+                onClick={(e) => {
+                  stopAll(e);
+                  onEdit?.(offer);
+                }}
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-danger"
+                onMouseDown={stopAll}
+                onClick={(e) => {
+                  stopAll(e);
+                  onDelete?.(offer);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-
     </div>
   );
 }

@@ -3,6 +3,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthGuard from "@/features/auth/AuthGuard";
 import NarrowPage from "@/components/common/NarrowPage";
+import NotificationsPage from "@/features/notifications/NotificationsPage";
 
 // pages
 import Home from "@/pages/Home/Home";
@@ -35,6 +36,8 @@ import ViewOfferForm from "@/features/vibes/offers/ViewOfferForm";
 import OfferViewAnalytics from "@/analytics/OfferViewAnalytics";
 import OfferTableUsers from "@/features/vibes/offers/OffersTableForUsers";
 
+
+
 import CatalogForm from "@/features/vibes/catalog/catalogForm";
 
 export default function AppRoutes({ questions, setQuestions }) {
@@ -61,6 +64,8 @@ export default function AppRoutes({ questions, setQuestions }) {
       <Route path="/login" element={<Navigate to="/signin" />} />
 
       <Route path="/review" element={<Review />} />
+      
+      <Route path="/notifications" element={<NotificationsPage />} />
 
       <Route path="/create-vibe" element={<CreateVibe />} />
       <Route path="/my-vibes" element={<UserVibes />} />
@@ -85,6 +90,8 @@ export default function AppRoutes({ questions, setQuestions }) {
           </>
         }
       />
+
+    
 
       <Route path="/email-verification-sent" element={<EmailVerificationSentPage />} />
       <Route path="/email-verified" element={<EmailVerifiedPage />} />
