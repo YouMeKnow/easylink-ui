@@ -11,5 +11,6 @@
   "settings_panel_text": "Ici se trouveront les paramètres du vibe (suppression, confidentialité, etc.).",
   "settings_panel_close": "Fermer",
   "error_no_id": "Erreur : ID du vibe manquant.",
-  "error_save": "Échec de l’enregistrement !"
+  "error_save": "Échec de l’enregistrement !",
+  "view": "Page publique"
 }

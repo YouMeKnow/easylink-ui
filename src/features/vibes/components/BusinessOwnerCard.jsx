@@ -112,6 +112,28 @@ export default function BusinessOwnerCard({
                   <OfferCard
                     key={offer.id}
                     offer={offer}
+                    canManage={true} // owner view
+
+                    onSelect={() => {
+                      // если тебе не нужен select — можешь убрать
+                    }}
+
+                    onEdit={() => {
+                      if (!returnState) return;
+                      navigate(`/offers/${offer.id}`, {
+                        state: { ...returnState, returnTab: "offers" },
+                      });
+                    }}
+
+                    onDelete={() => {
+                      if (!window.confirm("Delete this offer?")) return;
+
+                      // если у тебя есть delete endpoint — вызови здесь
+                      // await deleteOffer(offer.id)
+                      // reloadOffers()
+                      console.log("TODO: delete offer", offer.id);
+                    }}
+
                     onDoubleClick={() => {
                       if (!returnState) return;
                       navigate(`/offers/${offer.id}`, {

@@ -39,6 +39,11 @@ export default function VibePage() {
   } = useVibeLoader(id, token);
 
   const handleSave = useVibeSave({ token, vibe, setVibe, setEditing });
+  
+  const openCustomerView = useCallback(() => {
+    navigate(`/view/${id}`);
+  }, [navigate, id]);
+
 
   const isBusiness = vibe?.type === "BUSINESS";
 
@@ -84,9 +89,38 @@ export default function VibePage() {
             />
           </div>
 
-          <h2 className="vibe-header__title fw-bold">{t("title")}</h2>
+          <h2
+            className={`vibe-header__title fw-bold ${
+              editing ? "vibe-title--editing" : "vibe-title--view"
+            }`}
+          >
+            {t("title")}
+          </h2>
+
 
           <div className="vibe-header__right">
+              <a
+                href={`/view/${id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-light-outline btn-compact btn-no-hover d-flex align-items-center gap-2"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M14 3h7v7" />
+                  <path d="M10 14L21 3" />
+                  <path d="M21 14v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6" />
+                </svg>
+                {t("view")}
+              </a>
+
             <button
               type="button"
               className="btn-main btn-compact d-flex align-items-center gap-2"

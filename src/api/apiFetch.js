@@ -1,42 +1,10 @@
 // src/api/apiFetch.js
 import { getAuthSidecar } from "@/context/AuthContext";
-
-async function readBodySafe(res) {
-  // tries json -> text
-  const ct = res.headers.get("content-type") || "";
-  if (ct.includes("application/json")) {
-    try {
-      return await res.json();
-    } catch {
-      return null;
-    }
-  }
-  try {
-    const text = await res.text();
-    return text || null;
-  } catch {
-    return null;
-  }
-}
-
-function makeHttpError(res, data) {
-  const message =
-    (data && typeof data === "object" && (data.message || data.error)) ||
-    (typeof data === "string" && data) ||
-    res.statusText ||
-    "Request failed";
-
-  const err = new Error(message);
-  err.status = res.status;
-  err.data = data;
-  err.url = res.url;
-  return err;
-}
-
 export async function apiFetch(input, init = {}) {
   const {
-    auth = "auto", 
-    token = null,  
+    auth = "auto",
+    token = null,
+    stream = false,         
     ...restInit
   } = init;
 
@@ -54,8 +22,14 @@ export async function apiFetch(input, init = {}) {
   const isFormData =
     typeof FormData !== "undefined" && restInit.body instanceof FormData;
 
-  if (!isFormData && !headers.has("Content-Type")) {
+  const hasBody = restInit.body != null;
+  if (!stream && hasBody && !isFormData && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
+  }
+
+  // ✅ можно помочь явным Accept
+  if (stream && !headers.has("Accept")) {
+    headers.set("Accept", "text/event-stream");
   }
 
   if (access && !headers.has("Authorization")) {

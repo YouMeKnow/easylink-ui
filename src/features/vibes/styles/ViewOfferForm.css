@@ -1,0 +1,532 @@
+/* ===== Offer View (token-based, supports light/dark automatically) ===== */
+
+.offer-view {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.offer-view__loading {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  padding: 56px 0;
+}
+
+.offer-view__loading-text {
+  color: var(--text-weak);
+  font-weight: 600;
+}
+
+/* card */
+.offer-view__card {
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-md);
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+
+  padding: 18px;
+}
+
+/* header */
+.offer-view__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+
+  padding-bottom: 12px;
+  border-bottom: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+}
+
+.offer-view__title {
+  color: var(--text);
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.offer-view__sub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-weak);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.offer-view__sub-label {
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.95;
+}
+
+.offer-view__mono {
+  font-variant-numeric: tabular-nums;
+}
+
+.offer-view__badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ===== badges (use accent colors) ===== */
+.offer-badge {
+  display: inline-flex;
+  align-items: center;
+
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+
+  color: var(--text);
+  background: color-mix(in oklab, var(--surface) 85%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+
+  white-space: nowrap;
+}
+
+/* Active: accent-to (indigo) */
+.offer-badge.is-active {
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 42%, var(--stroke));
+  background: color-mix(in oklab, rgb(var(--accent-to)) 18%, var(--surface));
+}
+
+/* Scheduled: accent-from (pink) */
+.offer-badge.is-scheduled {
+  border-color: color-mix(in oklab, rgb(var(--accent-from)) 42%, var(--stroke));
+  background: color-mix(in oklab, rgb(var(--accent-from)) 18%, var(--surface));
+}
+
+/* Expired/Disabled: muted */
+.offer-badge.is-expired,
+.offer-badge.is-disabled {
+  opacity: 0.75;
+}
+
+/* warning (for Dynamic label if you keep it) */
+.offer-badge.is-warning {
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 32%, var(--stroke));
+  background: color-mix(in oklab, rgb(var(--accent-to)) 12%, var(--surface));
+  opacity: 0.95;
+}
+
+/* ===== hero ===== */
+.offer-view__hero {
+  margin-top: 14px;
+
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 78%, transparent);
+  box-shadow: var(--shadow-sm);
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+
+  padding: 16px;
+
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.offer-view__hero-left {
+  min-width: 240px;
+}
+
+.offer-view__hero-k {
+  color: var(--text-weak);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.offer-view__hero-v {
+  margin-top: 6px;
+  color: var(--text);
+  font-size: 34px;
+  font-weight: 1000;
+  letter-spacing: -0.02em;
+}
+
+.offer-view__hero-hint {
+  margin-top: 6px;
+  color: var(--text-weak);
+  font-size: 13px;
+}
+
+/* kv group */
+.offer-view__hero-right {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  min-width: 220px;
+}
+
+.kv {
+  display: grid;
+  gap: 2px;
+}
+
+.kv__k {
+  color: var(--text-weak);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kv__v {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* ===== smart hint (UX block) ===== */
+.offer-hint {
+  margin-top: 12px;
+
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+
+  padding: 14px 14px;
+  border-radius: calc(var(--radius) - 2px);
+
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 74%, transparent);
+  box-shadow: var(--shadow-sm);
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+}
+
+.offer-hint__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+
+  display: grid;
+  place-items: center;
+
+  background: color-mix(in oklab, rgb(var(--accent-to)) 12%, var(--surface));
+  border: 1px solid color-mix(in oklab, rgb(var(--accent-to)) 22%, var(--stroke));
+  flex: 0 0 auto;
+}
+
+.offer-hint__title {
+  color: var(--text);
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.offer-hint__text {
+  margin-top: 4px;
+  color: var(--text-weak);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* sections */
+.offer-view__section {
+  margin-top: 16px;
+}
+
+.offer-view__section-title {
+  color: var(--text-weak);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* description panel */
+.offer-view__desc {
+  color: var(--text);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  border-radius: calc(var(--radius) - 2px);
+  padding: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+}
+
+/* grid panels */
+.offer-view__grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.panel {
+  border-radius: calc(var(--radius) - 2px);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  padding: 12px;
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+}
+
+.panel__k {
+  color: var(--text-weak);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panel__v {
+  margin-top: 4px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* actions */
+.offer-view__actions {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Make bootstrap buttons match your tokens a bit better */
+.offer-view__actions .btn-primary {
+  background: rgb(var(--accent-to));
+  border-color: rgb(var(--accent-to));
+}
+
+.offer-view__actions .btn-outline-secondary {
+  color: var(--btn-text);
+  border-color: var(--btn-border);
+  background: var(--btn-bg);
+}
+
+.offer-view__actions .btn-outline-secondary:hover {
+  border-color: var(--btn-hover-border);
+}
+
+/* responsive */
+@media (max-width: 720px) {
+  .offer-view__hero {
+    flex-direction: column;
+  }
+  .offer-view__grid {
+    grid-template-columns: 1fr;
+  }
+  .offer-view__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+.offer-btn {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  border: 1px solid color-mix(in oklab, var(--stroke) 80%, transparent);
+  background: color-mix(in oklab, var(--surface) 85%, transparent);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  transition: transform .12s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.offer-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: color-mix(in oklab, var(--stroke) 95%, transparent);
+}
+
+.offer-btn--ghost {
+  background: color-mix(in oklab, var(--surface) 75%, transparent);
+}
+
+.offer-btn--primary {
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
+  background: color-mix(in oklab, rgb(var(--accent-to)) 22%, var(--surface));
+}
+/* ===== WOW layer (accent glow + premium glass) ===== */
+
+.offer-view__card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* gradient aura behind card */
+.offer-view__card::before {
+  content: "";
+  position: absolute;
+  inset: -120px -120px auto -120px;
+  height: 240px;
+  background:
+    radial-gradient(
+      120px 120px at 22% 40%,
+      color-mix(in oklab, rgb(var(--accent-from)) 55%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      160px 160px at 62% 30%,
+      color-mix(in oklab, rgb(var(--accent-to)) 55%, transparent),
+      transparent 62%
+    );
+  filter: blur(22px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* subtle top accent strip */
+.offer-view__card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgb(var(--accent-from)),
+    rgb(var(--accent-to))
+  );
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* keep content above glows */
+.offer-view__card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* stronger title hierarchy */
+.offer-view__title {
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+/* badges: more “product” */
+.offer-badge {
+  border: 1px solid color-mix(in oklab, var(--stroke) 65%, transparent);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+}
+
+.offer-badge.is-active {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, rgb(var(--accent-to)) 28%, var(--surface)),
+    color-mix(in oklab, rgb(var(--accent-from)) 18%, var(--surface))
+  );
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
+}
+
+.offer-badge.is-scheduled {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, rgb(var(--accent-from)) 26%, var(--surface)),
+    color-mix(in oklab, rgb(var(--accent-to)) 14%, var(--surface))
+  );
+  border-color: color-mix(in oklab, rgb(var(--accent-from)) 55%, var(--stroke));
+}
+
+/* hero: make it feel like a feature block */
+.offer-view__hero {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, rgb(var(--accent-to)) 10%, var(--surface)),
+    color-mix(in oklab, rgb(var(--accent-from)) 8%, var(--surface))
+  );
+  border-color: color-mix(in oklab, var(--stroke) 85%, transparent);
+}
+
+/* discount number: add gradient text */
+.offer-view__hero-v {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--accent-from)),
+    rgb(var(--accent-to))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* hint: no emoji vibes, use “icon chip” + glow */
+.offer-hint {
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid color-mix(in oklab, var(--stroke) 75%, transparent);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.offer-hint::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    240px 120px at 20% 50%,
+    color-mix(in oklab, rgb(var(--accent-to)) 18%, transparent),
+    transparent 60%
+  );
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.offer-hint__icon {
+  color: rgb(var(--accent-to));
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, rgb(var(--accent-to)) 18%, var(--surface)),
+    color-mix(in oklab, rgb(var(--accent-from)) 12%, var(--surface))
+  );
+  border: 1px solid color-mix(in oklab, rgb(var(--accent-to)) 35%, var(--stroke));
+}
+
+.offer-ic {
+  width: 20px;
+  height: 20px;
+}
+
+/* hint variants */
+.offer-hint.is-active .offer-hint__icon { color: rgb(var(--accent-to)); }
+.offer-hint.is-scheduled .offer-hint__icon { color: rgb(var(--accent-from)); }
+.offer-hint.is-expired .offer-hint__icon,
+.offer-hint.is-disabled .offer-hint__icon { color: color-mix(in oklab, var(--text-weak) 85%, transparent); }
+
+/* buttons: make them “wow” too */
+.offer-btn--primary {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--accent-to)),
+    rgb(var(--accent-from))
+  );
+  border-color: transparent;
+  color: #fff;
+}
+
+.offer-btn--primary:hover {
+  filter: saturate(1.05);
+}
+
+.offer-btn--primary {
+  border: 0;
+  background-clip: padding-box;
+}
