@@ -14,6 +14,8 @@ import OfferCard from "@/features/vibes/offers/OfferCard";
 
 import useQueryTab from "@/shared/router/useQueryTab";
 
+import { useDeleteOffer } from "@/features/vibes/offers/useDeleteOffer";
+
 export default function BusinessOwnerCard({
   t,
   vibe, // { id, type, photo }
@@ -42,9 +44,8 @@ export default function BusinessOwnerCard({
     { enabled: ownerActionsEnabled }
   );
 
-  const { offers = [], loading: loadingOffers } = useGetOffersByVibeId(vibeId, {
-    enabled: ownerActionsEnabled,
-  });
+  const { offers = [], loading: loadingOffers, reload: reloadOffers } =
+    useGetOffersByVibeId(vibeId, { enabled: ownerActionsEnabled });
 
   const itemIds = useMemo(
     () => (Array.isArray(items) ? items.map((x) => x.id) : []),
@@ -125,13 +126,15 @@ export default function BusinessOwnerCard({
                       });
                     }}
 
-                    onDelete={() => {
+                    onDelete={async () => {
                       if (!window.confirm("Delete this offer?")) return;
-
-                      // если у тебя есть delete endpoint — вызови здесь
-                      // await deleteOffer(offer.id)
-                      // reloadOffers()
-                      console.log("TODO: delete offer", offer.id);
+                      try {
+                        await deleteOffer({ offerId: offer.id, vibeId });
+                        await reloadOffers?.(); 
+                      } catch (e) {
+                        console.error(e);
+                        alert("Failed to delete offer");
+                      }
                     }}
 
                     onDoubleClick={() => {

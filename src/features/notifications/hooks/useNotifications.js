@@ -30,13 +30,20 @@ export function useNotifications({ enabled, limit = 6 } = {}) {
         : [];
       setItems(normalized);
     } catch (e) {
-  console.error("NOTIFICATIONS LOAD ERROR:", e);
-  setError(e);
+      console.error("NOTIFICATIONS LOAD ERROR:", e);
+      setError(e?.message || "Failed to load notifications");
     } finally {
       setLoading(false);
     }
   }, [enabled, limit]);
 
+  // keep latest load in ref (so SSE doesn't depend on load)
+  const loadRef = useRef(load);
+  useEffect(() => {
+    loadRef.current = load;
+  }, [load]);
+
+  // initial load when enabled changes
   useEffect(() => {
     if (!enabled) {
       setItems([]);
@@ -45,25 +52,22 @@ export function useNotifications({ enabled, limit = 6 } = {}) {
     }
     load().catch(() => {});
   }, [enabled, load]);
-  
 
-  // SSE refresh
+  // SSE refresh (simple)
   useEffect(() => {
     if (!enabled) return;
 
-    const ac = new AbortController();
-    openNotificationsStream({
-      signal: ac.signal,
-      onEvent: ({ event }) => {
-  console.log("SSE EVENT:", event);
-  if (event !== "connected") load().catch(() => {});
-},
-      onError: () => {},
+    const unsub = openNotificationsStream({
+      onEvent: ({ type }) => {
+        if (type === "connected" || type === "ping") return;
+        loadRef.current?.().catch(() => {});
+      },
     });
-    return () => ac.abort();
-  }, [enabled, load]);
 
-  // close on outside click / esc (только когда открыто)
+    return () => unsub?.();
+  }, [enabled]);
+
+  // close on outside click / esc (only when open)
   useEffect(() => {
     if (!open) return;
 
@@ -82,17 +86,17 @@ export function useNotifications({ enabled, limit = 6 } = {}) {
   }, [open]);
 
   const toggle = useCallback(async () => {
-    if (!open) load().catch(() => {});
+    if (!open) loadRef.current?.().catch(() => {});
     setOpen((v) => !v);
-  }, [open, load]);
+  }, [open]);
 
   const markRead = useCallback(async (id) => {
-    // optimistic
-    setItems((prev) => prev.map((x) => (x.id === id ? { ...x, read: true } : x)));
+    setItems((prev) =>
+      prev.map((x) => (x.id === id ? { ...x, read: true } : x))
+    );
     try {
       await markNotificationRead(id);
-    } catch {
-    }
+    } catch {}
   }, []);
 
   const markAllRead = useCallback(async () => {
