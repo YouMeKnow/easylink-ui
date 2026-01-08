@@ -81,7 +81,7 @@ export default function VibeSearch({ autoFocus = false }) {
 
           <button
             type="submit"
-            className="vibe-search__btn"     // ✅ И ЭТО
+            className="vibe-search__btn"     
             disabled={loading || !isValid}
             aria-busy={loading ? "true" : "false"}
           >

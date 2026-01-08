@@ -6,7 +6,6 @@
   justify-content: center;
 }
 
-/* делаем “капсулу” строго по центру */
 .vibe-search__panel {
   width: min(720px, 100%);
   padding: 0;
@@ -15,7 +14,6 @@
   box-shadow: none;
 }
 
-/* сама капсула (input + button) */
 .vibe-search__row {
   display: flex;
   align-items: stretch;
@@ -93,7 +91,6 @@
 
 .vibe-search__btn:active { transform: translateY(0); }
 
-/* убираем СИНИЙ фокус браузера и даём свой */
 .vibe-search__btn:focus { outline: none; box-shadow: none; }
 
 .vibe-search__btn:focus-visible {

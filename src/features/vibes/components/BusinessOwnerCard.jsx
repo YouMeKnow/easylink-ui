@@ -113,10 +113,9 @@ export default function BusinessOwnerCard({
                   <OfferCard
                     key={offer.id}
                     offer={offer}
-                    canManage={true} // owner view
+                    canManage={true} 
 
                     onSelect={() => {
-                      // если тебе не нужен select — можешь убрать
                     }}
 
                     onEdit={() => {

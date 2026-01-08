@@ -39,7 +39,7 @@ export async function apiFetch(input, init = {}) {
     ...restInit,
     headers,
     credentials: "include",
-    cache: "no-store", // полезно, особенно для SSE/проблемных кэшей
+    cache: "no-store", 
   });
 
   if (!res.ok) {
