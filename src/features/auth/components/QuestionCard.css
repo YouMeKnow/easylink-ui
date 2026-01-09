@@ -1,0 +1,149 @@
+/* QuestionCard.css — YMK glass styles */
+
+.auth-qcard {
+  background: color-mix(in oklab, var(--surface) 86%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 92%, transparent);
+  box-shadow: var(--shadow-sm);
+  border-radius: 22px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+/* subtle glow */
+.auth-qcard::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+  background:
+    radial-gradient(520px 260px at 15% 10%, rgba(var(--accent-from), 0.12), transparent 60%),
+    radial-gradient(560px 320px at 110% 25%, rgba(var(--accent-to), 0.12), transparent 60%);
+  opacity: 0.9;
+}
+
+.auth-qcard-meta,
+.auth-qcard-title,
+.auth-qcard-hint,
+.auth-qcard-inputrow {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-qcard-meta {
+  font-size: 12px;
+  color: var(--text-weak);
+  margin-bottom: 8px;
+}
+
+.auth-qcard-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.auth-qcard-hint {
+  font-size: 12px;
+  color: var(--text-weak);
+  margin-bottom: 10px;
+}
+
+/* input row */
+.auth-qcard-inputrow {
+  display: grid;
+  grid-template-columns: 1fr 44px;
+  gap: 10px;
+  align-items: center;
+}
+
+.auth-qcard-input {
+  height: 46px;
+  border-radius: 14px;
+  padding: 0 14px;
+
+  background: color-mix(in oklab, var(--surface) 82%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 92%, transparent);
+  box-shadow: 0 10px 24px rgba(15, 18, 34, 0.06);
+
+  color: var(--text);
+  outline: none;
+
+  transition: transform 0.12s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+:root[data-theme="dark"] .auth-qcard-input {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+}
+
+.auth-qcard-input::placeholder {
+  color: color-mix(in oklab, var(--text-weak) 78%, transparent);
+}
+
+.auth-qcard-input:focus {
+  border-color: rgba(var(--accent-to), 0.55);
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-to), 0.12),
+    0 14px 34px rgba(15, 18, 34, 0.10);
+  transform: translateY(-1px);
+}
+
+/* eye button (glass icon button) */
+.auth-qcard-eye {
+  width: 44px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+
+  background: color-mix(in oklab, var(--surface) 74%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 92%, transparent);
+  box-shadow: 0 10px 24px rgba(15, 18, 34, 0.08);
+
+  color: color-mix(in oklab, var(--text) 82%, transparent);
+  cursor: pointer;
+
+  transition: transform 0.12s ease, border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
+}
+
+/* remove bootstrap/browser rings completely */
+.auth-qcard-eye:focus,
+.auth-qcard-eye:focus-visible {
+  outline: none !important;
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-to), 0.12),
+    0 10px 24px rgba(15, 18, 34, 0.10) !important;
+}
+
+.auth-qcard-eye:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--accent-to), 0.45);
+  color: rgba(var(--accent-to), 0.95);
+}
+
+.auth-qcard-eye:active {
+  transform: translateY(0px) scale(0.99);
+}
+
+/* bootstrap icon sizing */
+.auth-qcard-eye i {
+  font-size: 18px;
+  line-height: 1;
+}
+.auth-qcard-eye {
+  display: grid;
+  place-items: center;
+  padding: 0 !important; /* bootstrap иногда добавляет */
+  line-height: 1;
+}
+
+.auth-qcard-eye i {
+  display: block;
+  line-height: 1;
+  margin: 0;
+}

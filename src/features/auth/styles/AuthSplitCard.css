@@ -1,0 +1,253 @@
+/* AuthSplitCard.css (YMK glass tones)
+   Works with your tokens from index.css
+*/
+
+.auth-split-card {
+  width: min(980px, 94vw);
+  margin: 28px auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  border-radius: 26px;
+  overflow: hidden;
+
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-md);
+
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+@media (max-width: 900px) {
+  .auth-split-card {
+    grid-template-columns: 1fr;
+  }
+  .auth-right {
+    display: none;
+  }
+}
+
+/* LEFT */
+.auth-left {
+  padding: 28px 28px 22px;
+  position: relative;
+}
+
+/* subtle top sheen */
+.auth-left::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0)
+  );
+  opacity: 0.55;
+}
+:root[data-theme="dark"] .auth-left::before {
+  opacity: 0.18;
+}
+
+.auth-title {
+  position: relative;
+  margin: 0 0 6px;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.auth-subtitle {
+  position: relative;
+  margin: 0 0 18px;
+  color: var(--text-weak);
+  max-width: 52ch;
+}
+
+/* FORM */
+.auth-form {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.auth-field {
+  display: grid;
+  gap: 7px;
+}
+
+.auth-label {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: color-mix(in oklab, var(--text) 86%, transparent);
+}
+
+.auth-input {
+  height: 44px;
+  border-radius: 14px;
+  padding: 0 14px;
+
+  background: color-mix(in oklab, var(--surface) 82%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 92%, transparent);
+  box-shadow: 0 10px 24px rgba(15, 18, 34, 0.06);
+
+  color: var(--text);
+  outline: none;
+  transition: transform 0.12s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+:root[data-theme="dark"] .auth-input {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+}
+
+.auth-input::placeholder {
+  color: color-mix(in oklab, var(--text-weak) 78%, transparent);
+}
+
+.auth-input:focus {
+  border-color: rgba(var(--accent-to), 0.55);
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-to), 0.12),
+    0 14px 34px rgba(15, 18, 34, 0.10);
+  transform: translateY(-1px);
+}
+
+.auth-hint {
+  font-size: 12px;
+  color: var(--text-weak);
+  margin-top: -2px;
+}
+
+/* PRIMARY BUTTON */
+.auth-btn {
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+
+  color: #fff;
+  background:
+    linear-gradient(135deg, rgba(var(--accent-from), 1), rgba(var(--accent-to), 1));
+  box-shadow:
+    0 18px 44px rgba(15, 18, 34, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+
+  cursor: pointer;
+  transition: transform 0.14s ease, filter 0.14s ease, box-shadow 0.14s ease;
+}
+
+.auth-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.03) saturate(1.06);
+  box-shadow:
+    0 22px 58px rgba(15, 18, 34, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.10) inset;
+}
+
+.auth-btn:active {
+  transform: translateY(0px) scale(0.995);
+}
+
+.auth-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+/* FOOTER LINK */
+.auth-footer {
+  position: relative;
+  margin-top: 16px;
+  color: var(--text-weak);
+  font-size: 14px;
+}
+
+.auth-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  color: color-mix(in oklab, var(--text) 88%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 92%, transparent);
+  background: color-mix(in oklab, var(--surface) 72%, transparent);
+
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.auth-link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(var(--accent-to), 0.45);
+  box-shadow: 0 10px 24px rgba(15, 18, 34, 0.10);
+}
+
+/* RIGHT */
+.auth-right {
+  position: relative;
+  background:
+    radial-gradient(900px 480px at 20% 10%, rgba(var(--accent-from), 0.22), transparent 60%),
+    radial-gradient(900px 520px at 110% 25%, rgba(var(--accent-to), 0.20), transparent 60%),
+    color-mix(in oklab, var(--surface) 58%, transparent);
+  border-left: 1px solid var(--stroke);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.auth-hero-img {
+  width: min(420px, 92%);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 20px 52px rgba(0, 0, 0, 0.22));
+}
+
+.auth-right-placeholder {
+  width: min(420px, 92%);
+  height: 320px;
+  border-radius: 22px;
+  border: 1px dashed color-mix(in oklab, var(--stroke) 86%, transparent);
+  background: color-mix(in oklab, var(--surface) 60%, transparent);
+}
+
+/* disable global hover/focus ring for primary auth button */
+.auth-btn {
+  border-color: transparent;
+}
+
+.auth-btn:hover {
+  border-color: transparent !important;
+}
+
+.auth-btn:focus,
+.auth-btn:focus-visible {
+  outline: none !important;
+  box-shadow:
+    0 18px 44px rgba(15, 18, 34, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
+
+/* kill bootstrap focus ring for auth primary button */
+.auth-btn:focus,
+.auth-btn:focus-visible {
+  outline: none !important;
+  box-shadow:
+    0 18px 44px rgba(15, 18, 34, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+}
+
+.auth-title {
+  color: var(--text);
+}
+
+.auth-subtitle {
+  color: var(--text-weak);
+}

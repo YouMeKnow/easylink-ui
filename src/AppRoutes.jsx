@@ -13,14 +13,14 @@ import Privacy from "@/pages/legal/Privacy";
 import Ads from "@/pages/legal/Ads";
 
 import ProfilePage from "@/pages/ProfilePage";
-import SignInPage from "@/pages/SignInPage";
+import SignIn from "@/features/auth/signin/SignIn";
 import EmailVerificationSentPage from "@/pages/EmailVerificationSentPage";
 import EmailVerifiedPage from "@/pages/EmailVerifiedPage";
 
 import VibePage from "@/pages/VibePage";
 
 // features
-import SignUp from "@/features/auth/SignUp";
+import SignUp from "@/features/auth/signup/SignUp";
 import Review from "@/features/review/Review";
 import CreateVibe from "@/features/vibes/forms/CreateVibe";
 import UserVibes from "@/features/vibes/UserVibes";
@@ -51,15 +51,13 @@ export default function AppRoutes({ questions, setQuestions }) {
       <Route
         path="/signup"
         element={
-          <NarrowPage>
-            <SignUp />
-          </NarrowPage>
+          <SignUp />
         }
       />
 
       <Route
         path="/signin"
-        element={<SignInPage questions={questions} setQuestions={setQuestions} />}
+        element={<SignIn questions={questions} setQuestions={setQuestions} />}
       />
       <Route path="/login" element={<Navigate to="/signin" />} />
 

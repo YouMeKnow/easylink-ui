@@ -8,7 +8,7 @@
   "step1_placeholder": "you@example.com",
   "step1_next": "Далее",
   "step2_info": "Сколько memory locks вы хотите добавить? Больше = безопаснее!",
-  "step2_label": "Выберите количество memory locks:",
+  "step2_label": "Выберите количество memory locks",
   "step3_info": "Придумайте вопрос, ответ на который знаете только вы. Он будет использоваться для входа без пароля!",
   "step3_question": "Вопрос",
   "step3_custom": "Написать свой",
@@ -32,5 +32,28 @@
   "toast_fail": "Регистрация не удалась",
   "unknown_error": "Что-то пошло не так. Пожалуйста, попробуйте снова.",
   "verification_already_sent": "Письмо с подтверждением уже отправлено. Проверьте свой email.",
-  "account_already_exists": "Такой аккаунт уже существует. Попробуйте войти."
+  "account_already_exists": "Такой аккаунт уже существует. Попробуйте войти.",
+  "finish_title": "Проверьте и создайте аккаунт",
+  "finish_info": "Эти вопросы будут использоваться для входа без пароля. Вы сможете изменить их позже.",
+    "password_signup": {
+    "title": "Создать аккаунт",
+    "subtitle": "Регистрация по паролю. Memory Locks можно включить позже.",
+    "email_label": "Почта",
+    "email_placeholder": "ymk@example.com",
+    "password_label": "Пароль",
+    "password_placeholder": "Минимум 8 символов",
+    "password_hint": "Используй 8+ символов.",
+    "cta": "Создать аккаунт",
+    "cta_loading": "Создаём...",
+    "footer_have_account": "Уже есть аккаунт?",
+    "footer_login": "Войти",
+    "hero_alt": "Регистрация",
+    "toast": {
+      "verify_email": "Проверь почту — мы отправили письмо для подтверждения!",
+      "signup_failed": "Не удалось зарегистрироваться"
+    },
+    "errors": {
+      "signup_failed_status": "Ошибка регистрации: {{status}}"
+    }
+  }
 }

@@ -36,7 +36,7 @@ export default function useGetOffersByVibeId(vibeId, opts = {}) {
       });
 
       if (!res.ok) {
-
+        // если apiFetch не кидает исключения сам
         const text = await res.text().catch(() => "");
         throw Object.assign(new Error(text || "Failed to load offers"), {
           status: res.status,
