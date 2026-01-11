@@ -1,6 +1,6 @@
 // src/features/vibes/offers/OfferCard.jsx
 import React, { useMemo } from "react";
-import "@/features/vibes/styles/OfferCard.css";
+import "./OfferCard.css";
 
 export default function OfferCard({
   offer,
@@ -42,13 +42,9 @@ export default function OfferCard({
     return onSelect?.(offer);
   };
 
-  // ✅ железно глушим клики внутри карточки
+  // 🔒 блокируем всплытие, но НЕ ломаем onClick кнопок
   const stopAll = (e) => {
-    e.preventDefault();
     e.stopPropagation();
-    if (e.nativeEvent?.stopImmediatePropagation) {
-      e.nativeEvent.stopImmediatePropagation();
-    }
   };
 
   const onKeyDown = (e) => {
@@ -111,8 +107,6 @@ export default function OfferCard({
               <button
                 type="button"
                 className="btn btn-sm btn-outline-primary"
-                // ✅ ВАЖНО: capture чтобы карточка не словила клик
-                onClickCapture={stopAll}
                 onMouseDown={stopAll}
                 onClick={(e) => {
                   stopAll(e);
@@ -125,8 +119,6 @@ export default function OfferCard({
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"
-                // ✅ ВАЖНО: capture чтобы карточка не словила клик
-                onClickCapture={stopAll}
                 onMouseDown={stopAll}
                 onClick={(e) => {
                   stopAll(e);

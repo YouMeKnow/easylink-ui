@@ -9,12 +9,13 @@ import BusinessTabsInCard from "@/features/vibes/forms/business/BusinessTabsInCa
 import MenuTab from "@/features/vibes/forms/business/tabs/MenuTab";
 
 import useItemsByVibeId from "@/features/vibes/catalog/useItemsByVibeId";
-import useGetOffersByVibeId from "@/features/vibes/offers/useGetOffersByVibeId";
-import OfferCard from "@/features/vibes/offers/OfferCard";
+import { useGetOffersByVibeId, OfferCard } from "@/features/vibes/offers";
+
+
 
 import useQueryTab from "@/shared/router/useQueryTab";
 
-import { useDeleteOffer } from "@/features/vibes/offers/useDeleteOffer";
+import { deleteOffer } from "@/features/vibes/offers";
 
 export default function BusinessOwnerCard({
   t,
@@ -113,14 +114,14 @@ export default function BusinessOwnerCard({
                   <OfferCard
                     key={offer.id}
                     offer={offer}
-                    canManage={true} 
-
-                    onSelect={() => {
-                    }}
-
+                    canManage={true}
+                    onOpen={() => {
+                      // public view
+                      navigate(`/offers/${offer.id}`)}
+                    }
                     onEdit={() => {
                       if (!returnState) return;
-                      navigate(`/offers/${offer.id}`, {
+                      navigate(`/offers/${offer.id}/edit`, {
                         state: { ...returnState, returnTab: "offers" },
                       });
                     }}
@@ -129,18 +130,11 @@ export default function BusinessOwnerCard({
                       if (!window.confirm("Delete this offer?")) return;
                       try {
                         await deleteOffer({ offerId: offer.id, vibeId });
-                        await reloadOffers?.(); 
+                        await reloadOffers?.();
                       } catch (e) {
                         console.error(e);
                         alert("Failed to delete offer");
                       }
-                    }}
-
-                    onDoubleClick={() => {
-                      if (!returnState) return;
-                      navigate(`/offers/${offer.id}`, {
-                        state: { ...returnState, returnTab: "offers" },
-                      });
                     }}
                   />
                 ))}

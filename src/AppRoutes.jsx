@@ -2,7 +2,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthGuard from "@/features/auth/AuthGuard";
-import NarrowPage from "@/components/common/NarrowPage";
 import NotificationsPage from "@/features/notifications/NotificationsPage";
 
 // pages
@@ -31,12 +30,9 @@ import MyCircle from "@/features/vibes/interactions/MyCircle";
 import MyOffers from "@/features/vibes/interactions/MyOffers";
 import InteractionsPageBasic from "@/features/vibes/interactions/MyCircle";
 
-import OfferForm from "@/features/vibes/offers/OfferForm";
-import ViewOfferForm from "@/features/vibes/offers/ViewOfferForm";
-import OfferViewAnalytics from "@/analytics/OfferViewAnalytics";
-import OfferTableUsers from "@/features/vibes/offers/OffersTableForUsers";
-
-
+import OfferEditorPage from "@/features/vibes/offers/pages/OfferEditorPage";
+import OfferAnalyticsPage from "@/features/vibes/offers/pages/OfferAnalyticsPage";
+import OfferDetailsPage from "@/features/vibes/offers/pages/OfferDetailsPage";
 
 import CatalogForm from "@/features/vibes/catalog/catalogForm";
 
@@ -76,20 +72,11 @@ export default function AppRoutes({ questions, setQuestions }) {
       <Route path="/vibes/:id/interactions/offers" element={<MyOffers />} />
       <Route path="/vibes/:id/interactions-basic" element={<InteractionsPageBasic />} />
 
-      <Route path="/offers/new" element={<OfferForm />} />
-      <Route path="/offers/:id" element={<OfferForm />} />
-      <Route path="/offer-table-users" element={<OfferTableUsers />} />
-      <Route
-        path="/view-offer-form/:id"
-        element={
-          <>
-            <OfferViewAnalytics />
-            <ViewOfferForm />
-          </>
-        }
-      />
+      <Route path="/offers/new" element={<OfferEditorPage />} />
+      <Route path="/offers/:id/edit" element={<OfferEditorPage />} />   {/* edit */}
 
-    
+      <Route path="/offers/:id" element={<OfferDetailsPage />} />
+      <Route path="/offers/:id/analytics" element={<OfferAnalyticsPage />} /> 
 
       <Route path="/email-verification-sent" element={<EmailVerificationSentPage />} />
       <Route path="/email-verified" element={<EmailVerifiedPage />} />

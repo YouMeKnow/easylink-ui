@@ -14,8 +14,13 @@
   cursor: pointer;
   user-select: none;
 
-  transition: transform 0.12s ease, box-shadow 0.16s ease, border-color 0.16s ease,
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease,
     background 0.16s ease;
+
+  overflow: hidden; /* страховка от вылезаний */
 }
 
 .offer-card:hover {
@@ -38,11 +43,13 @@
   opacity: 0.58;
 }
 
+/* ---------- LEFT BAR ---------- */
+
 .offer-card__bar {
   width: 6px;
   border-radius: 999px;
   margin-left: 12px;
-  background: #22c55e; /* active default */
+  background: #22c55e;
 }
 
 .offer-card.is-expired .offer-card__bar {
@@ -53,11 +60,15 @@
   background: #a1a1aa;
 }
 
+/* ---------- BODY ---------- */
+
 .offer-card__body {
   flex: 1;
   padding-right: 14px;
-  min-width: 0;
+  min-width: 0; /* 🔥 критично для flex */
 }
+
+/* ---------- TOP ROW ---------- */
 
 .offer-card__top {
   display: flex;
@@ -67,18 +78,23 @@
 }
 
 .offer-card__title-wrap {
-  min-width: 0;
+  flex: 1;
+  min-width: 0; /* 🔥 иначе текст расширяет карточку */
 }
 
 .offer-card__title {
   font-weight: 800;
   font-size: 16px;
-  line-height: 1.2;
+  line-height: 1.25;
   letter-spacing: 0.01em;
 
-  white-space: nowrap;
+  /* 2 строки + троеточие */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
   overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere; /* ломает длинные слова */
 }
 
 .offer-card__subtitle {
@@ -86,6 +102,8 @@
   font-size: 13px;
   color: #64748b;
 }
+
+/* ---------- BADGES ---------- */
 
 .offer-card__badges {
   display: flex;
@@ -103,6 +121,7 @@
   font-size: 12px;
   font-weight: 700;
   border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .offer-badge.tone-success {
@@ -134,6 +153,8 @@
   color: #92400e;
   border-color: color-mix(in oklab, #f59e0b 35%, transparent);
 }
+
+/* ---------- BOTTOM ROW ---------- */
 
 .offer-card__bottom {
   margin-top: 12px;
@@ -170,19 +191,25 @@
   margin-left: 6px;
 }
 
+/* ---------- ACTIONS ---------- */
+
 .offer-card__actions {
   display: flex;
   gap: 8px;
 }
+
+/* ---------- MOBILE ---------- */
 
 @media (max-width: 520px) {
   .offer-card__bottom {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .offer-card__actions {
     width: 100%;
   }
+
   .offer-card__actions .btn {
     flex: 1;
   }

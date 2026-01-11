@@ -9,8 +9,8 @@ import BusinessTabsInCard from "@/features/vibes/forms/business/BusinessTabsInCa
 import MenuTab from "@/features/vibes/forms/business/tabs/MenuTab";
 
 import useItemsByVibeId from "@/features/vibes/catalog/useItemsByVibeId";
-import useGetOffersByVibeId from "@/features/vibes/offers/useGetOffersByVibeId";
-import OfferCard from "@/features/vibes/offers/OfferCard";
+import useGetOffersByVibeId from "@/features/vibes/offers/hooks/useGetOffersByVibeId";
+import OfferCard from "@/features/vibes/offers/components/OfferCard/OfferCard";
 
 import useQueryTab from "@/shared/router/useQueryTab";
 
@@ -187,7 +187,7 @@ export default function BusinessCustomerCard({
                     key={offer.id}
                     offer={offer}
                     onOpen={(o) => {
-                      navigate(`/view-offer-form/${o.id}`, {
+                      navigate(`/offers/${o.id}`, {
                         state: {
                           origin: "vibe_view_offers",
                           ownerVibeId: vibeId,
