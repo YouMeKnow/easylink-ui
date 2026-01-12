@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import useItemsByVibeId from "@/features/vibes/catalog/useItemsByVibeId";
-import useGetOffersByVibeId from "@/features/vibes/offers/useGetOffersByVibeId";
-import OfferCard from "@/features/vibes/offers/OfferCard";
+import useGetOffersByVibeId from "@/features/vibes/offers/hooks/useGetOffersByVibeId";
+import OfferCard from "@/features/vibes/offers/components/OfferCard/OfferCard";
 
 import { useBusinessVibeForm } from "./useBusinessVibeForm";
 import MenuTab from "./tabs/MenuTab.jsx";

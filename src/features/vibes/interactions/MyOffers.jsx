@@ -1,7 +1,9 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import useGetOffersByVibeId from "../offers/useGetOffersByVibeId";
+import {
+  useGetOffersByVibeId
+} from "@/features/vibes/offers";
 
 export default function MyOffers() {
   const { t } = useTranslation("interactions");
