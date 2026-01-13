@@ -35,6 +35,8 @@ import OfferAnalyticsPage from "@/features/vibes/offers/pages/OfferAnalyticsPage
 import OfferDetailsPage from "@/features/vibes/offers/pages/OfferDetailsPage";
 
 import CatalogForm from "@/features/vibes/catalog/catalogForm";
+import CatalogItemPage from "@/features/vibes/catalog/pages/CatalogItemPage";
+
 
 export default function AppRoutes({ questions, setQuestions }) {
   return (
@@ -83,6 +85,7 @@ export default function AppRoutes({ questions, setQuestions }) {
 
       <Route path="/catalog/new" element={<CatalogForm />} />
       <Route path="/catalog/:id/edit" element={<CatalogForm />} />
+      <Route path="/catalog/:id" element={<CatalogItemPage />} />
 
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />

@@ -204,14 +204,17 @@ export default function BusinessCustomerCard({
             )
           }
           renderMenu={() => (
-            <MenuTab
+           <MenuTab
               t={t}
               loadingItems={loadingItems}
               items={items}
-              itemIds={itemIds}
+              itemIds={[]}      
               vibeId={vibeId}
+              isOwner={false}
               onAddItem={null}
-              onEditItem={null}
+              onEditItem={(it) => {
+                navigate(`/catalog/${it.id}`, { state: { vibeId } });
+              }}
             />
           )}
         />

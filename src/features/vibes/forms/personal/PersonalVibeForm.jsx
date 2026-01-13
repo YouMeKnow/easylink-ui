@@ -51,7 +51,19 @@ export default function PersonalVibeForm({
 
   const safeId = mode === "edit" && isUUID(initialData?.id) ? initialData.id : undefined;
   const ownerActionsEnabled = Boolean(safeId);
+const setBackground = (bg) => {
+  setExtraBlocks((prev) => {
+    const arr = Array.isArray(prev) ? [...prev] : [];
+    const idx = arr.findIndex((b) => b?.type === "BACKGROUND");
 
+    if (idx >= 0) {
+      arr[idx] = { ...arr[idx], value: bg, label: "Background", placeholder: "" };
+    } else {
+      arr.push({ type: "BACKGROUND", label: "Background", value: bg, placeholder: "" });
+    }
+    return arr;
+  });
+};
   return (
     <div
       className="d-flex flex-column gap-3 align-items-center justify-content-start w-100"
@@ -89,7 +101,17 @@ export default function PersonalVibeForm({
             : t("create_button")}
         </button>
       </div>
-
+<div className="d-flex gap-2" style={{ maxWidth: 920, width: "100%" }}>
+  <button type="button" className="btn btn-outline-secondary" onClick={() => setBackground("default")}>
+    Default
+  </button>
+  <button type="button" className="btn btn-outline-secondary" onClick={() => setBackground("gradient")}>
+    Gradient
+  </button>
+  <button type="button" className="btn btn-outline-secondary" onClick={() => setBackground("matrix")}>
+    Matrix
+  </button>
+</div>
       {/* editing — card in editMode */}
       <VibeCard
         id={safeId}
@@ -115,6 +137,7 @@ export default function PersonalVibeForm({
         onBlockRemove={(i) => removeBlock(i)}
         onOpenBlockPicker={() => setShowBlockModal(true)}
       />
+
 
       {/* contacts */}
       {showModal && (

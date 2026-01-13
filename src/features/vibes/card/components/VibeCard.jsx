@@ -1,5 +1,4 @@
 import React from "react";
-import { BsShareFill } from "react-icons/bs";
 import { useTranslation } from "react-i18next";
 
 import ShareModal from "@/features/vibes/components/ShareModal";
@@ -9,7 +8,7 @@ import useVisibilityToggle from "@/features/vibes/useVisibilityToggle.jsx";
 import VibeContent from "@/features/vibes/tools/VibeContent";
 
 import { trackEvent } from "@/services/amplitude";
-import isUuid from "@/shared/lib/isUuid"; 
+import isUuid from "@/shared/lib/isUuid";
 import "./VibeCard.css";
 import { Share2 } from "lucide-react";
 
@@ -26,7 +25,7 @@ export default function VibeCard({
 
   editMode = false,
   ownerActionsEnabled = false,
-  onShare = null, 
+  onShare = null,
   cardBody = null,
   maxCardWidth = 420,
 
@@ -49,6 +48,17 @@ export default function VibeCard({
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
   const shareUrl = hasId ? `${origin}/view/${id}` : "";
+
+  // --- background from extraBlocks (system block: type="BACKGROUND") ---
+  const getBgFromBlocks = (blocks) => {
+    if (!Array.isArray(blocks)) return "default";
+    const b = blocks.find((x) => x?.type === "BACKGROUND");
+    const v = String(b?.value || "").trim().toLowerCase();
+    if (!v) return "default";
+    if (v === "default" || v === "gradient" || v === "matrix") return v;
+    return "default";
+  };
+  const vibeBg = getBgFromBlocks(extraBlocks);
 
   // visibility (owner only)
   const [vibeVisible, code, visibilityToggleUI] = useVisibilityToggle(
@@ -110,12 +120,16 @@ export default function VibeCard({
   return (
     <div
       className="vibe-card"
+      data-bg={vibeBg}
       style={{
         width: "100%",
         maxWidth: maxCardWidth,
         margin: "0 auto",
       }}
     >
+      {/* Background layer */}
+      <div className="vibe-card__bg" aria-hidden="true" />
+
       {/* Share button */}
       {canShare && (
         <button
@@ -143,10 +157,8 @@ export default function VibeCard({
           </div>
 
           <div className="vibe-card__visibility-controls">
-            {/* toggle UI returned by hook */}
             {visibilityToggleUI}
 
-            {/* share code */}
             {vibeVisible && code && (
               <>
                 <button

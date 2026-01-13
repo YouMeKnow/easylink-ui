@@ -2,13 +2,9 @@ import React from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import PageLayout from "../../../../components/common/PageLayout";
 import { useTranslation } from "react-i18next";
-import {
-  useGetOffer,
-  OfferViewCard,
-} from "@/features/vibes/offers";
+import { useGetOffer, OfferViewCard } from "@/features/vibes/offers";
 
-
-export default function ViewOfferForm() {
+export default function OfferDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,7 +13,7 @@ export default function ViewOfferForm() {
   const params = new URLSearchParams(location.search);
   const vibeIdFromQuery = params.get("vibeId");
 
-  const { offer, loading, error } = useGetOffer(id);
+  const { offer } = useGetOffer(id);
 
   if (!offer) {
     return (
@@ -30,14 +26,18 @@ export default function ViewOfferForm() {
     );
   }
 
+  const canManage = offer.canManage === true; 
+
   return (
     <PageLayout title={t("Offer Details")}>
       <OfferViewCard
         offer={offer}
         onBack={() => navigate(-1)}
         onAllOffers={() => navigate(`/offers?vibeId=${vibeIdFromQuery || ""}`)}
-        isOwner={true} 
-        onAnalytics={() => navigate(`/offers/${offer.id}/analytics`)}
+        isOwner={canManage}
+        onAnalytics={
+          canManage ? () => navigate(`/offers/${offer.id}/analytics`) : undefined
+        }
       />
     </PageLayout>
   );
