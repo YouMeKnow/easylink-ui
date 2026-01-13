@@ -267,7 +267,7 @@ export default function OfferViewCard({
         {hint && (
           <div className={`offer-hint is-${status.key}`}>
             <div className="offer-hint__icon" aria-hidden="true">
-              {/* твои svg */}
+              {/* svg */}
               {status.key === "active" && (
                 <svg viewBox="0 0 24 24" className="offer-ic">
                   <path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />

@@ -1,0 +1,54 @@
+.matrix-container{
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+  opacity: .55;           /* чтобы не убивало контент */
+  border-radius: inherit; /* важно: под форму карточки */
+}
+
+.matrix-column{
+  position: absolute;
+  top: -110%;
+  width: 22px;
+  height: 220%;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 800;
+  animation: fall linear infinite;
+  white-space: nowrap;
+  filter: blur(.0px);
+}
+
+.matrix-column::before{
+  content: "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,.95) 0%,
+    rgba(255,255,255,.95) 6%,
+    rgba(0,255,65,.95) 12%,
+    rgba(0,221,51,.85) 28%,
+    rgba(0,153,17,.70) 50%,
+    rgba(0,55,0,.55) 70%,
+    rgba(0,255,65,.25) 88%,
+    transparent 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  writing-mode: vertical-lr;
+  letter-spacing: 1px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes fall{
+  0%   { transform: translateY(-10%); opacity: 1; }
+  100% { transform: translateY(200%); opacity: 0; }
+}
