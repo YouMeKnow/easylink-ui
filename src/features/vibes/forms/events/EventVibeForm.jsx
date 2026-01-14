@@ -94,26 +94,15 @@ export default function EventVibeForm({
       className="d-flex flex-column gap-3 align-items-center justify-content-start w-100"
       style={{ maxWidth: 1200, width: "100%", margin: "0 auto", padding: "0 20px" }}
     >
-      <div className="d-flex gap-2 w-100" style={{ maxWidth: 420 }}>
+      <div className="cv-top-actions">
         {mode === "edit" && (
-          <button
-            type="button"
-            className="btn btn-outline-secondary w-50"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <button type="button" className="cv-btn cv-btn--ghost" onClick={onCancel} disabled={loading}>
             {t("cancel")}
           </button>
         )}
-        <button
-          type="button"
-          className="btn btn-primary w-100"
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {loading
-            ? (mode === "edit" ? t("saving") : t("creating"))
-            : (mode === "edit" ? t("save_button") : t("create_button"))}
+
+        <button type="button" className="cv-btn cv-btn--primary" onClick={handleSubmit} disabled={loading}>
+          {loading ? (mode === "edit" ? t("saving") : t("creating")) : (mode === "edit" ? t("save_button") : t("create_button"))}
         </button>
       </div>
 

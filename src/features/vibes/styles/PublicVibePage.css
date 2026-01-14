@@ -1,43 +1,50 @@
+/* src/features/vibes/styles/PublicVibePage.css */
+
 .public-vibe-layout {
   display: flex;
-  justify-content: center;
-  gap: 70px;
-  padding: 24px 16px;
+  gap: 16px;
+  align-items: flex-start;
 }
 
 .public-vibe-layout__left {
-  width: 320px;
-  flex-shrink: 0;
+  flex: 0 0 340px; 
+  min-width: 300px;
 }
 
 .public-vibe-layout__right {
-  width: 420px;
-  max-width: 100%;
+  flex: 1 1 auto;
+  min-width: 0; 
 }
 
-/* mobile */
-@media (max-width: 900px) {
+.public-loading {
+  display: grid;
+  place-items: center;
+  min-height: 40vh;
+}
+
+/* ====== MOBILE ====== */
+@media (max-width: 768px) {
   .public-vibe-layout {
     flex-direction: column;
-    align-items: center;
+    gap: 12px;
+    padding: 0 12px; 
   }
 
-  .public-vibe-layout__left,
   .public-vibe-layout__right {
+    order: 1;
     width: 100%;
-    max-width: 420px;
+  }
+
+  .public-vibe-layout__left {
+    order: 2;
+    width: 100%;
+    flex: 0 0 auto;
+    min-width: 0;
   }
 }
-/* centered loading block for public pages */
-.public-loading {
-  min-height: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-/* spinner follows theme text color */
-.public-spinner {
-  color: var(--text);
-  opacity: 0.9;
+@media (max-width: 420px) {
+  .public-vibe-layout {
+    padding: 0 10px;
+  }
 }

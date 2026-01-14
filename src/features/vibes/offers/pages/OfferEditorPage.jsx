@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import "./OfferEditorPage.css";
 
 import {
   useGetOffer,
@@ -22,9 +23,8 @@ export default function OfferEditorPage() {
   const navigate = useNavigate();
 
   const { createOffer, loading: creating } = useCreateOffer(token);
-  const { offer, loading: fetching } = useGetOffer(id, token); // если у тебя нет loading — просто убери
-  const { updateOffer, loading: updating } = useUpdateOffer(token); // если у тебя нет loading — просто убери
-
+  const { offer, loading: fetching } = useGetOffer(id, token); 
+  const { updateOffer, loading: updating } = useUpdateOffer(token); 
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -35,7 +35,7 @@ export default function OfferEditorPage() {
     decreaseIntervalMinutes: 0,
     active: true,
     startTime: new Date().toISOString(),
-    endTime: new Date().toISOString(),
+    endTime: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // + 1 hour
   });
 
   const [changedFields, setChangedFields] = useState({});
@@ -52,7 +52,7 @@ export default function OfferEditorPage() {
         decreaseIntervalMinutes: offer.decreaseIntervalMinutes ?? 0,
         active: offer.active ?? true,
         startTime: offer.startTime || new Date().toISOString(),
-        endTime: offer.endTime || new Date().toISOString(),
+        endTime: offer.endTime || new Date(Date.now() + 60 * 60 * 1000).toISOString(),
       });
       setChangedFields({});
     }
@@ -106,7 +106,7 @@ export default function OfferEditorPage() {
 
   return (
     <PageLayout title={t("Offer Details")}>
-      <div className="container py-4" style={{ maxWidth: 900 }}>
+      <div className="container py-4 offer-editor" style={{ maxWidth: 900 }}>    
         <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
           <div>
             <div className="d-flex align-items-center gap-2">
@@ -120,12 +120,13 @@ export default function OfferEditorPage() {
           </div>
 
           <div className="d-flex gap-2">
-            <button type="button" className="btn btn-outline-secondary" onClick={onCancel} disabled={disabled}>
+            <button className="cv-btn cv-btn--ghost" onClick={onCancel} disabled={disabled}>
               {t("Cancel")}
             </button>
+
             <button
               type="button"
-              className="btn btn-primary"
+              className="cv-btn cv-btn--primary"
               onClick={onSave}
               disabled={disabled || timeInvalid || (isEditMode && !hasChanges)}
               title={timeInvalid ? t("End time must be after start time") : ""}
@@ -152,12 +153,13 @@ export default function OfferEditorPage() {
         )}
 
         <div className="d-flex justify-content-end gap-2 mt-3">
-          <button type="button" className="btn btn-outline-secondary" onClick={onCancel} disabled={disabled}>
+          <button className="cv-btn cv-btn--ghost cv-btn--lg" onClick={onCancel} disabled={disabled}>
             {t("Cancel")}
           </button>
+
           <button
             type="button"
-            className="btn btn-primary btn-lg"
+            className="cv-btn cv-btn--primary cv-btn--lg"
             onClick={onSave}
             disabled={disabled || timeInvalid || (isEditMode && !hasChanges)}
           >

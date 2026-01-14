@@ -1,10 +1,8 @@
 /* ===========================
-   Glassdoor-like Topbar (YMK) — tuned to your requests
-   - full width bar
-   - glass blur 10
-   - NO hover effects (nav + logo + theme toggle)
-   - logo text color hardcoded to match your logo
-   - theme toggle centered emoji
+   Header.css (clean)
+   - glass topbar
+   - mobile: hide nav + hide language switcher + show burger
+   - burger centered
    =========================== */
 
 /* top bar */
@@ -16,7 +14,6 @@
   width: 100%;
   height: 64px;
 
-  /* glass */
   background: color-mix(in oklab, var(--bg0) 82%, transparent);
   border-bottom: 1px solid color-mix(in oklab, var(--stroke) 85%, transparent);
 
@@ -47,7 +44,7 @@
   min-width: 0;
 }
 
-/* LOGO (brand color hardcoded) */
+/* LOGO */
 .topbar__logo{
   display: inline-flex;
   align-items: center;
@@ -61,10 +58,9 @@
   letter-spacing: .01em;
   font-size: 18px;
 
-  color: #1a73e8; /* <-- set to your logo blue */
+  color: #1a73e8;
 }
 
-/* no hover */
 .topbar__logo:hover{
   background: transparent;
   color: #1a73e8;
@@ -77,7 +73,7 @@
   object-fit: contain;
 }
 
-/* optional CTA holder (hidden by default; show on big desktop if you want) */
+/* optional CTA holder (desktop-only if you want) */
 .topbar__cta{
   display: none;
 }
@@ -101,19 +97,23 @@
   font-size: 14px;
   line-height: 1;
 
-  padding: 10px 6px;
+  padding: 10px 10px;
   border-radius: 10px;
 
-  transition: opacity .15s;
+  transition: background .15s ease, opacity .15s ease;
 }
 
-/* no hover */
 .topbar__nav a:hover{
-  opacity: .92;
-  background: transparent;
-  color: var(--text);
+  background: rgba(255,255,255,.08);
 }
 
+.topbar__nav a:hover{
+  background: color-mix(
+    in oklab,
+    currentColor 8%,
+    transparent
+  );
+}
 /* RIGHT */
 .topbar__right{
   justify-self: end;
@@ -122,72 +122,13 @@
   gap: 10px;
 }
 
-/* Theme toggle (no hover + centered emoji) */
-.topbar__iconBtn{
-  width: 36px;
-  height: 36px;
-
-  display: inline-grid;
-  place-items: center;
-
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background: transparent;
-
-  cursor: pointer;
-
-  color: var(--text);
-  opacity: .92;
-
-  line-height: 1;
-  font-size: 18px;
-
-  transition: opacity .15s;
+/* language switcher wrapper */
+.topbar__lang{
+  display: inline-flex;
+  align-items: center;
 }
 
-/* ensure emoji centers perfectly */
-.topbar__iconBtn span{
-  display: block;
-  line-height: 1;
-}
-
-/* no hover */
-.topbar__iconBtn:hover{
-  background: transparent;
-  transform: none;
-  box-shadow: none;
-  opacity: .92;
-}
-
-/* Burger */
-.topbar__burger{
-  display: none;
-  width: 40px;
-  height: 40px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text);
-
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-
-  transition: opacity .15s;
-}
-
-/* no hover */
-.topbar__burger:hover{
-  background: transparent;
-  transform: none;
-  opacity: .92;
-}
-
-/* Focus ring (keep professional) */
+/* Focus ring */
 .topbar a:focus-visible,
 .topbar button:focus-visible{
   outline: none;
@@ -195,55 +136,45 @@
   border-radius: 10px;
 }
 
-/* ===========================
-   Responsive
-   =========================== */
-
-@media (min-width: 1024px){
-  .topbar__cta{ display: block; } /* only if you keep CTA on desktop */
-}
-
-@media (max-width: 900px){
-  .topbar__nav{ gap: 18px; }
-  .topbar__inner{ padding: 0 14px; }
-}
-
-/* Mobile: hide center nav, show burger */
-@media (max-width: 768px){
-  .topbar__inner{
-    grid-template-columns: auto 1fr auto;
-    column-gap: 10px;
-  }
-
-  .topbar__nav{ display: none; }
-  .topbar__cta{ display: none; }
-
-  .topbar__burger{ display: grid; }
-}
-.topbar__nav a{
-  color: var(--text);
-  opacity: .86;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1;
-  padding: 10px 8px;
-  border-radius: 10px;
-  transition: background .15s, opacity .15s, color .15s;
-}
-
-.topbar__nav a:hover{
-  opacity: 1;
-  color: var(--link);
-  background: color-mix(in oklab, var(--bg1) 85%, transparent);
-}
+/* Theme toggle */
 .topbar__iconBtn{
   width: 36px;
   height: 36px;
   padding: 0;
 
-  display: inline-grid;
+  display: grid;
   place-items: center;
+
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+
+  cursor: pointer;
+
+  color: var(--text);
+  opacity: .92;
+
+  line-height: 0;
+  font-size: 18px;
+
+  transition: opacity .15s;
+}
+
+.topbar__iconBtn:hover{
+  background: transparent;
+  opacity: .92;
+}
+
+.topbar__iconBtn > span{
+  display: block;
+  line-height: 1;
+}
+
+.topbar__burger{
+  display: none; /* desktop: hidden */
+  width: 40px;
+  height: 40px;
+  padding: 0;
 
   border-radius: 10px;
   border: 1px solid transparent;
@@ -253,43 +184,44 @@
   color: var(--text);
   opacity: .92;
 
-  /* важно для центрирования svg */
   line-height: 0;
+
+  transition: opacity .15s;
 }
 
-.topbar__iconBtn svg{
-  width: 18px;
-  height: 18px;
-  display: block;      
-}
-.topbar__burger{
-  display: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text);
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-/* Mobile */
 @media (max-width: 768px){
   .topbar__burger{
-    display: inline-grid;
+    display: grid;
     place-items: center;
   }
 }
 
-/* Notifications button */
-.topbar__notifBtn {
+.topbar__burger:hover{
+  background: transparent;
+  opacity: .92;
+}
+
+.topbar__burgerIcon{
+  display: block;
+  font-size: 24px;
+  line-height: 1;
+  transform: translateY(0px);
+}
+
+/* ===========================
+   Notifications (popover + badge)
+   =========================== */
+
+.topbar__notifWrap{
+  position: relative;
+  display: inline-flex;
+}
+
+.topbar__notifBtn{
   position: relative;
 }
 
-/* Small badge (unread count) */
-.topbar__badge {
+.topbar__badge{
   position: absolute;
   top: -4px;
   right: -6px;
@@ -307,32 +239,22 @@
   font-weight: 800;
   line-height: 1;
 
-  /* uses your theme tokens if you have them; fallback safe */
   background: var(--danger, #ef4444);
   color: #fff;
   border: 2px solid var(--surface, #fff);
 }
 
-.topbar__icon {
+.topbar__icon{
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-/* === Notifications popover === */
-.topbar__notifWrap {
-  position: relative;
-  display: inline-flex;
-}
-
-.topbar__notifBtn {
-  position: relative;
-}
-
-.notifPop {
+.notifPop{
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
+
   width: min(360px, calc(100vw - 24px));
   border-radius: 16px;
   padding: 10px;
@@ -346,7 +268,7 @@
   backdrop-filter: blur(10px);
 }
 
-.notifPop__header {
+.notifPop__header{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -354,13 +276,13 @@
   padding: 6px 6px 10px;
 }
 
-.notifPop__title {
+.notifPop__title{
   font-weight: 800;
   letter-spacing: .01em;
   color: var(--text, #111827);
 }
 
-.notifPop__allBtn {
+.notifPop__allBtn{
   border: none;
   background: transparent;
   padding: 6px 8px;
@@ -370,22 +292,22 @@
   cursor: pointer;
 }
 
-.notifPop__allBtn:hover {
+.notifPop__allBtn:hover{
   background: color-mix(in oklab, var(--surface, #fff) 70%, transparent);
 }
 
-.notifPop__list {
+.notifPop__list{
   display: grid;
   gap: 8px;
 }
 
-.notifPop__empty {
+.notifPop__empty{
   padding: 16px 12px;
   text-align: center;
   color: color-mix(in oklab, var(--text, #111827) 55%, transparent);
 }
 
-.notifItem {
+.notifItem{
   width: 100%;
   text-align: left;
   border: 1px solid color-mix(in oklab, var(--stroke, #e5e7eb) 70%, transparent);
@@ -397,16 +319,16 @@
   transition: transform .12s ease, box-shadow .16s ease, background .16s ease;
 }
 
-.notifItem:hover {
+.notifItem:hover{
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm, 0 10px 20px rgba(0,0,0,.12));
 }
 
-.notifItem--unread {
+.notifItem--unread{
   border-color: color-mix(in oklab, var(--primary, #2563eb) 35%, var(--stroke, #e5e7eb));
 }
 
-.notifItem__top {
+.notifItem__top{
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -414,39 +336,47 @@
   margin-bottom: 2px;
 }
 
-.notifItem__title {
+.notifItem__title{
   font-weight: 800;
   color: var(--text, #111827);
   font-size: 13px;
 }
 
-.notifItem__time {
+.notifItem__time{
   font-size: 11px;
   color: color-mix(in oklab, var(--text, #111827) 55%, transparent);
   white-space: nowrap;
 }
 
-.notifItem__body {
+.notifItem__body{
   font-size: 12px;
   color: color-mix(in oklab, var(--text, #111827) 70%, transparent);
 }
 
-/* badge (если у тебя уже есть — оставь один вариант) */
-.topbar__badge {
-  position: absolute;
-  top: -4px;
-  right: -6px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1;
-  background: var(--danger, #ef4444);
-  color: #fff;
-  border: 2px solid var(--surface, #fff);
+/* ===========================
+   Responsive
+   =========================== */
+
+@media (min-width: 1024px){
+  .topbar__cta{ display: block; } /* если хочешь CTA на десктопе */
+}
+
+@media (max-width: 900px){
+  .topbar__nav{ gap: 18px; }
+  .topbar__inner{ padding: 0 14px; }
+}
+
+/* Mobile: hide center nav, hide language, show burger */
+@media (max-width: 768px){
+  .topbar__inner{
+    grid-template-columns: auto 1fr auto;
+    column-gap: 10px;
+  }
+
+  .topbar__nav{ display: none; }
+  .topbar__cta{ display: none; }
+
+  .topbar__lang{ display: none; }
+
+  .topbar__burger{ display: grid; }
 }

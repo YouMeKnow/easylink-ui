@@ -77,54 +77,34 @@ export default function CreateVibe() {
 
       {/* type selector */}
       <section className="cv-type">
-        {isMobile ? (
-          <div className="cv-segments" role="tablist" aria-label={t("type_label")}>
-            {typeOptions.map((opt) => {
-              const active = type === opt.value;
-              return (
-                <button
-                  key={opt.value}
-                  role="tab"
-                  aria-selected={active}
-                  className={`cv-segment ${active ? "is-active" : ""}`}
-                  onClick={() => {
-                    setType(opt.value);
-                    const url = new URL(window.location.href);
-                    url.searchParams.set("type", opt.value);
-                    window.history.replaceState({}, "", url.toString());
-                  }}
-                >
-                  {opt.label}
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="cv-select-wrap">
-            <label className="form-label" htmlFor="vibe-type">
-              {t("type_label")}
-            </label>
-            <select
-              id="vibe-type"
-              className="form-select"
-              value={type}
-              onChange={(e) => {
-                const next = e.target.value;
-                setType(next);
-                const url = new URL(window.location.href);
-                url.searchParams.set("type", next);
-                window.history.replaceState({}, "", url.toString());
-              }}
-              aria-label={t("type_label")}
-            >
-              {typeOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div className="cv-segments cv-segments--desktop" role="tablist" aria-label={t("type_label")}>
+          {typeOptions.map((opt) => {
+            const active = type === opt.value;
+            return (
+              <button
+                type="button"
+                key={opt.value}
+                role="tab"
+                aria-selected={active}
+                className={`cv-segment ${active ? "is-active" : ""}`}
+                onClick={() => {
+                  setType(opt.value);
+                  const url = new URL(window.location.href);
+                  url.searchParams.set("type", opt.value);
+                  window.history.replaceState({}, "", url.toString());
+                }}
+              >
+                <span className="cv-segment__label">{opt.label}</span>
+
+                <span className="cv-segment__hint">
+                  {opt.value === "BUSINESS" ? t("types_hint.business") : ""}
+                  {opt.value === "PERSONAL" ? t("types_hint.personal") : ""}
+                  {opt.value === "EVENT" ? t("types_hint.event") : ""}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </section>
       <section className="cv-form">
         <div className="cv-form__inner">

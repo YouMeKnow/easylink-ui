@@ -202,3 +202,26 @@
     max-width: 100%;
   }
 }
+
+:root[data-theme="dark"] .vibe-card {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface) 92%, transparent),
+      color-mix(in srgb, var(--bg1) 88%, transparent)
+    );
+
+  border-color: var(--stroke);
+  box-shadow: var(--shadow-md);
+}
+
+.vibe-card {
+  color: var(--text);
+}
+
+/* make Hidden / Visible text lighter in dark theme */
+:root[data-theme="dark"] 
+.vibe-card__visibility-controls 
+.form-check-label {
+  color: var(--text);
+}

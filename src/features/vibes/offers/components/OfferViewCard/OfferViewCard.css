@@ -1,5 +1,9 @@
-/* ===== Offer View (token-based, supports light/dark automatically) ===== */
+/* =========================================================
+   OfferViewCard.css (CLEAN)
+   token-based, supports light/dark via :root[data-theme]
+   ========================================================= */
 
+/* layout */
 .offer-view {
   max-width: 860px;
   margin: 0 auto;
@@ -17,8 +21,14 @@
   font-weight: 600;
 }
 
-/* card */
+/* =========================================================
+   Card shell + WOW layer
+   ========================================================= */
+
 .offer-view__card {
+  position: relative;
+  overflow: hidden;
+
   border-radius: var(--radius);
   background: var(--surface);
   border: 1px solid var(--stroke);
@@ -30,7 +40,49 @@
   padding: 18px;
 }
 
-/* header */
+/* gradient aura behind card */
+.offer-view__card::before {
+  content: "";
+  position: absolute;
+  inset: -120px -120px auto -120px;
+  height: 240px;
+  background:
+    radial-gradient(
+      120px 120px at 22% 40%,
+      color-mix(in oklab, rgb(var(--accent-from)) 55%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      160px 160px at 62% 30%,
+      color-mix(in oklab, rgb(var(--accent-to)) 55%, transparent),
+      transparent 62%
+    );
+  filter: blur(22px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* subtle top accent strip */
+.offer-view__card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgb(var(--accent-from)), rgb(var(--accent-to)));
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* keep content above glows */
+.offer-view__card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   Header
+   ========================================================= */
+
 .offer-view__header {
   display: flex;
   align-items: flex-start;
@@ -43,10 +95,10 @@
 
 .offer-view__title {
   color: var(--text);
-  font-weight: 900;
-  font-size: 20px;
+  font-weight: 950;
+  font-size: 22px;
   line-height: 1.2;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
 }
 
 .offer-view__sub {
@@ -76,7 +128,10 @@
   justify-content: flex-end;
 }
 
-/* ===== badges (use accent colors) ===== */
+/* =========================================================
+   Badges
+   ========================================================= */
+
 .offer-badge {
   display: inline-flex;
   align-items: center;
@@ -90,44 +145,55 @@
   letter-spacing: 0.01em;
 
   color: var(--text);
-  background: color-mix(in oklab, var(--surface) 85%, transparent);
-  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 65%, transparent);
 
   white-space: nowrap;
 }
 
-/* Active: accent-to (indigo) */
 .offer-badge.is-active {
-  border-color: color-mix(in oklab, rgb(var(--accent-to)) 42%, var(--stroke));
-  background: color-mix(in oklab, rgb(var(--accent-to)) 18%, var(--surface));
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, rgb(var(--accent-to)) 28%, var(--surface)),
+    color-mix(in oklab, rgb(var(--accent-from)) 18%, var(--surface))
+  );
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
 }
 
-/* Scheduled: accent-from (pink) */
 .offer-badge.is-scheduled {
-  border-color: color-mix(in oklab, rgb(var(--accent-from)) 42%, var(--stroke));
-  background: color-mix(in oklab, rgb(var(--accent-from)) 18%, var(--surface));
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, rgb(var(--accent-from)) 26%, var(--surface)),
+    color-mix(in oklab, rgb(var(--accent-to)) 14%, var(--surface))
+  );
+  border-color: color-mix(in oklab, rgb(var(--accent-from)) 55%, var(--stroke));
 }
 
-/* Expired/Disabled: muted */
 .offer-badge.is-expired,
 .offer-badge.is-disabled {
   opacity: 0.75;
 }
 
-/* warning (for Dynamic label if you keep it) */
 .offer-badge.is-warning {
   border-color: color-mix(in oklab, rgb(var(--accent-to)) 32%, var(--stroke));
   background: color-mix(in oklab, rgb(var(--accent-to)) 12%, var(--surface));
   opacity: 0.95;
 }
 
-/* ===== hero ===== */
+/* =========================================================
+   Hero block
+   ========================================================= */
+
 .offer-view__hero {
   margin-top: 14px;
 
   border-radius: calc(var(--radius) - 2px);
-  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
-  background: color-mix(in oklab, var(--surface) 78%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 85%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, rgb(var(--accent-to)) 10%, var(--surface)),
+    color-mix(in oklab, rgb(var(--accent-from)) 8%, var(--surface))
+  );
   box-shadow: var(--shadow-sm);
 
   -webkit-backdrop-filter: blur(var(--blur));
@@ -141,9 +207,7 @@
   flex-wrap: wrap;
 }
 
-.offer-view__hero-left {
-  min-width: 240px;
-}
+.offer-view__hero-left { min-width: 240px; }
 
 .offer-view__hero-k {
   color: var(--text-weak);
@@ -153,12 +217,18 @@
   text-transform: uppercase;
 }
 
+/* default value (view mode) */
 .offer-view__hero-v {
   margin-top: 6px;
-  color: var(--text);
   font-size: 34px;
   font-weight: 1000;
   letter-spacing: -0.02em;
+
+  /* gradient text */
+  background: linear-gradient(90deg, rgb(var(--accent-from)), rgb(var(--accent-to)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .offer-view__hero-hint {
@@ -175,10 +245,7 @@
   min-width: 220px;
 }
 
-.kv {
-  display: grid;
-  gap: 2px;
-}
+.kv { display: grid; gap: 2px; }
 
 .kv__k {
   color: var(--text-weak);
@@ -194,7 +261,10 @@
   font-weight: 800;
 }
 
-/* ===== smart hint (UX block) ===== */
+/* =========================================================
+   Hint block
+   ========================================================= */
+
 .offer-hint {
   margin-top: 12px;
 
@@ -202,15 +272,31 @@
   gap: 12px;
   align-items: flex-start;
 
-  padding: 14px 14px;
+  padding: 14px;
   border-radius: calc(var(--radius) - 2px);
 
-  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
-  background: color-mix(in oklab, var(--surface) 74%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 75%, transparent);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
   box-shadow: var(--shadow-sm);
 
   -webkit-backdrop-filter: blur(var(--blur));
   backdrop-filter: blur(var(--blur));
+
+  position: relative;
+  overflow: hidden;
+}
+
+.offer-hint::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    240px 120px at 20% 50%,
+    color-mix(in oklab, rgb(var(--accent-to)) 18%, transparent),
+    transparent 60%
+  );
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .offer-hint__icon {
@@ -221,10 +307,22 @@
   display: grid;
   place-items: center;
 
-  background: color-mix(in oklab, rgb(var(--accent-to)) 12%, var(--surface));
-  border: 1px solid color-mix(in oklab, rgb(var(--accent-to)) 22%, var(--stroke));
+  color: rgb(var(--accent-to));
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, rgb(var(--accent-to)) 18%, var(--surface)),
+    color-mix(in oklab, rgb(var(--accent-from)) 12%, var(--surface))
+  );
+  border: 1px solid color-mix(in oklab, rgb(var(--accent-to)) 35%, var(--stroke));
   flex: 0 0 auto;
+
+  position: relative;
+  z-index: 1;
 }
+
+.offer-ic { width: 20px; height: 20px; }
+
+.offer-hint__body { position: relative; z-index: 1; }
 
 .offer-hint__title {
   color: var(--text);
@@ -239,10 +337,19 @@
   line-height: 1.4;
 }
 
-/* sections */
-.offer-view__section {
-  margin-top: 16px;
+/* hint variants */
+.offer-hint.is-active .offer-hint__icon { color: rgb(var(--accent-to)); }
+.offer-hint.is-scheduled .offer-hint__icon { color: rgb(var(--accent-from)); }
+.offer-hint.is-expired .offer-hint__icon,
+.offer-hint.is-disabled .offer-hint__icon {
+  color: color-mix(in oklab, var(--text-weak) 85%, transparent);
 }
+
+/* =========================================================
+   Sections + grid panels
+   ========================================================= */
+
+.offer-view__section { margin-top: 16px; }
 
 .offer-view__section-title {
   color: var(--text-weak);
@@ -253,7 +360,6 @@
   margin-bottom: 8px;
 }
 
-/* description panel */
 .offer-view__desc {
   color: var(--text);
   background: color-mix(in oklab, var(--surface) 70%, transparent);
@@ -267,7 +373,6 @@
   backdrop-filter: blur(var(--blur));
 }
 
-/* grid panels */
 .offer-view__grid {
   margin-top: 12px;
   display: grid;
@@ -300,7 +405,224 @@
   font-weight: 800;
 }
 
-/* actions */
+/* =========================================================
+   Inline edit controls (inputs)
+   ========================================================= */
+
+/* Title input (make it obvious) */
+.offer-edit .offer-view__title-input{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+
+  border: 1px solid color-mix(in oklab, var(--stroke) 75%, transparent);
+  background: color-mix(in oklab, var(--surface) 82%, transparent);
+
+  color: var(--text);
+  font-weight: 950;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+
+  outline: none;
+  cursor: text;
+  caret-color: rgb(var(--accent-to));
+  box-shadow: var(--shadow-sm);
+}
+
+.offer-edit .offer-view__title-input::placeholder{
+  color: color-mix(in oklab, var(--text-weak) 90%, transparent);
+  opacity: 1;
+}
+
+.offer-edit .offer-view__title-input:focus{
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, rgb(var(--accent-to)) 26%, transparent),
+    var(--shadow-md);
+}
+
+/* description textarea */
+.offer-edit .offer-view__desc-input {
+  width: 100%;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  color: var(--text);
+
+  padding: 12px;
+  outline: none;
+  resize: vertical;
+  line-height: 1.5;
+
+  box-shadow: var(--shadow-sm);
+}
+
+.offer-edit .offer-view__desc-input:focus {
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, rgb(var(--accent-to)) 18%, transparent),
+    var(--shadow-md);
+}
+
+/* hero current discount input */
+.offer-view__hero-v--edit{
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.offer-view__hero-v-input{
+  width: 140px;
+  padding: 8px 10px;
+  border-radius: 14px;
+
+  border: 1px solid color-mix(in oklab, var(--stroke) 75%, transparent);
+  background: color-mix(in oklab, var(--surface) 86%, transparent);
+
+  font: inherit;
+  font-weight: 1000;
+  letter-spacing: -0.02em;
+  color: var(--text);
+
+  caret-color: rgb(var(--accent-to));
+  outline: none;
+  cursor: text;
+
+  box-shadow: var(--shadow-sm);
+}
+
+.offer-view__hero-v-input:focus{
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, rgb(var(--accent-to)) 26%, transparent),
+    var(--shadow-md);
+}
+
+.offer-view__hero-v-suf{
+  font-weight: 900;
+  color: var(--text-weak);
+  font-size: 14px;
+}
+
+/* select */
+.offer-select{
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 80%, transparent);
+  color: var(--text);
+
+  border-radius: 12px;
+  padding: 6px 10px;
+  outline: none;
+  font-weight: 800;
+}
+
+.offer-select:focus{
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
+  box-shadow: 0 0 0 3px color-mix(in oklab, rgb(var(--accent-to)) 18%, transparent);
+}
+
+/* inline numeric inputs */
+.offer-inline-num{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.offer-inline-num__input,
+.offer-inline-text{
+  width: 110px;
+
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 80%, transparent);
+  color: var(--text);
+
+  border-radius: 12px;
+  padding: 6px 10px;
+  outline: none;
+  font-weight: 800;
+}
+
+.offer-inline-num__input:focus,
+.offer-inline-text:focus{
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
+  box-shadow: 0 0 0 3px color-mix(in oklab, rgb(var(--accent-to)) 18%, transparent);
+}
+
+.offer-inline-num__suf{
+  color: var(--text-weak);
+  font-weight: 900;
+}
+
+/* datetime input */
+.offer-dt{
+  width: 100%;
+
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 80%, transparent);
+  color: var(--text);
+
+  border-radius: 12px;
+  padding: 8px 10px;
+  outline: none;
+  font-weight: 800;
+}
+
+.offer-dt:focus{
+  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
+  box-shadow: 0 0 0 3px color-mix(in oklab, rgb(var(--accent-to)) 18%, transparent);
+}
+
+/* =========================================================
+   Switch
+   ========================================================= */
+
+.offer-switch {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.offer-switch input { display: none; }
+
+.offer-switch__ui {
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  position: relative;
+
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.offer-switch__ui::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+
+  background: color-mix(in oklab, var(--text) 40%, var(--surface));
+  transition: left .18s ease, background .18s ease;
+}
+
+.offer-switch input:checked + .offer-switch__ui {
+  background: linear-gradient(90deg, rgb(var(--accent-to)), rgb(var(--accent-from)));
+  border-color: transparent;
+}
+
+.offer-switch input:checked + .offer-switch__ui::after {
+  left: 21px;
+  background: #fff;
+}
+
+/* =========================================================
+   Actions (internal OfferViewCard buttons if you use them)
+   ========================================================= */
+
 .offer-view__actions {
   margin-top: 16px;
   display: flex;
@@ -309,45 +631,18 @@
   gap: 10px;
 }
 
-/* Make bootstrap buttons match your tokens a bit better */
-.offer-view__actions .btn-primary {
-  background: rgb(var(--accent-to));
-  border-color: rgb(var(--accent-to));
-}
-
-.offer-view__actions .btn-outline-secondary {
-  color: var(--btn-text);
-  border-color: var(--btn-border);
-  background: var(--btn-bg);
-}
-
-.offer-view__actions .btn-outline-secondary:hover {
-  border-color: var(--btn-hover-border);
-}
-
-/* responsive */
-@media (max-width: 720px) {
-  .offer-view__hero {
-    flex-direction: column;
-  }
-  .offer-view__grid {
-    grid-template-columns: 1fr;
-  }
-  .offer-view__actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
 .offer-btn {
   height: 42px;
   padding: 0 14px;
   border-radius: 12px;
   font-weight: 800;
+
   border: 1px solid color-mix(in oklab, var(--stroke) 80%, transparent);
   background: color-mix(in oklab, var(--surface) 85%, transparent);
   color: var(--text);
+
   box-shadow: var(--shadow-sm);
-  transition: transform .12s ease, box-shadow .16s ease, border-color .16s ease;
+  transition: transform .12s ease, box-shadow .16s ease, border-color .16s ease, filter .16s ease;
 }
 
 .offer-btn:hover {
@@ -361,313 +656,98 @@
 }
 
 .offer-btn--primary {
-  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
-  background: color-mix(in oklab, rgb(var(--accent-to)) 22%, var(--surface));
-}
-/* ===== WOW layer (accent glow + premium glass) ===== */
-
-.offer-view__card {
-  position: relative;
-  overflow: hidden;
-}
-
-/* gradient aura behind card */
-.offer-view__card::before {
-  content: "";
-  position: absolute;
-  inset: -120px -120px auto -120px;
-  height: 240px;
-  background:
-    radial-gradient(
-      120px 120px at 22% 40%,
-      color-mix(in oklab, rgb(var(--accent-from)) 55%, transparent),
-      transparent 60%
-    ),
-    radial-gradient(
-      160px 160px at 62% 30%,
-      color-mix(in oklab, rgb(var(--accent-to)) 55%, transparent),
-      transparent 62%
-    );
-  filter: blur(22px);
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-/* subtle top accent strip */
-.offer-view__card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    rgb(var(--accent-from)),
-    rgb(var(--accent-to))
-  );
-  opacity: 0.85;
-  pointer-events: none;
-}
-
-/* keep content above glows */
-.offer-view__card > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* stronger title hierarchy */
-.offer-view__title {
-  font-size: 22px;
-  letter-spacing: -0.01em;
-}
-
-/* badges: more “product” */
-.offer-badge {
-  border: 1px solid color-mix(in oklab, var(--stroke) 65%, transparent);
-  background: color-mix(in oklab, var(--surface) 70%, transparent);
-}
-
-.offer-badge.is-active {
-  background: linear-gradient(
-    135deg,
-    color-mix(in oklab, rgb(var(--accent-to)) 28%, var(--surface)),
-    color-mix(in oklab, rgb(var(--accent-from)) 18%, var(--surface))
-  );
-  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
-}
-
-.offer-badge.is-scheduled {
-  background: linear-gradient(
-    135deg,
-    color-mix(in oklab, rgb(var(--accent-from)) 26%, var(--surface)),
-    color-mix(in oklab, rgb(var(--accent-to)) 14%, var(--surface))
-  );
-  border-color: color-mix(in oklab, rgb(var(--accent-from)) 55%, var(--stroke));
-}
-
-/* hero: make it feel like a feature block */
-.offer-view__hero {
-  background: linear-gradient(
-    135deg,
-    color-mix(in oklab, rgb(var(--accent-to)) 10%, var(--surface)),
-    color-mix(in oklab, rgb(var(--accent-from)) 8%, var(--surface))
-  );
-  border-color: color-mix(in oklab, var(--stroke) 85%, transparent);
-}
-
-/* discount number: add gradient text */
-.offer-view__hero-v {
-  background: linear-gradient(
-    90deg,
-    rgb(var(--accent-from)),
-    rgb(var(--accent-to))
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* hint: no emoji vibes, use “icon chip” + glow */
-.offer-hint {
-  border-radius: calc(var(--radius) - 2px);
-  border: 1px solid color-mix(in oklab, var(--stroke) 75%, transparent);
-  background: color-mix(in oklab, var(--surface) 70%, transparent);
-  position: relative;
-  overflow: hidden;
-}
-
-.offer-hint::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    240px 120px at 20% 50%,
-    color-mix(in oklab, rgb(var(--accent-to)) 18%, transparent),
-    transparent 60%
-  );
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-.offer-hint__icon {
-  color: rgb(var(--accent-to));
-  background: linear-gradient(
-    135deg,
-    color-mix(in oklab, rgb(var(--accent-to)) 18%, var(--surface)),
-    color-mix(in oklab, rgb(var(--accent-from)) 12%, var(--surface))
-  );
-  border: 1px solid color-mix(in oklab, rgb(var(--accent-to)) 35%, var(--stroke));
-}
-
-.offer-ic {
-  width: 20px;
-  height: 20px;
-}
-
-/* hint variants */
-.offer-hint.is-active .offer-hint__icon { color: rgb(var(--accent-to)); }
-.offer-hint.is-scheduled .offer-hint__icon { color: rgb(var(--accent-from)); }
-.offer-hint.is-expired .offer-hint__icon,
-.offer-hint.is-disabled .offer-hint__icon { color: color-mix(in oklab, var(--text-weak) 85%, transparent); }
-
-/* buttons: make them “wow” too */
-.offer-btn--primary {
-  background: linear-gradient(
-    90deg,
-    rgb(var(--accent-to)),
-    rgb(var(--accent-from))
-  );
-  border-color: transparent;
+  border: 0;
   color: #fff;
+  background: linear-gradient(90deg, rgb(var(--accent-to)), rgb(var(--accent-from)));
 }
 
-.offer-btn--primary:hover {
-  filter: saturate(1.05);
+.offer-btn--primary:hover { filter: saturate(1.05); }
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 720px) {
+  .offer-view__hero { flex-direction: column; }
+  .offer-view__grid { grid-template-columns: 1fr; }
+  .offer-view__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* ===== Discount presets: fix layout / height / alignment ===== */
+
+.offer-view__discount-edit{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.offer-btn--primary {
-  border: 0;
-  background-clip: padding-box;
-}
-/* ===== inline edit controls (WYSIWYG) ===== */
-.offer-edit .offer-view__title-input {
-  width: 100%;
-  border: 0;
-  outline: none;
-  background: transparent;
-  color: var(--text);
-  font-weight: 900;
-  font-size: 22px;
-  letter-spacing: -0.01em;
-  padding: 2px 0;
-}
-
-.offer-edit .offer-view__title-input::placeholder { color: var(--text-weak); opacity: .7; }
-
-.offer-edit .offer-view__desc-input {
-  width: 100%;
-  border-radius: calc(var(--radius) - 2px);
-  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
-  background: color-mix(in oklab, var(--surface) 70%, transparent);
-  color: var(--text);
-  padding: 12px;
-  outline: none;
-  resize: vertical;
-  line-height: 1.5;
-  box-shadow: var(--shadow-sm);
-}
-
-.offer-edit .offer-view__desc-input:focus {
-  border-color: color-mix(in oklab, rgb(var(--accent-to)) 55%, var(--stroke));
-  box-shadow: var(--shadow-md);
-}
-
-.offer-view__hero-v--edit {
+.offer-view__discount-inputWrap{
+  position: relative;
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
 }
 
-.offer-view__hero-v-input {
-  width: 140px;
-  border: 0;
-  outline: none;
-  background: transparent;
-  font: inherit;
-  font-weight: 1000;
-  letter-spacing: -0.02em;
-  color: transparent;
-  background: linear-gradient(90deg, rgb(var(--accent-from)), rgb(var(--accent-to)));
-  -webkit-background-clip: text;
-  background-clip: text;
+/* important: make presets not "collapse" under global button styles */
+.offer-view__discount-presets{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-height: 42px;
 }
 
-.offer-view__hero-v-suf {
-  font-weight: 900;
-  color: var(--text-weak);
-  font-size: 14px;
-}
+.offer-view__preset{
+  appearance: none;
+  -webkit-appearance: none;
 
-.offer-select {
-  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
-  background: color-mix(in oklab, var(--surface) 80%, transparent);
-  color: var(--text);
-  border-radius: 12px;
-  padding: 6px 10px;
-  outline: none;
-  font-weight: 800;
-}
-
-.offer-inline-num,
-.offer-inline-text {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-}
+  justify-content: center;
 
-.offer-inline-num__input,
-.offer-inline-text {
-  width: 110px;
-  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
-  background: color-mix(in oklab, var(--surface) 80%, transparent);
+  height: 40px;              /* <- main fix */
+  padding: 0 12px;           /* <- no vertical padding chaos */
+  border-radius: 999px;
+
+  border: 1px solid color-mix(in oklab, var(--stroke) 75%, transparent);
+  background: color-mix(in oklab, var(--surface) 82%, transparent);
   color: var(--text);
-  border-radius: 12px;
-  padding: 6px 10px;
-  outline: none;
+
   font-weight: 800;
-}
+  font-size: 13px;
+  line-height: 1;
 
-.offer-inline-num__suf {
-  color: var(--text-weak);
-  font-weight: 900;
-}
-
-.offer-dt {
-  width: 100%;
-  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
-  background: color-mix(in oklab, var(--surface) 80%, transparent);
-  color: var(--text);
-  border-radius: 12px;
-  padding: 8px 10px;
-  outline: none;
-  font-weight: 800;
-}
-
-/* switch */
-.offer-switch {
-  display: inline-flex;
-  align-items: center;
+  white-space: nowrap;
   cursor: pointer;
-  user-select: none;
-}
-.offer-switch input { display: none; }
-.offer-switch__ui {
-  width: 42px;
-  height: 24px;
-  border-radius: 999px;
-  position: relative;
-  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
-  background: color-mix(in oklab, var(--surface) 70%, transparent);
+
   box-shadow: var(--shadow-sm);
+  transition: transform .08s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
 }
-.offer-switch__ui::after {
-  content: "";
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  position: absolute;
-  top: 50%;
-  left: 3px;
-  transform: translateY(-50%);
-  background: color-mix(in oklab, var(--text) 40%, var(--surface));
-  transition: left .18s ease, background .18s ease;
+
+.offer-view__preset:hover{
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+  border-color: color-mix(in oklab, var(--stroke) 95%, transparent);
+  box-shadow: var(--shadow-md);
 }
-.offer-switch input:checked + .offer-switch__ui {
-  background: linear-gradient(90deg, rgb(var(--accent-to)), rgb(var(--accent-from)));
-  border-color: transparent;
+
+.offer-view__preset:active{
+  transform: scale(.99);
 }
-.offer-switch input:checked + .offer-switch__ui::after {
-  left: 21px;
-  background: #fff;
+
+.offer-view__preset:disabled{
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* mobile: presets go full-width nicely */
+@media (max-width: 520px){
+  .offer-view__discount-presets{
+    width: 100%;
+  }
+  .offer-view__preset{
+    flex: 1;
+  }
 }

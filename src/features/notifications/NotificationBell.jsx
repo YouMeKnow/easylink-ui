@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/services/amplitude";
 import { useNotificationsState } from "@/features/notifications/context/NotificationsContext";
-
+import { Bell } from "lucide-react";
 import "@/features/notifications/styles/NotificationBell.css";
 
 export default function NotificationBell() {
@@ -53,7 +53,9 @@ export default function NotificationBell() {
         aria-expanded={open}
         aria-haspopup="dialog"
       >
-        <span className="topbar__icon" aria-hidden="true">🔔</span>
+        <span className="topbar__icon" aria-hidden="true">
+          <Bell size={18} />
+        </span>
 
         {unreadCount > 0 && (
           <span className="topbar__badge" aria-label={`${unreadCount} unread`}>

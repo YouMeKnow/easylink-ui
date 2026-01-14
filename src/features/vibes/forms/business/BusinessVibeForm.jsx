@@ -157,34 +157,17 @@ export default function BusinessVibeForm({
       style={{ maxWidth: 1200, margin: "0 auto" }}
     >
       {/* top actions */}
-      <div className="d-flex gap-2 w-100" style={{ maxWidth: 420 }}>
+      <div className="cv-top-actions">
         {mode === "edit" && (
-          <button
-            type="button"
-            className="btn btn-outline-secondary w-50"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <button type="button" className="cv-btn cv-btn--ghost" onClick={onCancel} disabled={loading}>
             {t("cancel")}
           </button>
         )}
 
-        <button
-          type="button"
-          className="btn btn-primary w-100"
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {loading
-            ? mode === "edit"
-              ? t("saving")
-              : t("creating")
-            : mode === "edit"
-            ? t("save_button")
-            : t("create_button")}
+        <button type="button" className="cv-btn cv-btn--primary" onClick={handleSubmit} disabled={loading}>
+          {loading ? (mode === "edit" ? t("saving") : t("creating")) : (mode === "edit" ? t("save_button") : t("create_button"))}
         </button>
       </div>
-
       <form className="w-100" onSubmit={(e) => e.preventDefault()}>
         <VibeCard
           {...contentProps}

@@ -213,3 +213,107 @@
     flex: 1;
   }
 }
+
+/* =========================
+   DARK THEME overrides
+   uses tokens from index.css
+   ========================= */
+
+:root[data-theme="dark"] .offer-card{
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border-color: color-mix(in srgb, var(--stroke) 92%, transparent);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .offer-card:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: color-mix(in srgb, var(--stroke) 120%, transparent);
+}
+
+/* focus ring in dark */
+:root[data-theme="dark"] .offer-card:focus-visible{
+  outline: 3px solid color-mix(in srgb, rgb(var(--accent-to)) 38%, transparent);
+  outline-offset: 2px;
+}
+
+/* selected state (keep your “pink-ish” idea but make it night-safe) */
+:root[data-theme="dark"] .offer-card.is-selected{
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, rgba(var(--accent-from), .18) 28%, var(--surface)),
+      color-mix(in srgb, rgba(var(--accent-to), .16) 22%, var(--surface))
+    );
+  border-color: color-mix(in srgb, rgb(var(--accent-to)) 22%, var(--stroke));
+}
+
+/* disabled stays */
+:root[data-theme="dark"] .offer-card.is-disabled{
+  opacity: .55;
+}
+
+/* left bar */
+:root[data-theme="dark"] .offer-card__bar{ background: #22c55e; }
+:root[data-theme="dark"] .offer-card.is-expired .offer-card__bar{ background: rgba(148,163,184,.9); }
+:root[data-theme="dark"] .offer-card.is-disabled .offer-card__bar{ background: rgba(161,161,170,.9); }
+
+/* subtitle + labels + hints */
+:root[data-theme="dark"] .offer-card__subtitle,
+:root[data-theme="dark"] .offer-card__label,
+:root[data-theme="dark"] .offer-card__hint{
+  color: var(--text-weak);
+}
+
+/* value */
+:root[data-theme="dark"] .offer-card__value{
+  color: var(--text);
+}
+
+/* badges — keep tones but make them dark-friendly */
+:root[data-theme="dark"] .offer-badge{
+  border-color: color-mix(in srgb, var(--stroke) 90%, transparent);
+}
+
+:root[data-theme="dark"] .offer-badge.tone-success{
+  background: rgba(34,197,94,.14);
+  color: rgba(255,255,255,.90);
+  border-color: rgba(34,197,94,.28);
+}
+
+:root[data-theme="dark"] .offer-badge.tone-neutral{
+  background: rgba(148,163,184,.12);
+  color: rgba(255,255,255,.86);
+  border-color: rgba(148,163,184,.22);
+}
+
+:root[data-theme="dark"] .offer-badge.tone-muted{
+  background: rgba(148,163,184,.10);
+  color: rgba(255,255,255,.78);
+  border-color: rgba(148,163,184,.18);
+}
+
+:root[data-theme="dark"] .offer-badge.tone-info{
+  background: rgba(59,130,246,.14);
+  color: rgba(255,255,255,.90);
+  border-color: rgba(59,130,246,.26);
+}
+
+:root[data-theme="dark"] .offer-badge.tone-warning{
+  background: rgba(245,158,11,.14);
+  color: rgba(255,255,255,.90);
+  border-color: rgba(245,158,11,.26);
+}
+
+/* action buttons inside offer card (bootstrap) — dark-safe */
+:root[data-theme="dark"] .offer-card__actions .btn{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.14);
+  color: rgba(255,255,255,.90);
+}
+
+:root[data-theme="dark"] .offer-card__actions .btn:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.22);
+}

@@ -134,7 +134,6 @@ export default function OfferViewCard({
           </div>
 
           <div className="offer-view__badges">
-            {/* toggle active прямо в карточке */}
             {isEdit ? (
               <label className="offer-switch" title={t("Show to users")}>
                 <input
@@ -160,21 +159,46 @@ export default function OfferViewCard({
           <div className="offer-view__hero-left">
             <div className="offer-view__hero-k">{t("Current discount")}</div>
 
-            {isEdit ? (
-              <div className="offer-view__hero-v offer-view__hero-v--edit">
-                <input
-                  className="offer-view__hero-v-input"
-                  type="number"
-                  value={offer.currentDiscount ?? 0}
-                  onChange={(e) => patch({ currentDiscount: Number(e.target.value) })}
-                  disabled={disabled}
-                  min={0}
-                />
-                <span className="offer-view__hero-v-suf">{discountSuffix}</span>
-              </div>
-            ) : (
-              <div className="offer-view__hero-v">{discountValue(offer)}</div>
-            )}
+              {isEdit ? (
+                <div className="offer-view__hero-v offer-view__hero-v--edit">
+                  <div className="offer-view__discount-edit">
+                    <div className="offer-view__discount-inputWrap">
+                      <input
+                        className="offer-view__hero-v-input"
+                        type="number"
+                        inputMode="decimal"
+                        min={0}
+                        step={offer.discountType === "FIXED" ? 0.5 : 1}
+                        value={offer.currentDiscount ?? 0}
+                        onChange={(e) => {
+                          const raw = e.target.value;
+                          const v = raw === "" ? 0 : Number(raw);
+                          patch({ currentDiscount: Number.isFinite(v) ? v : 0 });
+                        }}
+                        disabled={disabled}
+                      />
+                      <span className="offer-view__hero-v-suf">{discountSuffix}</span>
+                    </div>
+
+                    {/* presets: 10/25/50 for % ; for $ можно оставить 5/10/20 */}
+                    <div className="offer-view__discount-presets">
+                      {(offer.discountType === "FIXED" ? [5, 10, 20] : [10, 25, 50]).map((p) => (
+                        <button
+                          key={p}
+                          type="button"
+                          className="offer-view__preset"
+                          onClick={() => patch({ currentDiscount: p })}
+                          disabled={disabled}
+                        >
+                          {offer.discountType === "FIXED" ? `$${p}` : `${p}%`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="offer-view__hero-v">{discountValue(offer)}</div>
+              )}
 
             <div className="offer-view__hero-hint">
               {t("Discount type")}:{" "}

@@ -135,27 +135,6 @@ a:hover {
   color: var(--linkHover);
 }
 
-/* default button (your custom ones can override) */
-button {
-  border-radius: 8px;
-  border: 1px solid var(--btn-border);
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--btn-bg);
-  color: var(--btn-text);
-  cursor: pointer;
-  transition: border-color 0.25s, background-color 0.25s;
-}
-button:hover {
-  border-color: var(--btn-hover-border);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
 .glass {
   background: var(--surface);
   border: 1px solid var(--stroke);
@@ -163,4 +142,32 @@ button:focus-visible {
   border-radius: var(--radius);
   backdrop-filter: blur(var(--blur));
   -webkit-backdrop-filter: blur(var(--blur));
+}
+
+button {
+  border-radius: 10px;
+  border: 1px solid var(--btn-border);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  cursor: pointer;
+
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.08s ease;
+}
+
+button:hover {
+  border-color: color-mix(in srgb, var(--stroke) 70%, transparent);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, rgb(var(--accent-to)) 35%, transparent);
 }

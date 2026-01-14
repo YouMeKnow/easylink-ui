@@ -42,7 +42,6 @@ export default function OfferCard({
     return onSelect?.(offer);
   };
 
-  // 🔒 блокируем всплытие, но НЕ ломаем onClick кнопок
   const stopAll = (e) => {
     e.stopPropagation();
   };

@@ -8,6 +8,7 @@ import { useEarlyAccess } from "@/components/common/hooks/useEarlyAccess";
 import { useEarlyAccessCheckable } from "@/components/common/hooks/useEarlyAccessCheckable";
 import { trackEvent } from "@/services/amplitude";
 import NotificationBell from "@/features/notifications/NotificationBell";
+import { Sun, Moon } from "lucide-react";
 
 import "./Header.css";
 import HeaderMobileMenu from "./HeaderMobileMenu";
@@ -120,16 +121,18 @@ function Header() {
 
           {/* RIGHT */}
           <div className="topbar__right">
-            <LanguageSwitcher />
+            <div className="topbar__lang">
+              <LanguageSwitcher />
+            </div>
+
             <NotificationBell />
 
             <button
               className="topbar__iconBtn"
               onClick={() => setMode(resolved === "dark" ? "light" : "dark")}
               aria-label="Toggle theme"
-              title="Toggle theme"
             >
-              {resolved === "dark" ? "🌙" : "☀️"}
+              {resolved === "dark" ? <Moon size={18} /> : <Sun size={18} />}
             </button>
 
             <button
@@ -137,7 +140,7 @@ function Header() {
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
             >
-              ☰
+              <span className="topbar__burgerIcon" aria-hidden>☰</span>
             </button>
           </div>
         </div>
