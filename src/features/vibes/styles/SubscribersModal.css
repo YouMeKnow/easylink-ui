@@ -122,3 +122,19 @@
     flex: 1 1 100%;
   }
 }
+
+@media (max-width: 768px) {
+  .subs-modal__content.modal-content {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .subs-modal__content.modal-content {
+    background: rgba(18, 20, 28, 0.92) !important;
+  }
+
+  :root[data-theme="light"] .subs-modal__content.modal-content {
+    background: rgba(255, 255, 255, 0.96) !important;
+  }
+}

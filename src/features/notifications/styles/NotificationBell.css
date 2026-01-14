@@ -1,4 +1,4 @@
-/* NotificationBell.css (theme-token based, no hardcoded light/dark) */
+/* NotificationBell.css */
 
 .topbar__notifWrap {
   position: relative;
@@ -405,4 +405,80 @@
 @keyframes nbShimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+/* ===== Mobile popover: keep fully visible ===== */
+/* ===== Mobile: popover must fit screen ===== */
+@media (max-width: 768px){
+  .topbar__notifWrap{ position: static; }
+
+  .notifPop{
+    position: fixed !important;
+    top: calc(64px + 8px) !important;
+
+    left: 12px !important;
+    right: 12px !important;
+
+    width: auto !important;
+    max-width: none !important;
+
+    max-height: calc(100dvh - (64px + 8px) - 12px) !important;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 3000; 
+  }
+
+  .notifPop__list{
+    flex: 1 1 auto;
+    max-height: none !important;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .notifPop__header,
+  .notifPop__footer{
+    flex: 0 0 auto;
+  }
+}
+
+/* iOS safe areas */
+@supports (padding: env(safe-area-inset-left)){
+  @media (max-width: 768px){
+    .notifPop{
+      left: calc(12px + env(safe-area-inset-left)) !important;
+      right: calc(12px + env(safe-area-inset-right)) !important;
+      top: calc(64px + 8px + env(safe-area-inset-top)) !important;
+      max-height: calc(
+        100dvh - (64px + 8px + env(safe-area-inset-top)) - 12px - env(safe-area-inset-bottom)
+      ) !important;
+    }
+  }
+}
+
+/* =========================================
+   Disable glass for Notification popover
+========================================= */
+.notifPop {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  background: var(--bg0, #ffffff) !important;
+
+  border-color: var(--stroke) !important;
+}
+
+:root[data-theme="dark"] .notifPop {
+  background: #0f1222 !important;
+}
+
+.notifPop__header,
+.notifPop__footer {
+  background: var(--bg0, #ffffff) !important;
+}
+
+:root[data-theme="dark"] .notifPop__header,
+:root[data-theme="dark"] .notifPop__footer {
+  background: #0f1222 !important;  
 }

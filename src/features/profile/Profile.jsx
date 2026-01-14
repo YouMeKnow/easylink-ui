@@ -43,7 +43,7 @@ export default function Profile() {
         </section>
 
         {/* Search */}
-        <section className="profile__search glass animate-fadeIn" role="search">
+        <section className="profile__search animate-fadeIn" role="search">
           <VibeSearch />
         </section>
 

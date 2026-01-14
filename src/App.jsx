@@ -6,6 +6,7 @@ import Header from "@/shared/ui/Header";
 import Footer from "@/shared/ui/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "@/shared/ui/buttons/CvButtons.css";
 
 import "@/i18n";
 

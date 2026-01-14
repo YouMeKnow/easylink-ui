@@ -22,7 +22,7 @@ const iconMap = {
 
 export default function ProfileCards({ cards = [] }) {
   return (
-    <div className="profile pc-grid">
+    <div className="pc-grid">
       {cards.map((c, i) => {
         const IconCmp = typeof c.icon === "string" ? iconMap[c.icon] : null;
 

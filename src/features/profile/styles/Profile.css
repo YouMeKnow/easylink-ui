@@ -194,3 +194,130 @@
   -webkit-backdrop-filter: blur(var(--blur, 10px));
   backdrop-filter: blur(var(--blur, 10px));
 }
+/* ===========================
+   Mobile optimization
+   =========================== */
+
+/* 1) reduce heavy background on mobile */
+@media (max-width: 768px){
+  .profile .profile__bg{
+    /* fixed + huge gradients can be janky on phones */
+    position: absolute;
+    inset: 0;
+  }
+}
+
+/* 2) container padding tighter */
+@media (max-width: 520px){
+  .profile .profile__container{
+    width: 92vw;
+    padding: 16px;
+  }
+}
+
+/* 3) hero stacks nicely */
+@media (max-width: 768px){
+  .profile .profile__hero{
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 18px;
+    margin-block: 14px;
+  }
+
+  .profile .profile__chip{
+    width: 100%;
+    justify-content: center;
+
+    /* long emails should not break layout */
+    max-width: 100%;
+  }
+
+  .profile .profile__chip-text{
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* 4) heading sizes tuned for mobile */
+@media (max-width: 480px){
+  .profile .profile__heading{
+    font-size: 30px;
+    line-height: 1.06;
+  }
+
+  .profile .profile__subheading{
+    font-size: 14px;
+  }
+}
+
+/* 5) glass uses your global tokens (more consistent) */
+.profile .glass{
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius);
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+}
+
+/* 6) on mobile: reduce motion + remove hover lift */
+@media (max-width: 768px){
+  .profile .profile__cards > * :where(.card, [data-elevate]){
+    transition: none;
+    will-change: auto;
+  }
+
+  .profile .profile__cards > * :where(.card, [data-elevate]):hover{
+    transform: none;
+    box-shadow: var(--shadow-sm);
+    border-color: var(--stroke);
+  }
+
+  /* also tone down backdrop blur a bit for perf */
+  .profile .glass{
+    -webkit-backdrop-filter: blur(calc(var(--blur) * 0.75));
+    backdrop-filter: blur(calc(var(--blur) * 0.75));
+  }
+}
+
+/* 7) search block: make inputs full width and comfy */
+@media (max-width: 768px){
+  .profile .profile__search{
+    padding: 14px;
+    margin-block: 12px;
+  }
+
+  .profile .profile__search :where(input, .form-control){
+    width: 100%;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+}
+.profile .profile__cards > * {
+  display: grid;
+  gap: 12px; /* вместо margin у карточек */
+}/* subtle divider after Create card */
+.profile .profile__cards .create-card {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.profile .profile__cards .create-card::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -6px;
+  height: 1px;
+  background: var(--stroke);
+  opacity: .6;
+}
+.profile .profile__search{
+  padding: 0;          /* ❌ убираем лишний воздух */
+  margin-block: 14px;  /* оставляем только вертикальный отступ */
+  background: none;
+  border: none;
+  box-shadow: none;
+}

@@ -51,19 +51,8 @@ export default function PersonalVibeForm({
 
   const safeId = mode === "edit" && isUUID(initialData?.id) ? initialData.id : undefined;
   const ownerActionsEnabled = Boolean(safeId);
-const setBackground = (bg) => {
-  setExtraBlocks((prev) => {
-    const arr = Array.isArray(prev) ? [...prev] : [];
-    const idx = arr.findIndex((b) => b?.type === "BACKGROUND");
 
-    if (idx >= 0) {
-      arr[idx] = { ...arr[idx], value: bg, label: "Background", placeholder: "" };
-    } else {
-      arr.push({ type: "BACKGROUND", label: "Background", value: bg, placeholder: "" });
-    }
-    return arr;
-  });
-};
+
   return (
     <div
       className="d-flex flex-column gap-3 align-items-center justify-content-start w-100"
@@ -74,44 +63,19 @@ const setBackground = (bg) => {
         padding: "0 20px",
       }}
     >
-      <div className="d-flex gap-2 w-100" style={{ maxWidth: 420 }}>
+      
+      <div className="cv-top-actions">
         {mode === "edit" && (
-          <button
-            type="button"
-            className="btn btn-outline-secondary w-50"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <button type="button" className="cv-btn cv-btn--ghost" onClick={onCancel} disabled={loading}>
             {t("cancel")}
           </button>
         )}
 
-        <button
-          type="button"
-          className="btn btn-primary w-100"
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {loading
-            ? mode === "edit"
-              ? t("saving")
-              : t("creating")
-            : mode === "edit"
-            ? t("save_button")
-            : t("create_button")}
+        <button type="button" className="cv-btn cv-btn--primary" onClick={handleSubmit} disabled={loading}>
+          {loading ? (mode === "edit" ? t("saving") : t("creating")) : (mode === "edit" ? t("save_button") : t("create_button"))}
         </button>
       </div>
-<div className="d-flex gap-2" style={{ maxWidth: 920, width: "100%" }}>
-  <button type="button" className="btn btn-outline-secondary" onClick={() => setBackground("default")}>
-    Default
-  </button>
-  <button type="button" className="btn btn-outline-secondary" onClick={() => setBackground("gradient")}>
-    Gradient
-  </button>
-  <button type="button" className="btn btn-outline-secondary" onClick={() => setBackground("matrix")}>
-    Matrix
-  </button>
-</div>
+
       {/* editing — card in editMode */}
       <VibeCard
         id={safeId}
@@ -127,6 +91,7 @@ const setBackground = (bg) => {
         onChangeName={setName}
         onChangeDescription={setDescription}
         onChangePhoto={setPhoto}
+
         onOpenContactPicker={(idx) => {
           setTypeIndex(Number.isInteger(idx) ? idx : null);
           setShowModal(true);
@@ -138,7 +103,6 @@ const setBackground = (bg) => {
         onOpenBlockPicker={() => setShowBlockModal(true)}
       />
 
-
       {/* contacts */}
       {showModal && (
         <ContactTypeModal
@@ -149,6 +113,7 @@ const setBackground = (bg) => {
           }}
           onSelect={(typeKey) => {
             if (typeIndex != null) {
+
               setContacts((prev) => {
                 const updated = [...prev];
                 updated[typeIndex] = { ...updated[typeIndex], type: typeKey };

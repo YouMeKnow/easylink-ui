@@ -219,20 +219,6 @@
   box-shadow: var(--shadow-md);
 }
 
-/* avatar */
-.svm__avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  object-fit: cover;
-  flex: 0 0 auto;
-
-  /* little “photo pop” */
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
-}
-:root[data-theme="dark"] .svm__avatar {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
-}
 
 .svm__cardBody {
   min-width: 0;
@@ -394,4 +380,141 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* ===========================
+   Mobile optimization
+=========================== */
+@media (max-width: 640px) {
+  .svm {
+    padding: 0;
+    place-items: end center; 
+
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .svm__modal {
+    width: 100vw;
+    border-radius: 18px 18px 0 0;
+    max-height: 92vh;
+    height: 92vh; 
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header sticky */
+  .svm__header {
+    padding: 14px 14px 10px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  .svm__body {
+    padding: 12px 14px;
+    flex: 1;
+    min-height: 0;
+  }
+  .svm__listWrap {
+    max-height: none; 
+    overflow: auto;
+    padding-right: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .svm__grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .svm__card {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .svm__title { font-size: 16px; }
+  .svm__subtitle { font-size: 12px; }
+
+  .svm__name { font-size: 14px; }
+  .svm__desc { font-size: 12px; }
+
+  /* Footer sticky */
+  .svm__footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .svm__hint {
+    font-size: 12px;
+    text-align: left;
+  }
+
+  .svm__actions {
+    gap: 10px;
+  }
+
+  .svm__btn {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .svm__modal {
+    width: min(760px, 94vw);
+    max-height: 86vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .svm__body {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .svm__listWrap {
+    max-height: none;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* =========================================
+   Disable glass on phones only
+========================================= */
+@media (max-width: 640px) {
+  .svm {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.65);
+  }
+
+  .svm__modal {
+    background: var(--bg0, #ffffff) !important;
+    border: 1px solid var(--stroke) !important;
+    box-shadow: none !important;
+  }
+
+  .svm__modal::before {
+    display: none !important;
+  }
+  .svm__header,
+  .svm__footer {
+    background: var(--bg0, #ffffff) !important;
+  }
+
+  /* Dark theme */
+  :root[data-theme="dark"] .svm__modal,
+  :root[data-theme="dark"] .svm__header,
+  :root[data-theme="dark"] .svm__footer {
+    background: #0f1222 !important;
+  }
 }

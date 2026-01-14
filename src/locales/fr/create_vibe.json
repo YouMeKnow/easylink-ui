@@ -7,5 +7,10 @@
     "business": "Entreprise",
     "personal": "Personnelle",
     "event": "Autre"
+  },
+  "types_hint": {
+    "business": "pour entreprises et services",
+    "personal": "profil et contacts",
+    "event": "événements et rencontres"
   }
 }
