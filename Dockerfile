@@ -5,8 +5,6 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-ARG VITE_AMPLITUDE_API_KEY
-ENV VITE_AMPLITUDE_API_KEY=$VITE_AMPLITUDE_API_KEY
 RUN npm run build
 
 FROM nginx:alpine
