@@ -34,13 +34,35 @@ pipeline {
       }
     }
 
-    stage('deploy ui') {
-      steps {
-        sh '''
-          set -e
-          docker compose -f /workspace/ymk/docker-compose.yml up -d --force-recreate ui
-        '''
-      }
+  stage('preflight') {
+    steps {
+      sh '''
+        set -eu
+        echo "[preflight] docker:"; docker version || true
+        echo "[preflight] docker help has compose?"; docker --help | grep -i compose || true
+        (docker compose version || true)
+        (docker-compose --version || true)
+        ls -la /workspace/ymk || true
+        ls -la /workspace/ymk/docker-compose.yml || true
+      '''
+    }
+  }
+  
+  stage('deploy ui') {
+    steps {
+      sh '''
+        set -e
+        if docker compose version >/dev/null 2>&1; then
+          DC="docker compose"
+        elif command -v docker-compose >/dev/null 2>&1; then
+          DC="docker-compose"
+        else
+          echo "[error] docker compose not available in this agent"
+          exit 1
+        fi
+  
+        DOCKER_HOST="${DOCKER_HOST}" $DC -f /workspace/ymk/docker-compose.yml up -d --force-recreate ui
+      '''
     }
   }
 
