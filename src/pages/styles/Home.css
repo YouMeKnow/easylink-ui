@@ -529,3 +529,24 @@ body, .home {
   max-width: 960px;
 }
 
+.demo-close {
+  all: unset;
+  cursor: pointer;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--text);
+  background: rgba(0,0,0,0.04);
+
+  pointer-events: auto;
+}
+
+.demo-close:hover {
+  background: rgba(0,0,0,0.08);
+}
