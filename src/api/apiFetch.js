@@ -1,8 +1,38 @@
 // src/api/apiFetch.js
 import { getAuthSidecar } from "@/context/AuthContext";
 
+let refreshInFlight = null;
+
 export async function apiFetch(input, init = {}) {
   const { auth = "auto", token = null, stream = false, ...restInit } = init;
+
+  const res = await doFetchOnce(input, { auth, token, stream, ...restInit });
+
+  if (res.ok) return res;
+
+  if (auth === "off" || res.status !== 401) {
+    const data = await readBodySafe(res);
+    throw makeHttpError(res, data);
+  }
+
+  const refreshed = await tryRefreshAccessToken();
+  if (!refreshed) {
+    const data = await readBodySafe(res);
+    throw makeHttpError(res, data);
+  }
+
+  const res2 = await doFetchOnce(input, { auth, token, stream, ...restInit });
+
+  if (!res2.ok) {
+    const data = await readBodySafe(res2);
+    throw makeHttpError(res2, data);
+  }
+
+  return res2;
+}
+
+async function doFetchOnce(input, init) {
+  const { auth, token, stream, ...restInit } = init;
 
   const sc = getAuthSidecar();
 
@@ -35,19 +65,57 @@ export async function apiFetch(input, init = {}) {
     headers.delete("Authorization");
   }
 
-  const res = await fetch(input, {
+  return fetch(input, {
     ...restInit,
     headers,
     credentials: "include",
-    cache: "no-store", 
+    cache: "no-store",
   });
+}
 
-  if (!res.ok) {
-    const data = await readBodySafe(res);
-    throw makeHttpError(res, data);
+async function tryRefreshAccessToken() {
+  const refresh =
+    typeof window !== "undefined" ? localStorage.getItem("refresh") : null;
+  if (!refresh) return false;
+
+  if (!refreshInFlight) {
+    refreshInFlight = (async () => {
+      try {
+        const res = await fetch("/api/v3/auth/refresh", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          cache: "no-store",
+          body: JSON.stringify({ refreshToken: refresh }),
+        });
+
+        if (!res.ok) {
+          // refresh 
+          localStorage.removeItem("refresh");
+          localStorage.removeItem("jwt");
+          return false;
+        }
+
+        const data = await res.json().catch(() => ({}));
+        const accessToken = data?.accessToken || data?.token || null;
+
+        if (!accessToken) {
+          localStorage.removeItem("refresh");
+          localStorage.removeItem("jwt");
+          return false;
+        }
+
+        localStorage.setItem("jwt", accessToken);
+        return true;
+      } catch {
+        return false;
+      } finally {
+        refreshInFlight = null;
+      }
+    })();
   }
 
-  return res;
+  return await refreshInFlight;
 }
 
 /** read response body safely (text or json) */
