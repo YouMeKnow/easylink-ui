@@ -43,13 +43,12 @@ function Header() {
 
   const subscribed = subscribedAfterRequest || subscribedStatus;
 
-  const handleLogout = () => {
+  const handleLogout = () => {З
     trackEvent("Logout Clicked", { page: "header" });
-    logout();
+    logout("manual");
     setSubscribedAfterRequest(false);
     setSubscribedStatus(false);
     setMenuOpen(false);
-    navigate("/");
   };
 
   return (
