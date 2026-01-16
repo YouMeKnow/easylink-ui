@@ -1,0 +1,19 @@
+/* SignIn.css */
+
+.signin-page {
+  background: transparent;
+  min-height: calc(100vh - 80px);
+  padding: 32px 16px;
+}
+
+.signin-topbar {
+  max-width: 1040px;
+  margin: 0 auto 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.signin-body {
+  max-width: 1040px;
+  margin: 0 auto;
+}

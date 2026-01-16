@@ -1,213 +1,382 @@
-/* ------------------------------ HEADER -------------------------- */
-.header {
-  max-width: 1280px;
-  margin: 1.5rem auto 0;
-  width: 100%;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+/* ===========================
+   Header.css (clean)
+   - glass topbar
+   - mobile: hide nav + hide language switcher + show burger
+   - burger centered
+   =========================== */
+
+/* top bar */
+.topbar{
   position: sticky;
   top: 0;
-  z-index: 100;
-  border-radius: 15px;
+  z-index: 1000;
+
+  width: 100%;
+  height: 64px;
+
+  background: color-mix(in oklab, var(--bg0) 82%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--stroke) 85%, transparent);
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  color: var(--text);
 }
 
-.header__container {
-  max-width: 1100px;
-  height: 85px;
+/* inner container */
+.topbar__inner{
+  height: 100%;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+  padding: 0 20px;
 
-/* grid: logo | free(1fr) | right */
-.header__top {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  width: 100%;
-  column-gap: .75rem;
+  column-gap: 18px;
 }
 
-/* ------------------------------- LOGO ------------------------------ */
-.header .logo {
+/* LEFT */
+.topbar__left{
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  line-height: 1;
-  padding: 0;
-  margin: 0;
-  height: auto;
-  width: max-content;
-  text-decoration: none;
-  color: #007bff;
-  transition: color .2s;
-  font-size: 2rem;
-  font-weight: 700;
+  gap: 14px;
+  min-width: 0;
 }
-.header .logo:hover { color: #0056a3; }
 
-.header .logo img {
-  width: 28px;
-  height: 28px;
+/* LOGO */
+.topbar__logo{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+
+  padding: 6px 8px;
+  border-radius: 10px;
+
+  font-weight: 800;
+  letter-spacing: .01em;
+  font-size: 18px;
+
+  color: #1a73e8;
+}
+
+.topbar__logo:hover{
+  background: transparent;
+  color: #1a73e8;
+}
+
+.topbar__logo img{
+  width: 26px;
+  height: 26px;
   display: block;
-  margin: 0;
   object-fit: contain;
 }
-.header .logo span { line-height: 1; }
 
-/* ------------------------------- CTA CENTER ------------------------------ */
-/* Access CTA is centered within the middle (1fr) grid column */
-.header .header__access {
-  justify-self: center;
-  margin: 0; /* critical: remove any left margins so true centering works */
-  max-width: min(520px, 100%);
-  overflow: hidden;
-}
-
-/* CTA focus/hover tweaks */
-.header .access-cta {
-  border: 1px solid rgba(255,255,255,.16);
-  outline: none;
-}
-.header .access-cta:hover {
-  border-color: rgba(255,255,255,.20) !important;
-  box-shadow: var(--shadow);
-}
-.header .access-cta:focus,
-.header .access-cta:focus-visible {
-  outline: none !important;
-  border-color: currentColor !important; 
-  box-shadow: 0 0 0 3px var(--ring), var(--shadow) !important;
-}
-.header .access-cta:active {
-  box-shadow: 0 4px 12px var(--shadow);
-}
-.header .access-cta,
-.header .access-cta * {
-  outline: none !important;
-}
-
-/* ------------------------------- RIGHT SIDE ------------------------------ */
-/* Right side wraps nav + language switcher and sits in the right grid cell */
-.header__right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-self: end;
-}
-
-/* NAV */
-.header .nav {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 0 0 auto;
-  min-width: 0;
-  white-space: nowrap;
-  flex-wrap: nowrap;
-  gap: clamp(.6rem, 1.6vw, 1rem);
-}
-.header .nav a {
-  color: #333;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color .2s;
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-}
-.header .nav a:hover { color: #007bff; }
-
-.header .logout-btn {
-  background: none;
-  border: none;
-  color: #333;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0;
-}
-.header .logout-btn:hover {
-  color: #007bff;
-  text-decoration: underline;
-}
-
-/* Language switcher container (no special styles required, but keep hook) */
-.header .language-switcher {
-  display: inline-flex;
-  align-items: center;
-}
-
-/* ------------------------------- BURGER ------------------------------ */
-.header .burger-btn {
+/* optional CTA holder (desktop-only if you want) */
+.topbar__cta{
   display: none;
-  background: none;
-  border: none;
-  font-size: 2rem;
+}
+
+/* CENTER NAV */
+.topbar__nav{
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.topbar__nav a{
+  color: var(--text);
+  opacity: .92;
+  text-decoration: none;
+
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+
+  padding: 10px 10px;
+  border-radius: 10px;
+
+  transition: background .15s ease, opacity .15s ease;
+}
+
+.topbar__nav a:hover{
+  background: rgba(255,255,255,.08);
+}
+
+.topbar__nav a:hover{
+  background: color-mix(
+    in oklab,
+    currentColor 8%,
+    transparent
+  );
+}
+/* RIGHT */
+.topbar__right{
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* language switcher wrapper */
+.topbar__lang{
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Focus ring */
+.topbar a:focus-visible,
+.topbar button:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--accent-to), .28);
+  border-radius: 10px;
+}
+
+/* Theme toggle */
+.topbar__iconBtn{
+  width: 36px;
+  height: 36px;
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+
   cursor: pointer;
-  padding: .25rem .5rem;
-  margin-left: 1rem;
-  z-index: 1000;
-  color: #333;
+
+  color: var(--text);
+  opacity: .92;
+
+  line-height: 0;
+  font-size: 18px;
+
+  transition: opacity .15s;
+}
+
+.topbar__iconBtn:hover{
+  background: transparent;
+  opacity: .92;
+}
+
+.topbar__iconBtn > span{
+  display: block;
   line-height: 1;
 }
 
-/* ------------------------------- FOCUS RESETS ------------------------------ */
-.header a:focus,
-.header a:focus-visible,
-.header button:focus,
-.header button:focus-visible {
-  outline: none;
-  box-shadow: none;
+.topbar__burger{
+  display: none; /* desktop: hidden */
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+
+  cursor: pointer;
+  color: var(--text);
+  opacity: .92;
+
+  line-height: 0;
+
+  transition: opacity .15s;
 }
 
-/* ------------------------------- DESKTOP TWEAKS ------------------------------ */
-@media (max-width:1280px){
-  .access-cta__badge { display: none; }
-}
-html[lang="ru"] .header .nav,
-html[lang="fr"] .header .nav {
-  gap: clamp(.5rem, 1.2vw, .9rem);
-}
-html[lang="ru"] .header .nav a,
-html[lang="fr"] .header .nav a {
-  font-size: clamp(.92rem, 1vw, 1rem);
+@media (max-width: 768px){
+  .topbar__burger{
+    display: grid;
+    place-items: center;
+  }
 }
 
-/* ------------------------------- MOBILE ------------------------------ */
-@media (max-width: 768px) {
-  .header__container { height: 85px; }
+.topbar__burger:hover{
+  background: transparent;
+  opacity: .92;
+}
 
-  /* grid: logo | free | burger */
-  .header__top {
+.topbar__burgerIcon{
+  display: block;
+  font-size: 24px;
+  line-height: 1;
+  transform: translateY(0px);
+}
+
+/* ===========================
+   Notifications (popover + badge)
+   =========================== */
+
+.topbar__notifWrap{
+  position: relative;
+  display: inline-flex;
+}
+
+.topbar__notifBtn{
+  position: relative;
+}
+
+.topbar__badge{
+  position: absolute;
+  top: -4px;
+  right: -6px;
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+
+  background: var(--danger, #ef4444);
+  color: #fff;
+  border: 2px solid var(--surface, #fff);
+}
+
+.topbar__icon{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notifPop{
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+
+  width: min(360px, calc(100vw - 24px));
+  border-radius: 16px;
+  padding: 10px;
+  z-index: 2000;
+
+  background: color-mix(in oklab, var(--surface, #fff) 92%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke, #e5e7eb) 70%, transparent);
+  box-shadow: var(--shadow-md, 0 20px 50px rgba(0,0,0,.18));
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.notifPop__header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 6px 10px;
+}
+
+.notifPop__title{
+  font-weight: 800;
+  letter-spacing: .01em;
+  color: var(--text, #111827);
+}
+
+.notifPop__allBtn{
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+  color: var(--primary, #2563eb);
+  cursor: pointer;
+}
+
+.notifPop__allBtn:hover{
+  background: color-mix(in oklab, var(--surface, #fff) 70%, transparent);
+}
+
+.notifPop__list{
+  display: grid;
+  gap: 8px;
+}
+
+.notifPop__empty{
+  padding: 16px 12px;
+  text-align: center;
+  color: color-mix(in oklab, var(--text, #111827) 55%, transparent);
+}
+
+.notifItem{
+  width: 100%;
+  text-align: left;
+  border: 1px solid color-mix(in oklab, var(--stroke, #e5e7eb) 70%, transparent);
+  background: color-mix(in oklab, var(--surface, #fff) 88%, transparent);
+  border-radius: 14px;
+  padding: 10px 10px;
+  cursor: pointer;
+
+  transition: transform .12s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.notifItem:hover{
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm, 0 10px 20px rgba(0,0,0,.12));
+}
+
+.notifItem--unread{
+  border-color: color-mix(in oklab, var(--primary, #2563eb) 35%, var(--stroke, #e5e7eb));
+}
+
+.notifItem__top{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.notifItem__title{
+  font-weight: 800;
+  color: var(--text, #111827);
+  font-size: 13px;
+}
+
+.notifItem__time{
+  font-size: 11px;
+  color: color-mix(in oklab, var(--text, #111827) 55%, transparent);
+  white-space: nowrap;
+}
+
+.notifItem__body{
+  font-size: 12px;
+  color: color-mix(in oklab, var(--text, #111827) 70%, transparent);
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+
+@media (min-width: 1024px){
+  .topbar__cta{ display: block; } /* если хочешь CTA на десктопе */
+}
+
+@media (max-width: 900px){
+  .topbar__nav{ gap: 18px; }
+  .topbar__inner{ padding: 0 14px; }
+}
+
+/* Mobile: hide center nav, hide language, show burger */
+@media (max-width: 768px){
+  .topbar__inner{
     grid-template-columns: auto 1fr auto;
+    column-gap: 10px;
   }
 
-  /* hide right block (nav + language) */
-  .header__right { display: none !important; }
+  .topbar__nav{ display: none; }
+  .topbar__cta{ display: none; }
 
-  /* center CTA between logo and burger */
-  .header .header__access {
-    justify-self: center;
-    max-width: 100%;
-    overflow: hidden;
-    transform: translateX(6px); 
-  }
+  .topbar__lang{ display: none; }
 
-  .access-cta { white-space: nowrap; }
-  .access-cta__label { overflow: hidden; text-overflow: ellipsis; }
-  .access-cta__badge { display: none !important; }
-
-  /* burger on the right */
-  .header .burger-btn {
-    display: block !important;
-    font-size: 28px;
-    justify-self: end;
-  }
-}
-
-/* desktop hides burger */
-@media (min-width: 769px) {
-  .header .burger-btn { display: none; }
+  .topbar__burger{ display: grid; }
 }

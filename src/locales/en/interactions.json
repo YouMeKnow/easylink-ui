@@ -23,5 +23,20 @@
   "table": {
     "vibe": "Vibe",
     "offer": "Offer"
+  },
+  "subtitle": "Choose what you want to view.",
+  "circle": {
+    "title": "My Circle",
+    "description": "Businesses and profiles you follow.",
+    "button": "View Circle"
+  },
+  "offers": {
+    "title": "My Offers",
+    "description": "Active promotions from your circle.",
+    "button": "View Offers"
+  },
+  "myCircle": "My Circle",
+  "empty": {
+    "circle": "Your Vibe circle is empty."
   }
 }

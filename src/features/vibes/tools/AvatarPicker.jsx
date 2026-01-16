@@ -28,35 +28,20 @@ export default function AvatarPicker({ name, photo, editMode, onChangePhoto }) {
       />
 
       <div
-        style={{
-          position: "relative",
-          cursor: editMode ? "pointer" : "default",
-        }}
+        style={{ position: "relative", cursor: editMode ? "pointer" : "default" }}
         onClick={handlePickPhoto}
+        onKeyDown={(e) => {
+          if (!editMode) return;
+          if (e.key === "Enter" || e.key === " ") handlePickPhoto();
+        }}
+        role={editMode ? "button" : undefined}
+        tabIndex={editMode ? 0 : -1}
         aria-label={editMode ? "Change photo" : undefined}
+        className="vibe-avatar-wrap"
       >
         <Avatar name={name} photo={photo} photoUrl={previewUrl} />
 
-        {editMode && (
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: "50%",
-              background: "rgba(0,0,0,.15)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 12,
-              color: "#fff",
-              opacity: 0,
-              transition: "opacity .15s",
-            }}
-            className="vibe-avatar-overlay"
-          >
-            change photo
-          </div>
-        )}
+        {editMode && <div className="vibe-avatar-overlay">change photo</div>}
       </div>
     </>
   );

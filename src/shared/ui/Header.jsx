@@ -2,23 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
+
 import LanguageSwitcher from "@/shared/ui/LanguageSwitcher";
 import { useEarlyAccess } from "@/components/common/hooks/useEarlyAccess";
 import { useEarlyAccessCheckable } from "@/components/common/hooks/useEarlyAccessCheckable";
 import { trackEvent } from "@/services/amplitude";
+import NotificationBell from "@/features/notifications/NotificationBell";
+import { Sun, Moon } from "lucide-react";
+
 import "./Header.css";
 import HeaderMobileMenu from "./HeaderMobileMenu";
-import AccessCTA from "./AccessCTA"; 
+import AccessCTA from "./AccessCTA";
+import { useTheme } from "@/context/ThemeContext";
 
 function Header() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
-
   const { t } = useTranslation("header");
-  const { t: tc } = useTranslation("common"); 
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const { setMode, resolved } = useTheme();
 
+  // Early Access
   const {
     requestEarlyAccess,
     loading: loadingSubscribe,
@@ -38,62 +43,104 @@ function Header() {
 
   const subscribed = subscribedAfterRequest || subscribedStatus;
 
-  const handleLogout = () => {
+  const handleLogout = () => {З
     trackEvent("Logout Clicked", { page: "header" });
-    logout();
+    logout("manual");
     setSubscribedAfterRequest(false);
     setSubscribedStatus(false);
-    navigate("/");
+    setMenuOpen(false);
   };
 
   return (
     <>
-      <header className="header">
-        <div className="header__container">
-          <div className="header__top">
-            <Link to="/" className="logo" aria-label="YMK home">
+      <header className="topbar">
+        <div className="topbar__inner">
+          {/* LEFT */}
+          <div className="topbar__left">
+            <Link to="/" className="topbar__logo" aria-label="YMK home">
               <img src="/clearviewblue.png" alt="YMK logo" />
               <span>YMK</span>
             </Link>
 
-            <AccessCTA
-              className="header__access"
-              subscribed={subscribed}
-              loading={loadingSubscribe}
-              onClick={() => (isAuthenticated ? requestEarlyAccess() : navigate("/signin"))}
-            />
+            <div className="topbar__cta">
+              <AccessCTA
+                subscribed={subscribed}
+                loading={loadingSubscribe}
+                onClick={() =>
+                  isAuthenticated ? requestEarlyAccess() : navigate("/signin")
+                }
+              />
+            </div>
+          </div>
 
-            <div className="header__right">
-              <nav className="nav">
-                <Link to="/" onClick={() => trackEvent("Header Home Clicked")}>{t("home")}</Link>
-                {!isAuthenticated && <Link to="/signup" onClick={() => trackEvent("Header Sign Up Clicked")}>{t("sign_up")}</Link>}
-                {!isAuthenticated && <Link to="/signin" onClick={() => trackEvent("Header Sign In Clicked")}>{t("log_in")}</Link>}
-                {isAuthenticated && <Link to="/profile" onClick={() => trackEvent("Header Profile Clicked")}>{t("profile")}</Link>}
-                <Link to="/about" onClick={() => trackEvent("Header About Clicked")}>{t("about")}</Link>
-                <Link to="/review" onClick={() => trackEvent("Header Review Clicked")}>{t("review")}</Link>
-                {isAuthenticated && (
-                  <Link
-                    to="/"
-                    onClick={(e) => { e.preventDefault(); handleLogout(); }}
-                  >
-                    {t("log_out")}
-                  </Link>
-                )}
-              </nav>
+          {/* CENTER */}
+          <nav className="topbar__nav">
+            <Link to="/" onClick={() => trackEvent("Header Home Clicked")}>
+              {t("home")}
+            </Link>
 
-              <div className="language-switcher">
-                <LanguageSwitcher />
-              </div>
+            {!isAuthenticated && (
+              <Link to="/signup" onClick={() => trackEvent("Header Sign Up Clicked")}>
+                {t("sign_up")}
+              </Link>
+            )}
+
+            {!isAuthenticated && (
+              <Link to="/signin" onClick={() => trackEvent("Header Sign In Clicked")}>
+                {t("log_in")}
+              </Link>
+            )}
+
+            {isAuthenticated && (
+              <Link to="/profile" onClick={() => trackEvent("Header Profile Clicked")}>
+                {t("profile")}
+              </Link>
+            )}
+
+            <Link to="/about" onClick={() => trackEvent("Header About Clicked")}>
+              {t("about")}
+            </Link>
+
+            <Link to="/review" onClick={() => trackEvent("Header Review Clicked")}>
+              {t("review")}
+            </Link>
+
+            {isAuthenticated && (
+              <Link
+                to="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLogout();
+                }}
+              >
+                {t("log_out")}
+              </Link>
+            )}
+          </nav>
+
+          {/* RIGHT */}
+          <div className="topbar__right">
+            <div className="topbar__lang">
+              <LanguageSwitcher />
             </div>
 
+            <NotificationBell />
+
             <button
-              className="burger-btn"
+              className="topbar__iconBtn"
+              onClick={() => setMode(resolved === "dark" ? "light" : "dark")}
+              aria-label="Toggle theme"
+            >
+              {resolved === "dark" ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+
+            <button
+              className="topbar__burger"
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
             >
-              ☰
+              <span className="topbar__burgerIcon" aria-hidden>☰</span>
             </button>
-
           </div>
         </div>
       </header>
@@ -101,7 +148,7 @@ function Header() {
       <HeaderMobileMenu
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
-        isAuthenticated={isAuthenticated}     
+        isAuthenticated={isAuthenticated}
         handleLogout={handleLogout}
         trackEvent={trackEvent}
       />

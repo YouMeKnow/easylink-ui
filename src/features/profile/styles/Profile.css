@@ -1,25 +1,15 @@
 /* =======================
    src/features/profile/styles/Profile.css
-   (scoped to .profile only — no global leaks)
+   Scoped to .profile
    ======================= */
 
 .profile {
-  /* tokens */
+  /* keep only page accents (global theme handles text/surface/shadows) */
   --accent-from: 255, 138, 181; /* #ff8ab5 */
-  --accent-to: 244, 196, 54;   /* #f4c436 */
-  --bg: #0f1222; /* used behind gradient */
-  --text: #0f1222;
-  --text-weak: #5b6280;
-  --surface: #ffffff;
-  --ring: 234 238 247; /* #eaEEF7 */
-  --blur: 14px;
-  --radius: 18px;
-  --shadow-sm: 0 6px 22px rgba(15,18,34,.08);
-  --shadow-md: 0 16px 48px rgba(15,18,34,.12);
+  --accent-to: 244, 196, 54;    /* #f4c436 */
 
   position: relative;
   min-height: 100svh;
-  /* min-height: auto; */
   color: var(--text);
   isolation: isolate;
 }
@@ -35,18 +25,12 @@
     linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-  .profile {
-    --text: #e7e9f5;
-    --text-weak: #aab1c6;
-    --surface: rgba(255,255,255,.06);
-  }
-  .profile .profile__bg {
-    background:
-      radial-gradient(1000px 600px at 15% -10%, rgba(var(--accent-from), .18), transparent 55%),
-      radial-gradient(900px 560px at 110% 20%, rgba(var(--accent-to), .16), transparent 55%),
-      linear-gradient(180deg, #0f1222 0%, #121429 100%);
-  }
+/* DARK via your toggle (not system) */
+:root[data-theme="dark"] .profile .profile__bg {
+  background:
+    radial-gradient(1000px 600px at 15% -10%, rgba(var(--accent-from), .18), transparent 55%),
+    radial-gradient(900px 560px at 110% 20%, rgba(var(--accent-to), .16), transparent 55%),
+    linear-gradient(180deg, #0f1222 0%, #121429 100%);
 }
 
 /* ===== Layout ===== */
@@ -58,7 +42,8 @@
 
 /* ===== Glass helpers ===== */
 .profile .glass {
-  background: rgba(255, 255, 255, 0.6);
+  /* use global tokens so it matches the rest of the site */
+  background: rgba(255, 255, 255, 0.60);
   -webkit-backdrop-filter: blur(var(--blur));
   backdrop-filter: blur(var(--blur));
   border: 1px solid rgba(255, 255, 255, 0.55);
@@ -66,12 +51,10 @@
   border-radius: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  .profile .glass {
-    background: rgba(18, 20, 41, 0.48);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 10px 40px rgba(0,0,0,.45);
-  }
+:root[data-theme="dark"] .profile .glass {
+  background: rgba(18, 20, 41, 0.70);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ===== Hero ===== */
@@ -90,7 +73,11 @@
   letter-spacing: -0.02em;
   font-size: clamp(28px, 4.6vw, 42px);
   line-height: 1.08;
-  background: linear-gradient(90deg, rgba(var(--accent-from), 1) 0%, rgba(var(--accent-to), 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(var(--accent-from), 1) 0%,
+    rgba(var(--accent-to), 1) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -115,16 +102,23 @@
   border: 1px solid rgba(255,255,255,.5);
   box-shadow: var(--shadow-sm);
 }
+
+:root[data-theme="dark"] .profile .profile__chip {
+  background: rgba(18,20,41,.62);
+  border-color: rgba(255,255,255,.14);
+}
+
 .profile .profile__chip-dot {
   inline-size: 8px;
   block-size: 8px;
   border-radius: 9999px;
   background: radial-gradient(circle at 35% 35%, #38d39f 0%, #1bbd83 60%, #0da56f 100%);
 }
-.profile .profile__chip-text { font-size: 14px; color: var(--text); opacity: .9; }
 
-@media (prefers-color-scheme: dark) {
-  .profile .profile__chip { background: rgba(18,20,41,.52); border-color: rgba(255,255,255,.12); }
+.profile .profile__chip-text {
+  font-size: 14px;
+  color: var(--text);
+  opacity: .9;
 }
 
 /* ===== Search block ===== */
@@ -135,18 +129,16 @@
 
 /* Make embedded inputs feel glassy without breaking component internals */
 .profile .profile__search :where(input, .form-control) {
-  background: rgba(255,255,255,.75) !important;
-  border: 1px solid rgba(255,255,255,.6) !important;
+  background: rgba(255,255,255,.78) !important;
+  border: 1px solid rgba(255,255,255,.60) !important;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
-@media (prefers-color-scheme: dark) {
-  .profile .profile__search :where(input, .form-control) {
-    background: rgba(18,20,41,.6) !important;
-    border-color: rgba(255,255,255,.12) !important;
-    color: #e7e9f5 !important;
-  }
+:root[data-theme="dark"] .profile .profile__search :where(input, .form-control) {
+  background: rgba(18,20,41,.62) !important;
+  border-color: rgba(255,255,255,.14) !important;
+  color: var(--text) !important;
 }
 
 /* ===== Cards ===== */
@@ -154,11 +146,11 @@
   margin-top: clamp(10px, 2vw, 18px);
 }
 
-/* Optional: elevate children on hover if they have a card-like wrapper */
 .profile .profile__cards > * :where(.card, [data-elevate]) {
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
   will-change: transform;
 }
+
 .profile .profile__cards > * :where(.card, [data-elevate]):hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
@@ -185,4 +177,147 @@
 .profile :where(a, button, input, [tabindex]):focus-visible{
   box-shadow: 0 0 0 4px rgba(var(--accent-from), .20), 0 0 0 2px rgba(var(--accent-to), .25);
   border-radius: 12px;
+}
+
+.profile .searchbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 18px 18px;
+  border-radius: 18px;
+
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+
+  -webkit-backdrop-filter: blur(var(--blur, 10px));
+  backdrop-filter: blur(var(--blur, 10px));
+}
+/* ===========================
+   Mobile optimization
+   =========================== */
+
+/* 1) reduce heavy background on mobile */
+@media (max-width: 768px){
+  .profile .profile__bg{
+    /* fixed + huge gradients can be janky on phones */
+    position: absolute;
+    inset: 0;
+  }
+}
+
+/* 2) container padding tighter */
+@media (max-width: 520px){
+  .profile .profile__container{
+    width: 92vw;
+    padding: 16px;
+  }
+}
+
+/* 3) hero stacks nicely */
+@media (max-width: 768px){
+  .profile .profile__hero{
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 18px;
+    margin-block: 14px;
+  }
+
+  .profile .profile__chip{
+    width: 100%;
+    justify-content: center;
+
+    /* long emails should not break layout */
+    max-width: 100%;
+  }
+
+  .profile .profile__chip-text{
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* 4) heading sizes tuned for mobile */
+@media (max-width: 480px){
+  .profile .profile__heading{
+    font-size: 30px;
+    line-height: 1.06;
+  }
+
+  .profile .profile__subheading{
+    font-size: 14px;
+  }
+}
+
+/* 5) glass uses your global tokens (more consistent) */
+.profile .glass{
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius);
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+}
+
+/* 6) on mobile: reduce motion + remove hover lift */
+@media (max-width: 768px){
+  .profile .profile__cards > * :where(.card, [data-elevate]){
+    transition: none;
+    will-change: auto;
+  }
+
+  .profile .profile__cards > * :where(.card, [data-elevate]):hover{
+    transform: none;
+    box-shadow: var(--shadow-sm);
+    border-color: var(--stroke);
+  }
+
+  /* also tone down backdrop blur a bit for perf */
+  .profile .glass{
+    -webkit-backdrop-filter: blur(calc(var(--blur) * 0.75));
+    backdrop-filter: blur(calc(var(--blur) * 0.75));
+  }
+}
+
+/* 7) search block: make inputs full width and comfy */
+@media (max-width: 768px){
+  .profile .profile__search{
+    padding: 14px;
+    margin-block: 12px;
+  }
+
+  .profile .profile__search :where(input, .form-control){
+    width: 100%;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+}
+.profile .profile__cards > * {
+  display: grid;
+  gap: 12px; /* вместо margin у карточек */
+}/* subtle divider after Create card */
+.profile .profile__cards .create-card {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.profile .profile__cards .create-card::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -6px;
+  height: 1px;
+  background: var(--stroke);
+  opacity: .6;
+}
+.profile .profile__search{
+  padding: 0;          /* ❌ убираем лишний воздух */
+  margin-block: 14px;  /* оставляем только вертикальный отступ */
+  background: none;
+  border: none;
+  box-shadow: none;
 }

@@ -4,6 +4,50 @@ import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/shared/ui/LanguageSwitcher";
 import "./HeaderMobileMenu.css";
 
+import {
+  X,
+  ChevronRight,
+  Home,
+  User,
+  Info,
+  MessageSquare,
+  LogIn,
+  UserPlus,
+  LogOut,
+} from "lucide-react";
+
+function MenuItem({ to, onClick, icon: Icon, children }) {
+  return (
+    <Link to={to} className="mItem" onClick={onClick}>
+      <span className="mItem__icon" aria-hidden>
+        <Icon size={18} />
+      </span>
+      <span className="mItem__label">{children}</span>
+      <span className="mItem__chev" aria-hidden>
+        <ChevronRight size={18} />
+      </span>
+    </Link>
+  );
+}
+
+function MenuButton({ onClick, icon: Icon, danger = false, children }) {
+  return (
+    <button
+      type="button"
+      className={"mItem " + (danger ? "is-danger" : "")}
+      onClick={onClick}
+    >
+      <span className="mItem__icon" aria-hidden>
+        <Icon size={18} />
+      </span>
+      <span className="mItem__label">{children}</span>
+      <span className="mItem__chev" aria-hidden>
+        <ChevronRight size={18} />
+      </span>
+    </button>
+  );
+}
+
 function HeaderMobileMenu({
   isOpen,
   onClose,
@@ -11,7 +55,7 @@ function HeaderMobileMenu({
   handleLogout,
   trackEvent,
 }) {
-  const { t } = useTranslation("header"); 
+  const { t } = useTranslation("header");
 
   if (!isOpen) return null;
 
@@ -29,99 +73,103 @@ function HeaderMobileMenu({
             <img src="/clearviewblue.png" alt="YMK logo" />
             <span>YMK</span>
           </Link>
+
           <button className="close-btn" onClick={onClose} aria-label="Close menu">
-            ✕
+            <X size={20} />
           </button>
         </div>
 
         <nav className="mobile-nav">
-          <Link
+          <MenuItem
             to="/"
-            className="mobile-menu-link"
+            icon={Home}
             onClick={() => {
               trackEvent("Mobile Home Clicked");
               onClose();
             }}
           >
             {t("home")}
-          </Link>
+          </MenuItem>
 
           {!isAuthenticated && (
-            <Link
+            <MenuItem
               to="/signup"
-              className="mobile-menu-link"
+              icon={UserPlus}
               onClick={() => {
                 trackEvent("Mobile Sign Up Clicked");
                 onClose();
               }}
             >
               {t("sign_up")}
-            </Link>
+            </MenuItem>
           )}
 
           {!isAuthenticated && (
-            <Link
+            <MenuItem
               to="/signin"
-              className="mobile-menu-link"
+              icon={LogIn}
               onClick={() => {
                 trackEvent("Mobile Sign In Clicked");
                 onClose();
               }}
             >
               {t("log_in")}
-            </Link>
+            </MenuItem>
           )}
 
           {isAuthenticated && (
-            <Link
+            <MenuItem
               to="/profile"
-              className="mobile-menu-link"
+              icon={User}
               onClick={() => {
                 trackEvent("Mobile Profile Clicked");
                 onClose();
               }}
             >
               {t("profile")}
-            </Link>
+            </MenuItem>
           )}
 
-          <Link
+          <MenuItem
             to="/about"
-            className="mobile-menu-link"
+            icon={Info}
             onClick={() => {
               trackEvent("Mobile About Clicked");
               onClose();
             }}
           >
             {t("about")}
-          </Link>
+          </MenuItem>
 
-          <Link
+          <MenuItem
             to="/review"
-            className="mobile-menu-link"
+            icon={MessageSquare}
             onClick={() => {
               trackEvent("Mobile Review Clicked");
               onClose();
             }}
           >
             {t("review")}
-          </Link>
+          </MenuItem>
 
           {isAuthenticated && (
-            <button
-              className="mobile-menu-link logout-btn"
+            <MenuButton
+              danger
+              icon={LogOut}
               onClick={() => {
                 handleLogout();
                 onClose();
               }}
             >
               {t("log_out")}
-            </button>
+            </MenuButton>
           )}
         </nav>
 
         <div className="mobile-menu-footer">
-          <LanguageSwitcher dropUp /> 
+          <div className="mobile-lang">
+            <LanguageSwitcher dropUp />
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,50 @@
+/* src/features/vibes/styles/PublicVibePage.css */
+
+.public-vibe-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.public-vibe-layout__left {
+  flex: 0 0 340px; 
+  min-width: 300px;
+}
+
+.public-vibe-layout__right {
+  flex: 1 1 auto;
+  min-width: 0; 
+}
+
+.public-loading {
+  display: grid;
+  place-items: center;
+  min-height: 40vh;
+}
+
+/* ====== MOBILE ====== */
+@media (max-width: 768px) {
+  .public-vibe-layout {
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 12px; 
+  }
+
+  .public-vibe-layout__right {
+    order: 1;
+    width: 100%;
+  }
+
+  .public-vibe-layout__left {
+    order: 2;
+    width: 100%;
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .public-vibe-layout {
+    padding: 0 10px;
+  }
+}

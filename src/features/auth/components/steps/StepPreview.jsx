@@ -7,16 +7,25 @@ export default function StepPreview({ form }) {
   const entriesList = form.entriesList ?? form.questions ?? [];
 
   return (
-    <div className="card p-5 shadow-sm animate-fadein text-center">
-      <QuestionsPreview entriesList={entriesList} />
+    <div className="signup-step animate-fadein">
+      <div className="signup-step-head">
+        <div className="signup-step-title">{t("finish_title") ?? t("finish_create")}</div>
+        <div className="signup-step-lead">{t("finish_info") ?? ""}</div>
+      </div>
 
-      <button
-        type="button"
-        className="btn btn-primary btn-lg px-5 mt-3"
-        onClick={form.handleSignup}
-      >
-        {t("finish_create")}
-      </button>
+      <div className="signup-panel signup-panel-preview">
+        <QuestionsPreview entriesList={entriesList} />
+      </div>
+
+      <div className="signup-actions">
+        <button
+          type="button"
+          className="signup-btn signup-btn-primary signup-btn-wide"
+          onClick={form.handleSignup}
+        >
+          {t("finish_create")}
+        </button>
+      </div>
     </div>
   );
 }

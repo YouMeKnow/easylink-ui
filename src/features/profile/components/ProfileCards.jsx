@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/ProfileCards.css";
-import { IconBarChart, IconPlus, IconShield, IconZap } from "@/pages/home/icons/Icons";
+import { IconBarChart, IconPlus, IconShield, IconZap } from "@/pages/Home/icons/Icons";
 
 /**
  * cards: Array<{
@@ -13,7 +13,6 @@ import { IconBarChart, IconPlus, IconShield, IconZap } from "@/pages/home/icons/
  * }>
  */
 
-// ключи -> компоненты иконок
 const iconMap = {
   "bar-chart": IconBarChart,
   "plus": IconPlus,
@@ -23,7 +22,7 @@ const iconMap = {
 
 export default function ProfileCards({ cards = [] }) {
   return (
-    <div className="profile pc-grid">
+    <div className="pc-grid">
       {cards.map((c, i) => {
         const IconCmp = typeof c.icon === "string" ? iconMap[c.icon] : null;
 

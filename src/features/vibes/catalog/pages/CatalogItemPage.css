@@ -1,0 +1,122 @@
+.catalogItemPage {
+  padding: 14px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.catalogItemTop {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.catalogBackBtn {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 800;
+}
+
+.mt12 { margin-top: 12px; }
+
+.catalogCard {
+  border-radius: 18px;
+  border: 1px solid var(--stroke);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+.catalogHero {
+  position: relative;
+}
+
+.catalogHeroImg {
+  width: 100%;
+  height: 320px;
+  background: color-mix(in oklab, var(--surface) 90%, transparent);
+  border-bottom: 1px solid var(--stroke);
+}
+
+.catalogNoImg {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--text-weak);
+  font-weight: 800;
+}
+
+.catalogPricePill {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke);
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+  box-shadow: var(--shadow-sm);
+  font-weight: 900;
+  color: var(--text);
+}
+
+.catalogBody {
+  padding: 14px;
+}
+
+.catalogTitle {
+  font-size: 20px;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.catalogDesc {
+  margin-top: 10px;
+  color: var(--text-weak);
+  line-height: 1.5;
+}
+
+.catalogLoading,
+.catalogEmpty {
+  padding: 18px;
+  color: var(--text-weak);
+  font-weight: 800;
+}
+
+.catalogError {
+  padding: 18px;
+}
+
+.catalogErrorTitle {
+  font-weight: 950;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.catalogErrorText {
+  color: var(--text-weak);
+  line-height: 1.45;
+}
+
+/* debug */
+.catalogDebug {
+  margin-top: 14px;
+  border-top: 1px solid var(--stroke);
+  padding-top: 12px;
+  color: var(--text-weak);
+}
+.catalogDebug pre {
+  margin: 10px 0 0;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+  overflow: auto;
+  font-size: 12px;
+}

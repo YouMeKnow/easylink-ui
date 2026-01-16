@@ -1,0 +1,593 @@
+/* ============================================================
+   SignUpMemoryLocks.css (clean)
+   - Wizard page layout + SidebarSteps + Step UI
+   ============================================================ */
+
+/* ---------- page shell ---------- */
+.signup-shell {
+  background: transparent;
+  min-height: calc(100vh - 80px);
+  padding: 32px 16px;
+}
+
+.signup-wrap {
+  max-width: min(1400px, 96vw);
+  margin: 0 auto;
+}
+
+/* ---------- main card ---------- */
+.signup-card {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-md);
+  border-radius: 22px;
+  overflow: hidden;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+/* ---------- header ---------- */
+.signup-header {
+  padding: 22px 22px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(99, 102, 241, 0.08),
+    rgba(255, 255, 255, 0)
+  );
+  border-bottom: 1px solid var(--stroke);
+}
+
+.signup-headline {
+  display: grid;
+  gap: 6px;
+}
+
+.signup-title {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-size: 22px;
+}
+
+.signup-subtitle {
+  margin: 0;
+  color: var(--text-weak);
+  font-size: 14px;
+}
+
+/* progress */
+.signup-progress {
+  margin-top: 14px;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+}
+:root[data-theme="light"] .signup-progress {
+  background: rgba(15, 18, 34, 0.08);
+}
+
+.signup-progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #0ea5e9);
+  transition: width 280ms ease;
+}
+
+/* ---------- content layout ---------- */
+.signup-content {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 24px;
+  padding: 22px;
+  align-items: start;
+}
+
+/* sidebar column */
+.signup-aside {
+  position: sticky;
+  top: 22px;
+  min-width: 0;
+}
+
+/* main column */
+.signup-main {
+  display: block;
+  min-width: 0;
+}
+
+/* IMPORTANT: avoid overflow in grid children */
+.signup-card,
+.signup-content,
+.signup-main,
+.signup-step-wrap {
+  min-width: 0;
+}
+
+/* Step wrapper: controls how “wide” the step content feels */
+.signup-step-wrap {
+  width: 100%;
+  max-width: 1000px;
+  overflow: hidden;
+}
+.signup-step-wrap > * {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 992px) {
+  .signup-shell {
+    padding: 20px 12px;
+  }
+
+  .signup-wrap {
+    max-width: 760px;
+  }
+
+  .signup-content {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .signup-aside {
+    position: static;
+  }
+
+  .signup-step-wrap {
+    max-width: 760px;
+  }
+}
+
+/* ============================================================
+   STEP CONTENT (forms) — scoped to main content only
+   ============================================================ */
+.signup-step-wrap .signup-step {
+  display: grid;
+  gap: 16px;
+}
+
+.signup-step-lead {
+  font-size: 13px;
+  color: var(--text-weak);
+}
+
+/* field */
+.signup-field {
+  display: grid;
+  gap: 8px;
+}
+
+.signup-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+/* input (with icon container) */
+.signup-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 14px;
+  border: 1px solid var(--stroke);
+  background: rgba(255, 255, 255, 0.10);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+:root[data-theme="light"] .signup-input {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 24px rgba(15, 18, 34, 0.06);
+}
+
+.signup-input-el {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 14px 14px;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.signup-input.is-invalid {
+  border-color: rgba(239, 68, 68, 0.55);
+}
+
+.signup-input-icon {
+  margin-right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: rgba(239, 68, 68, 0.9);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.signup-error {
+  font-size: 13px;
+  color: rgba(239, 68, 68, 0.95);
+}
+
+/* actions */
+.signup-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+  gap: 12px;
+}
+.signup-actions-split {
+  justify-content: space-between;
+}
+
+/* buttons */
+.signup-btn {
+  border: 0;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.signup-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.signup-btn-primary {
+  color: white;
+  background: linear-gradient(90deg, #6366f1, #0ea5e9);
+  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.25);
+}
+
+.signup-btn-ghost {
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--text);
+  border: 1px solid var(--stroke);
+  box-shadow: none;
+}
+:root[data-theme="light"] .signup-btn-ghost {
+  background: rgba(15, 18, 34, 0.04);
+}
+.signup-btn-ghost:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+/* count selector */
+.signup-pills {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.signup-pill {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+
+  font-size: 22px;
+  font-weight: 900;
+
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  color: var(--text);
+  box-shadow: var(--shadow-md);
+
+  transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+:root[data-theme="light"] .signup-pill {
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 24px rgba(15, 18, 34, 0.08);
+}
+
+.signup-pill:hover {
+  transform: translateY(-1px);
+  border-color: rgba(99, 179, 241, 0.35);
+}
+
+.signup-pill.is-active {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.95), rgba(14, 165, 233, 0.95));
+  color: white;
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 14px 34px rgba(99, 102, 241, 0.28);
+}
+
+/* hard fix for light theme active pill */
+:root[data-theme="light"] .signup-pill.is-active {
+  background: linear-gradient(90deg, #6366f1, #0ea5e9) !important;
+  color: #fff !important;
+  border-color: rgba(99, 102, 241, 0.35) !important;
+  opacity: 1 !important;
+}
+
+/* step head */
+.signup-step-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.signup-step-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* tiny substep indicator */
+.signup-substeps {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.signup-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--stroke);
+}
+:root[data-theme="light"] .signup-dot {
+  background: rgba(15, 18, 34, 0.06);
+}
+.signup-dot.is-active {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.95), rgba(14, 165, 233, 0.95));
+  border-color: transparent;
+}
+.signup-dot.is-done {
+  background: rgba(14, 165, 233, 0.25);
+  border-color: rgba(14, 165, 233, 0.35);
+}
+
+/* panel (inner surface) */
+.signup-panel {
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--stroke);
+  background: rgba(255, 255, 255, 0.06);
+}
+:root[data-theme="light"] .signup-panel {
+  background: rgba(15, 18, 34, 0.03);
+}
+
+/* selects/inputs plain */
+.signup-select,
+.signup-input-plain {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--stroke);
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--text);
+  padding: 12px 12px;
+  outline: none;
+}
+:root[data-theme="light"] .signup-select,
+:root[data-theme="light"] .signup-input-plain {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+
+:root[data-theme="light"] .signup-icon-btn {
+  background: rgba(15, 18, 34, 0.04);
+}
+
+/* preview */
+.signup-panel-preview {
+  padding: 18px;
+}
+
+.signup-btn-wide {
+  min-width: 220px;
+}
+
+/* ============================================================
+   SIDEBAR STEPS — fully scoped to .signup-steps
+   ============================================================ */
+.signup-steps {
+  width: 100%;
+  max-width: 300px;
+  padding: 16px 14px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+/* sidebar header */
+.signup-steps-head {
+  display: grid;
+  gap: 6px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--stroke);
+}
+
+.signup-steps-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.signup-steps-meta {
+  font-size: 12px;
+  color: var(--text-weak);
+}
+
+/* sidebar list */
+.signup-steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+/* item */
+.signup-steps .signup-step {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 14px;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.signup-step-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 13px;
+  border: 1px solid var(--stroke);
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--text-weak);
+}
+:root[data-theme="light"] .signup-step-badge {
+  background: rgba(15, 18, 34, 0.04);
+}
+
+.signup-step-label {
+  font-size: 14px;
+  color: var(--text-weak);
+  line-height: 1.2;
+}
+
+.signup-step-check {
+  width: 14px;
+  height: 8px;
+  border-left: 2px solid rgba(255, 255, 255, 0.9);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+  transform: rotate(-45deg);
+}
+
+.signup-steps .signup-step:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+:root[data-theme="light"] .signup-steps .signup-step:hover {
+  background: rgba(15, 18, 34, 0.04);
+}
+
+.signup-steps .signup-step--active {
+  background: rgba(99, 102, 241, 0.12);
+}
+.signup-steps .signup-step--active .signup-step-badge {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.95), rgba(14, 165, 233, 0.95));
+  color: #fff;
+  border-color: transparent;
+}
+.signup-steps .signup-step--active .signup-step-label {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.signup-steps .signup-step--done .signup-step-badge {
+  background: rgba(14, 165, 233, 0.22);
+  border-color: rgba(14, 165, 233, 0.35);
+  color: transparent;
+}
+
+@media (max-width: 992px) {
+  .signup-steps {
+    max-width: none;
+  }
+}
+
+/* optional helpers */
+.signup-step--center {
+  text-align: center;
+  align-items: center;
+}
+.signup-step--center .signup-field {
+  align-items: center;
+}
+.signup-step--center .signup-label {
+  font-size: 16px;
+}
+
+.signup-header {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 992px) {
+  .signup-header {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .signup-progress {
+    grid-column: 1 / -1;
+  }
+}
+
+.signup-header-right {
+  display: flex;
+  justify-content: flex-end;
+}
+.signup-wrap {
+  max-width: 1040px;     
+  width: 100%;
+  margin: 0 auto;
+}
+
+.signup-content {
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+
+
+.signup-step-wrap {
+  width: 100%;
+  max-width: 640px;       
+  overflow: hidden;
+}
+
+.signup-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.signup-input-el {
+  padding-right: 46px; 
+}
+
+.signup-icon-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 36px;
+  height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  cursor: pointer;
+
+  padding: 0;
+  line-height: 0; 
+}
+
+.signup-icon-btn svg {
+  display: block;
+}

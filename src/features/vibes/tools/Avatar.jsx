@@ -1,34 +1,47 @@
-import React, { useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
+import SmartImage from "@/shared/ui/SmartImage";
+import "@/features/vibes/styles/Avatar.css";
 
-function Avatar({ name, photo, onChangePhoto }) {
+export default function Avatar({ name, photo, photoUrl }) {
   const [open, setOpen] = useState(false);
 
   const API_BASE =
     import.meta.env.VITE_API_URL?.replace(/\/$/, "") || window.location.origin;
 
-  let src = null;
+  const src = useMemo(() => {
+    const normalize = (p) => {
+      if (!p) return null;
+      const s = String(p).trim();
 
-  if (photo instanceof File) {
-    src = URL.createObjectURL(photo);
-  } else if (typeof photo === "string") {
-    if (photo.startsWith("/uploads")) {
-      src = `${API_BASE}${photo}`;
-    } else {
-      src = photo;
-    }
-  }
+      if (/^https?:\/\//i.test(s)) return s;
+      if (s.startsWith("/uploads/")) return `${API_BASE}${s}`;
+      if (s.startsWith("uploads/")) return `${API_BASE}/${s}`;
+      if (s.startsWith("/")) return `${API_BASE}${s}`;       
+      return `${API_BASE}/${s}`;
+    };
 
-  const handleFileSelect = (e) => {
-    const file = e.target.files[0];
-    if (file && onChangePhoto) {
-      onChangePhoto(file); // 👈 передаём выбранный файл наружу
+    // 1) explicit url wins, BUT normalized
+    if (photoUrl) return normalize(photoUrl);
+
+    // 2) file preview
+    if (photo instanceof File) return URL.createObjectURL(photo);
+
+    // 3) string photo normalized
+    if (typeof photo === "string") return normalize(photo);
+
+    return null;
+  }, [photo, photoUrl, API_BASE]);
+
+
+  useEffect(() => {
+    if (photo instanceof File && src?.startsWith("blob:")) {
+      return () => URL.revokeObjectURL(src);
     }
-  };
+  }, [photo, src]);
 
   return (
     <>
       <div
-        onClick={() => document.getElementById("avatarInput").click()} // 👈 кликом открываем выбор файла
         onDoubleClick={() => src && setOpen(true)}
         style={{
           width: 94,
@@ -41,13 +54,18 @@ function Avatar({ name, photo, onChangePhoto }) {
           overflow: "hidden",
           marginBottom: 14,
           marginTop: -8,
-          cursor: "pointer",
+          userSelect: "none",
         }}
       >
         {src ? (
-          <img
-            src={src}
-            alt="avatar"
+          <SmartImage
+            src={photoUrl || photo}
+            alt={name}
+            fallback={
+              <span style={{ color: "#bbb", fontSize: 40 }}>
+                {name ? name[0].toUpperCase() : "?"}
+              </span>
+            }
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         ) : (
@@ -55,19 +73,9 @@ function Avatar({ name, photo, onChangePhoto }) {
             {name ? name[0].toUpperCase() : "?"}
           </span>
         )}
-
-        {/* 👇 скрытый input */}
-        <input
-          id="avatarInput"
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={handleFileSelect}
-        />
       </div>
 
-      {/* 👇 окно предпросмотра (двойной клик) */}
-      {open && (
+      {open && src && (
         <div
           onClick={() => setOpen(false)}
           style={{
@@ -84,19 +92,10 @@ function Avatar({ name, photo, onChangePhoto }) {
           <img
             src={src}
             alt={name}
-            onDoubleClick={() => setOpen(false)}
-            style={{
-              maxWidth: "90%",
-              maxHeight: "90%",
-              borderRadius: 12,
-              boxShadow: "0 0 20px rgba(0,0,0,0.5)",
-              cursor: "zoom-out",
-            }}
+            style={{ maxWidth: "90%", maxHeight: "90%", borderRadius: 12 }}
           />
         </div>
       )}
     </>
   );
 }
-
-export default Avatar;

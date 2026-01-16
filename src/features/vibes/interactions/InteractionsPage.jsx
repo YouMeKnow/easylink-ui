@@ -35,7 +35,7 @@ export default function InteractionsPage() {
       <div className="card p-4 shadow" style={{ borderRadius: 18 }}>
         {/* Section 1: Circle */}
         <h5 className="mb-3" style={{ color: "#476dfe" }}>
-          {t("circle")}
+          {t("sections.following")}
         </h5>
         <VibeCircleList vibes={following} t={t} />
 
@@ -43,7 +43,7 @@ export default function InteractionsPage() {
 
         {/* Section 2: Offers */}
         <h5 className="mb-3" style={{ color: "#476dfe" }}>
-          {t("offers")}
+          {t("sections.offers")}
         </h5>
         <OffersTable offers={offers} subscriberVibeId={id} t={t} />
       </div>

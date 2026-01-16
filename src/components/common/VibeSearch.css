@@ -1,0 +1,138 @@
+/* VibeSearch.css */
+
+.vibe-search {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.vibe-search__panel {
+  width: min(720px, 100%);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.vibe-search__row {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+
+  padding: 12px;
+  border-radius: 22px;
+
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+
+  overflow: hidden;
+}
+
+/* input */
+.vibe-search__input {
+  flex: 1;
+  min-width: 0;
+
+  height: 46px;
+  padding: 0 14px;
+
+  border-radius: 14px;
+  border: 1px solid var(--field-stroke, var(--stroke));
+  background: var(--field, color-mix(in oklab, var(--bg0) 10%, transparent));
+  color: var(--text);
+
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.vibe-search__input::placeholder {
+  color: color-mix(in oklab, var(--text-weak) 85%, transparent);
+  opacity: 1;
+}
+
+.vibe-search__input:focus {
+  border-color: color-mix(in oklab, var(--link) 55%, var(--field-stroke, var(--stroke)));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--link) 22%, transparent);
+  background: color-mix(in oklab, var(--field, rgba(255,255,255,.1)) 88%, transparent);
+}
+
+/* button */
+.vibe-search__btn {
+  height: 46px;
+  padding: 0 18px;
+  border-radius: 14px;
+
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--accent-from), 1),
+    rgba(var(--accent-to), 1)
+  );
+  color: #fff;
+
+  font-weight: 800;
+  letter-spacing: .01em;
+  white-space: nowrap;
+
+  box-shadow: 0 12px 28px color-mix(in oklab, rgba(var(--accent-to),1) 30%, transparent);
+  transition: transform .12s ease, box-shadow .18s ease, filter .18s ease;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.vibe-search__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 36px color-mix(in oklab, rgba(var(--accent-to),1) 38%, transparent);
+}
+
+.vibe-search__btn:active { transform: translateY(0); }
+
+.vibe-search__btn:focus { outline: none; box-shadow: none; }
+
+.vibe-search__btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, rgba(var(--accent-from),1) 30%, transparent);
+}
+
+/* disabled */
+.vibe-search__btn:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+
+  background: color-mix(in oklab, var(--bg0) 86%, var(--text) 14%);
+  color: color-mix(in oklab, var(--text) 55%, transparent);
+  border: 1px solid var(--stroke);
+
+  box-shadow: none;
+  transform: none;
+  filter: saturate(.7);
+}
+
+/* spinner */
+.vibe-search__spinner {
+  width: 14px;
+  height: 14px;
+  margin-right: 10px;
+  display: inline-block;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,.45);
+  border-top-color: rgba(255,255,255,.95);
+  animation: vibe-spin .8s linear infinite;
+  vertical-align: -0.15em;
+}
+
+@keyframes vibe-spin { to { transform: rotate(360deg); } }
+
+/* hint */
+.vibe-search__hint {
+  margin-top: 10px;
+  min-height: 1.2em;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+
+.vibe-search__hint.is-error { color: #ff6a6a; }

@@ -11,5 +11,6 @@
   "settings_panel_text": "Here will be Vibe settings (delete, privacy, etc.).",
   "settings_panel_close": "Close",
   "error_no_id": "Error: Vibe ID is missing.",
-  "error_save": "Save failed!"
+  "error_save": "Save failed!",
+  "view": "Public page"
 }
