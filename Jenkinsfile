@@ -32,11 +32,10 @@ pipeline {
           docker -H "$DOCKER_HOST" version
           docker -H "$DOCKER_HOST" compose version
 
-          # docker compose runs against the HOST engine, so use HOST path
-          COMPOSE_FILE='C:\\ymk\\docker-compose.yml'
+          COMPOSE_FILE=/workspace/ymk/docker-compose.yml
           echo "[preflight] COMPOSE_FILE=$COMPOSE_FILE"
 
-          # validate Docker Desktop can read the compose file
+          test -f "$COMPOSE_FILE"
           docker -H "$DOCKER_HOST" compose -f "$COMPOSE_FILE" config >/dev/null
 
           # persist for later stages
@@ -86,7 +85,8 @@ pipeline {
       sh '''
         set +e
         echo "[post] docker ps (top 30)"
-        docker -H "$DOCKER_HOST" ps -a | head -n 30
+        docker -H "$DOCKER_HOST" ps -a > /tmp/ps.txt || true
+        head -n 30 /tmp/ps.txt || true
       '''
     }
   }
