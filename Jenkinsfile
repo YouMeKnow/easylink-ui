@@ -27,19 +27,22 @@ pipeline {
           set -eu
           echo "[preflight] whoami: $(whoami)"
           echo "[preflight] pwd: $PWD"
-          echo "[preflight] DOCKER_HOST=${DOCKER_HOST:-<unset>}"
+          echo "[preflight] DOCKER_HOST=$DOCKER_HOST"
 
-          echo "[preflight] docker version"
           docker -H "$DOCKER_HOST" version
+          docker -H "$DOCKER_HOST" compose version
 
-          echo "[preflight] compose availability"
-          (docker compose version || true)
-          (docker-compose --version || true)
+          # docker compose runs against the HOST engine, so use HOST path
+          COMPOSE_FILE='C:\\ymk\\docker-compose.yml'
+          echo "[preflight] COMPOSE_FILE=$COMPOSE_FILE"
 
-          echo "[preflight] /workspace/ymk listing"
-          ls -la /workspace || true
-          ls -la /workspace/ymk || true
-          ls -la /workspace/ymk/docker-compose.yml || true
+          # validate Docker Desktop can read the compose file
+          docker -H "$DOCKER_HOST" compose -f "$COMPOSE_FILE" config >/dev/null
+
+          # persist for later stages
+          printf "COMPOSE_FILE=%s\n" "$COMPOSE_FILE" > .compose_root.env
+
+          echo "[preflight] OK"
         '''
       }
     }
@@ -60,28 +63,31 @@ pipeline {
     stage('deploy ui') {
       steps {
         sh '''
-          set -e
-          if docker compose version >/dev/null 2>&1; then
-            DC="docker compose"
-          elif command -v docker-compose >/dev/null 2>&1; then
-            DC="docker-compose"
-          else
-            echo "[error] docker compose not available in this agent"
-            exit 1
-          fi
+          set -eu
+          . ./.compose_root.env
+          echo "[deploy] COMPOSE_FILE=$COMPOSE_FILE"
 
-          DOCKER_HOST="$DOCKER_HOST" $DC -f /workspace/ymk/docker-compose.yml up -d --force-recreate ui
+          # hard remove old service container (no interactive prompts ever)
+          docker -H "$DOCKER_HOST" compose -p ymk -f "$COMPOSE_FILE" rm -sf ui || true
+
+          # recreate only ui with latest image
+          docker -H "$DOCKER_HOST" compose -p ymk -f "$COMPOSE_FILE" up -d --no-deps --force-recreate ui
+
+          docker -H "$DOCKER_HOST" compose -p ymk -f "$COMPOSE_FILE" ps
         '''
       }
     }
   }
 
   post {
-    success {
-      echo 'UI deploy successful!'
-    }
-    failure {
-      echo 'UI deploy failed!'
+    success { echo 'UI deploy successful!' }
+    failure { echo 'UI deploy failed!' }
+    always {
+      sh '''
+        set +e
+        echo "[post] docker ps (top 30)"
+        docker -H "$DOCKER_HOST" ps -a | head -n 30
+      '''
     }
   }
 }
