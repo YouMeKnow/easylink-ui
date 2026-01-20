@@ -315,8 +315,8 @@
   opacity: .6;
 }
 .profile .profile__search{
-  padding: 0;          /* ❌ убираем лишний воздух */
-  margin-block: 14px;  /* оставляем только вертикальный отступ */
+  padding: 0;          
+  margin-block: 14px;  
   background: none;
   border: none;
   box-shadow: none;

@@ -93,28 +93,52 @@ export default function Home() {
         tabIndex={0}
         onKeyDown={(e) => { if (e.key === "Enter") handleGetStarted(); }}
       >
-        <motion.h1 id="hero-title" className="hero__title" variants={fadeUp}>
-          <span className="hero__title-gradient">
-            {t("headline_prefix", "Your digital identity,")}
-            <br className="hide-sm" /> {t("headline_suffix", "beautifully simple")}
-          </span>
-        </motion.h1>
+        <div className="hero-bg" aria-hidden="true" />
 
-        <motion.p className="hero__subtitle" variants={fadeUp}>
-          {t("subheadline", "Create a Vibe — a fast, shareable profile with passwordless login and built-in analytics.")}
-        </motion.p>
+        <div className="hero-inner">
+          <div className="hero-shell">
+            <motion.h1 id="hero-title" className="hero__title" variants={fadeUp}>
+              <span className="hero__title-gradient">
+                {t("headline_prefix", "Your digital identity,")}
+                <br className="hide-sm" /> {t("headline_suffix", "beautifully simple")}
+              </span>
+            </motion.h1>
 
-        <motion.button
-          className="btn-cta btn-cta--xl"
-          onClick={handleGetStarted}
-          whileHover={!reduce ? { y: -1 } : undefined}
-          whileTap={!reduce ? { scale: 0.985 } : undefined}
-          aria-label={t("get_started", "Get started")}
-          title={t("get_started", "Get started")}
-        >
-          {t("get_started", "Get started")}
-        </motion.button>
+            <motion.p className="hero__subtitle" variants={fadeUp}>
+              {t("subheadline", "Create a Vibe — a fast, shareable profile with passwordless login and built-in analytics.")}
+            </motion.p>
+
+            <div className="heroCtaHit">
+              <motion.a
+                href="#"
+                role="button"
+                tabIndex={0}
+                className="heroCta-wrap"
+                aria-label={t("get_started", "Get started")}
+                title={t("get_started", "Get started")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleGetStarted();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleGetStarted();
+                  }
+                }}
+                whileTap={!reduce ? { scale: 0.985 } : undefined}   // hover УБРАЛИ
+              >
+                <span className="heroCta heroCta--xl">
+                  {t("get_started", "Get started")}
+                  <span className="heroCta__arrow">→</span>
+                </span>
+              </motion.a>
+            </div>
+
+          </div>
+        </div>
       </motion.section>
+
 
       <div className="hero__search">
         <VibeSearch autoFocus={false} />
