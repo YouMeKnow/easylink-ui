@@ -7,7 +7,7 @@ pipeline {
     durabilityHint('PERFORMANCE_OPTIMIZED')
     skipDefaultCheckout(true)
   }
-
+  
   environment {
     DOCKER_HOST = 'tcp://host.docker.internal:2375'
     IMAGE_TAG   = 'ymk/ui:latest'
@@ -50,9 +50,9 @@ pipeline {
       steps {
         sh '''
           set -eu
-          docker -H "$DOCKER_HOST" build --no-cache \
+          docker -H "$DOCKER_HOST" build --pull \
             -t "$IMAGE_TAG" \
-            --build-arg VITE_AMPLITUDE_API_KEY="${AMPLITUDE_API_KEY}" \
+            --build-arg VITE_AMPLITUDE_API_KEY="$AMPLITUDE_API_KEY" \
             .
           docker -H "$DOCKER_HOST" image inspect "$IMAGE_TAG" --format "ui image={{.Id}} created={{.Created}}"
         '''
