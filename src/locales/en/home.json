@@ -76,5 +76,10 @@
       "details_label": "Details",
       "details_value": "Talks, Q&A, snacks, and live Vibe demos."
     }
+  },
+  "search": {
+    "kicker": "TRY A VIBE SEARCH",
+    "title": "Open a vibe by code",
+    "description": "Enter a vibe code to instantly open any vibe — personal, business, or event."
   }
 }

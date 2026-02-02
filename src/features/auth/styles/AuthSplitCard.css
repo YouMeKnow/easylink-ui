@@ -261,3 +261,9 @@
 .auth-subtitle {
   color: var(--text-weak);
 }
+
+@media (max-width: 768px) {
+  .auth-right {
+    display: none;
+  }
+}

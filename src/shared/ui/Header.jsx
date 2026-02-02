@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { Sun, Moon } from "lucide-react";
+
+import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 
 import LanguageSwitcher from "@/shared/ui/LanguageSwitcher";
+import NotificationBell from "@/features/notifications/NotificationBell";
+
 import { useEarlyAccess } from "@/components/common/hooks/useEarlyAccess";
 import { useEarlyAccessCheckable } from "@/components/common/hooks/useEarlyAccessCheckable";
 import { trackEvent } from "@/services/amplitude";
-import NotificationBell from "@/features/notifications/NotificationBell";
-import { Sun, Moon } from "lucide-react";
 
-import "./Header.css";
 import HeaderMobileMenu from "./HeaderMobileMenu";
 import AccessCTA from "./AccessCTA";
-import { useTheme } from "@/context/ThemeContext";
+import "./Header.css";
 
 function Header() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation("header");
+  const { setMode, resolved } = useTheme();
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const { setMode, resolved } = useTheme();
 
   // Early Access
   const {
@@ -106,15 +108,13 @@ function Header() {
             </Link>
 
             {isAuthenticated && (
-              <Link
-                to="/"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLogout();
-                }}
+              <button
+                type="button"
+                className="topbar__linkBtn"
+                onClick={handleLogout}
               >
                 {t("log_out")}
-              </Link>
+              </button>
             )}
           </nav>
 
@@ -130,6 +130,7 @@ function Header() {
               className="topbar__iconBtn"
               onClick={() => setMode(resolved === "dark" ? "light" : "dark")}
               aria-label="Toggle theme"
+              type="button"
             >
               {resolved === "dark" ? <Moon size={18} /> : <Sun size={18} />}
             </button>
@@ -138,13 +139,17 @@ function Header() {
               className="topbar__burger"
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
+              type="button"
             >
-              <span className="topbar__burgerIcon" aria-hidden>☰</span>
+              <span className="topbar__burgerIcon" aria-hidden>
+                ☰
+              </span>
             </button>
           </div>
         </div>
       </header>
 
+      {/* MOBILE MENU */}
       <HeaderMobileMenu
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
