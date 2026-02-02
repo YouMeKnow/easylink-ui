@@ -2,7 +2,7 @@
    Header.css (clean)
    - glass topbar
    - mobile: hide nav + hide language switcher + show burger
-   - burger centered
+   - sheet (shadcn) styled as glass
    =========================== */
 
 /* top bar */
@@ -104,16 +104,32 @@
 }
 
 .topbar__nav a:hover{
-  background: rgba(255,255,255,.08);
+  background: color-mix(in oklab, currentColor 8%, transparent);
 }
 
-.topbar__nav a:hover{
-  background: color-mix(
-    in oklab,
-    currentColor 8%,
-    transparent
-  );
+/* logout button in nav should look like links */
+.topbar__linkBtn{
+  color: var(--text);
+  opacity: .92;
+
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+
+  padding: 10px 10px;
+  border-radius: 10px;
+
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  transition: background .15s ease, opacity .15s ease;
 }
+
+.topbar__linkBtn:hover{
+  background: color-mix(in oklab, currentColor 8%, transparent);
+}
+
 /* RIGHT */
 .topbar__right{
   justify-self: end;
@@ -128,11 +144,11 @@
   align-items: center;
 }
 
-/* Focus ring */
+/* Focus ring (fix: works with hex vars) */
 .topbar a:focus-visible,
 .topbar button:focus-visible{
   outline: none;
-  box-shadow: 0 0 0 3px rgba(var(--accent-to), .28);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-to) 28%, transparent);
   border-radius: 10px;
 }
 
@@ -379,4 +395,61 @@
   .topbar__lang{ display: none; }
 
   .topbar__burger{ display: grid; }
+}
+
+/* ===========================
+   shadcn Sheet styling (mobile menu)
+   =========================== */
+
+.ymkSheet{
+  background: color-mix(in oklab, var(--bg0) 88%, transparent);
+  border-left: 1px solid color-mix(in oklab, var(--stroke) 80%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.ymkSheet__title{
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+
+.ymkSheet__body{
+  margin-top: 12px;
+  display: grid;
+  gap: 18px;
+}
+
+.ymkSheet__links{
+  display: grid;
+  gap: 10px;
+}
+
+.ymkSheet__links a,
+.ymkSheet__linkBtn{
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 700;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.ymkSheet__links a:hover,
+.ymkSheet__linkBtn:hover{
+  background: color-mix(in oklab, currentColor 8%, transparent);
+}
+
+.ymkSheet__linkBtn{
+  cursor: pointer;
+}
+
+.ymkSheet__bottom{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
 }

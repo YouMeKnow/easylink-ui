@@ -1,0 +1,65 @@
+.vibe-avatar-wrap{
+  position: relative;
+  display: inline-block;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.vibe-avatar-wrap.is-editable{
+  cursor: pointer;
+}
+
+.vibe-avatar-edit{
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  line-height: 0;
+
+  background: color-mix(in oklab, var(--bg0, #0b0f2a) 70%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke, rgba(255,255,255,.12)) 70%, transparent);
+  color: color-mix(in oklab, var(--text, #fff) 85%, transparent);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity .15s ease, transform .15s ease, background .15s ease;
+}
+
+.vibe-avatar-wrap.is-editable:hover .vibe-avatar-edit,
+.vibe-avatar-wrap.is-editable:focus-within .vibe-avatar-edit{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.vibe-avatar-edit:hover{
+  background: color-mix(in oklab, var(--bg0, #0b0f2a) 55%, transparent);
+}
+
+.vibe-avatar-edit:focus-visible,
+.vibe-avatar-wrap.is-editable:focus-visible{
+  outline: 2px solid color-mix(in oklab, var(--accent, #7c5cff) 70%, white);
+  outline-offset: 3px;
+}
+
+.vibe-avatar-edit svg{
+  display: block;
+}
+
+@media (hover: none){
+  .vibe-avatar-edit{
+    opacity: 1;
+    transform: none;
+  }
+}
