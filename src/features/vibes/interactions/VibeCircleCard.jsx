@@ -1,3 +1,5 @@
+// @deprecated – replaced by VibeCircleTile   
+
 // src/features/vibes/components/VibeCircleCard.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
