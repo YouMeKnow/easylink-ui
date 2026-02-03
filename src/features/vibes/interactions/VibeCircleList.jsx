@@ -1,3 +1,5 @@
+// @deprecated – replaced by VibeCircleGrid
+
 import React from "react";
 import VibeCircleCard from "./VibeCircleCard";
 
