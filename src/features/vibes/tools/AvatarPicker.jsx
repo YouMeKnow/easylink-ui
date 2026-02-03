@@ -1,10 +1,14 @@
 import React from "react";
 import Avatar from "./Avatar";
 import usePhotoPreview from "./usePhotoPreview";
+import AvatarCropModal from "./AvatarCropModal";
 import "./AvatarPicker.css";
+
 export default function AvatarPicker({ name, photo, editMode, onChangePhoto }) {
   const fileRef = React.useRef(null);
   const previewUrl = usePhotoPreview(photo);
+
+  const [cropFile, setCropFile] = React.useState(null);
 
   const handlePickPhoto = () => {
     if (!editMode) return;
@@ -13,8 +17,15 @@ export default function AvatarPicker({ name, photo, editMode, onChangePhoto }) {
 
   const handlePhotoSelected = (e) => {
     const file = e.target.files?.[0];
-    if (file && onChangePhoto) onChangePhoto(file);
+    if (file) setCropFile(file);      
     e.target.value = "";
+  };
+
+  const handleCropCancel = () => setCropFile(null);
+
+  const handleCropSave = (croppedFile) => {
+    setCropFile(null);
+    onChangePhoto?.(croppedFile);     
   };
 
   return (
@@ -61,6 +72,15 @@ export default function AvatarPicker({ name, photo, editMode, onChangePhoto }) {
           </button>
         )}
       </div>
+
+      {/* ✅ Crop modal */}
+      {cropFile && (
+        <AvatarCropModal
+          file={cropFile}
+          onCancel={handleCropCancel}
+          onSave={handleCropSave}
+        />
+      )}
     </>
   );
 }

@@ -10,7 +10,9 @@
   "following_empty": "You are not following anyone yet.",
   "followers_empty": "No one follows you yet.",
   "sections": {
-    "offers": "Offers",
+    "business": "Business",
+    "personal": "Personal",
+    "other": "Others",
     "following": "Following"
   },
   "tabs": {
@@ -36,7 +38,13 @@
     "button": "View Offers"
   },
   "myCircle": "My Circle",
+  "search_placeholder": "Search by name...",
+  "count": "{{count}} vibes",
+  "count_filtered": "{{shown}} / {{total}}",
+  "no_results": "No results.",
+
   "empty": {
-    "circle": "Your Vibe circle is empty."
+    "circle": "Your Vibe Circle is empty.",
+    "circle_hint": "Start following vibes to see them here."
   }
 }

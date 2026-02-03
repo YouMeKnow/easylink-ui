@@ -10,7 +10,9 @@
   "following_empty": "Вы ещё ни на кого не подписаны.",
   "followers_empty": "На вас пока никто не подписан.",
   "sections": {
-    "offers": "Предложения",
+    "business": "Бизнес",
+    "personal": "Личное",
+    "other": "Другое",
     "following": "Подписки"
   },
   "tabs": {
@@ -36,7 +38,13 @@
     "button": "Просмотреть предложения"
   },
   "myCircle": "Мой круг",
+  "search_placeholder": "Поиск по имени...",
+  "count": "{{count}} вайбов",
+  "count_filtered": "{{shown}} / {{total}}",
+  "no_results": "Ничего не найдено.",
+
   "empty": {
-    "circle": "Твой круг пуст."
+    "circle": "Ваш круг вайбов пуст.",
+    "circle_hint": "Начните подписываться на вайбы, чтобы видеть их здесь."
   }
 }
