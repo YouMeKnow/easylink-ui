@@ -10,7 +10,9 @@
   "following_empty": "Vous n’êtes encore abonné à personne.",
   "followers_empty": "Personne ne vous suit pour l’instant.",
   "sections": {
-    "offers": "Offres",
+    "business": "Business",
+    "personal": "Personnel",
+    "other": "Autres",
     "following": "Abonnements"
   },
   "tabs": {
@@ -36,7 +38,13 @@
     "button": "Voir les offres"
   },
   "myCircle": "Mon cercle",
+  "search_placeholder": "Rechercher par nom…",
+  "count": "{{count}} vibes",
+  "count_filtered": "{{shown}} / {{total}}",
+  "no_results": "Aucun résultat.",
+
   "empty": {
-    "circle": "Votre cercle Vibe est vide."
+    "circle": "Votre cercle de vibes est vide.",
+    "circle_hint": "Commencez à suivre des vibes pour les voir ici."
   }
 }

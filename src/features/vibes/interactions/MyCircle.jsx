@@ -2,7 +2,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import useFollowing from "./useFollowing";
-import VibeCircleList from "./VibeCircleList";
+import VibeCircleGrid from "./VibeCircleGrid";
 
 export default function MyCircle() {
   const { t } = useTranslation("interactions");
@@ -13,26 +13,33 @@ export default function MyCircle() {
   const following = useFollowing(id, token);
 
   return (
-    <div className="container py-5" style={{ maxWidth: 900 }}>
-      {/* Header */}
-      <div className="d-flex align-items-center mb-4">
-        <button
-          className="btn btn-outline-secondary"
-          onClick={() => navigate(-1)}
-        >
+    <div className="container py-5" style={{ maxWidth: 980 }}>
+      {/* header */}
+      <div className="d-flex align-items-center justify-content-between gap-3 mb-4">
+        <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
           {t("back")}
         </button>
-       <h2 className="fw-bold mx-auto mb-0">
-        {t("myCircle")}
-      </h2>
+
+        <div className="text-center grow">
+          <h2 className="fw-bold mb-0">{t("myCircle")}</h2>
+          <div className="text-muted" style={{ fontSize: 13, marginTop: 4 }}>
+            {t("sections.following")} · {Array.isArray(following) ? following.length : 0}
+          </div>
+        </div>
+        <div style={{ width: 88 }} />
       </div>
 
-      {/* Content */}
-      <div className="card p-4 shadow" style={{ borderRadius: 18 }}>
-        <h5 className="mb-3" style={{ color: "#476dfe" }}>
-          {t("sections.following")}
-        </h5>
-        <VibeCircleList vibes={following} t={t} />
+      {/* content */}
+      <div
+        className="p-4 shadow-sm"
+        style={{
+          borderRadius: 18,
+          border: "1px solid rgba(0,0,0,0.06)",
+          background: "rgba(255,255,255,0.85)",
+          backdropFilter: "blur(10px)",
+        }}
+      >
+        <VibeCircleGrid vibes={following} t={t} />
       </div>
     </div>
   );
