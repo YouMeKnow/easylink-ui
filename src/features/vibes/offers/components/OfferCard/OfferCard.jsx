@@ -10,11 +10,21 @@ export default function OfferCard({
   selected,
   onSelect,
   canManage = false,
+
+  // ✅ new
+  variant = "default", // "default" | "compact"
+  className = "",
 }) {
   const formatDate = (isoString) =>
     new Date(isoString).toLocaleString("en-US", {
       dateStyle: "medium",
       timeStyle: "short",
+    });
+
+  const formatDateShort = (isoString) =>
+    new Date(isoString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "2-digit",
     });
 
   const now = Date.now();
@@ -56,13 +66,17 @@ export default function OfferCard({
       onDelete?.(offer);
   };
 
+  const isCompact = variant === "compact";
+
   return (
     <div
       className={[
         "offer-card",
+        isCompact ? "offer-card--compact" : "",
         selected ? "is-selected" : "",
         !offer.active ? "is-disabled" : "",
         isExpired ? "is-expired" : "",
+        className,
       ].join(" ")}
       role="button"
       tabIndex={0}
@@ -71,64 +85,79 @@ export default function OfferCard({
       onKeyDown={onKeyDown}
       title={canManage ? "Click to open • Press E to edit" : "Click to open"}
     >
-      <div className="offer-card__bar" />
+      {!isCompact && <div className="offer-card__bar" />}
 
       <div className="offer-card__body">
         <div className="offer-card__top">
           <div className="offer-card__title-wrap">
             <div className="offer-card__title">{offer.title}</div>
+
             <div className="offer-card__subtitle">
-              {formatDate(offer.startTime)} → {formatDate(offer.endTime)}
+              {isCompact ? (
+                <>
+                  {formatDateShort(offer.startTime)} → {formatDateShort(offer.endTime)}
+                </>
+              ) : (
+                <>
+                  {formatDate(offer.startTime)} → {formatDate(offer.endTime)}
+                </>
+              )}
             </div>
           </div>
 
           <div className="offer-card__badges">
-            <span className={`offer-badge tone-${status.tone}`}>
-              {status.label}
-            </span>
+            <span className={`offer-badge tone-${status.tone}`}>{status.label}</span>
             {offer.discountType === "DYNAMIC" && (
               <span className="offer-badge tone-warning">Dynamic</span>
             )}
-          </div>
-        </div>
 
-        <div className="offer-card__bottom">
-          <div className="offer-card__meta">
-            <span className="offer-card__label">Discount</span>
-            <span className="offer-card__value">{discountText}</span>
-            {isUpcoming && (
-              <span className="offer-card__hint">Starts later</span>
+            {/* ✅ compact: discount как маленький чип справа */}
+            {isCompact && (
+              <span className="offer-badge tone-neutral offer-badge--discount">
+                {discountText}
+              </span>
             )}
           </div>
-
-          {canManage && (
-            <div className="offer-card__actions">
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-primary"
-                onMouseDown={stopAll}
-                onClick={(e) => {
-                  stopAll(e);
-                  onEdit?.(offer);
-                }}
-              >
-                Edit
-              </button>
-
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-danger"
-                onMouseDown={stopAll}
-                onClick={(e) => {
-                  stopAll(e);
-                  onDelete?.(offer);
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          )}
         </div>
+
+        {/* ✅ compact: убираем тяжёлый bottom ряд (там слишком много воздуха) */}
+        {!isCompact && (
+          <div className="offer-card__bottom">
+            <div className="offer-card__meta">
+              <span className="offer-card__label">Discount</span>
+              <span className="offer-card__value">{discountText}</span>
+              {isUpcoming && <span className="offer-card__hint">Starts later</span>}
+            </div>
+
+            {canManage && (
+              <div className="offer-card__actions">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-primary"
+                  onMouseDown={stopAll}
+                  onClick={(e) => {
+                    stopAll(e);
+                    onEdit?.(offer);
+                  }}
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-danger"
+                  onMouseDown={stopAll}
+                  onClick={(e) => {
+                    stopAll(e);
+                    onDelete?.(offer);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
