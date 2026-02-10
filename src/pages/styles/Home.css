@@ -55,16 +55,12 @@ body,
   z-index: 0;
 
   background:
-    radial-gradient(
-      900px 650px at 20% 0%,
+    radial-gradient(900px 650px at 20% 0%,
       rgba(var(--accent-to), 0.18),
-      transparent 60%
-    ),
-    radial-gradient(
-      900px 650px at 90% 15%,
+      transparent 60%),
+    radial-gradient(900px 650px at 90% 15%,
       rgba(var(--accent-from), 0.14),
-      transparent 62%
-    );
+      transparent 62%);
 }
 
 .hero-ig {
@@ -91,13 +87,11 @@ body,
   font-size: clamp(34px, 4.6vw, 56px);
 
   /* full gradient */
-  background: linear-gradient(
-    90deg,
-    #5f9cff 0%,
-    #6a7bff 35%,
-    #8b5cf6 70%,
-    #5f9cff 100%
-  );
+  background: linear-gradient(90deg,
+      #5f9cff 0%,
+      #6a7bff 35%,
+      #8b5cf6 70%,
+      #5f9cff 100%);
 
   background-size: 200% 100%;
   background-position: 200% 50%;
@@ -112,12 +106,17 @@ body,
 }
 
 @keyframes gradientFlow {
-  from { background-position: 200% 50%; }
-  to   { background-position:   0% 50%; }
+  from {
+    background-position: 200% 50%;
+  }
+
+  to {
+    background-position: 0% 50%;
+  }
 }
 
 /* keep class in markup if you want, but neutralize it so it won't fight */
-.hero-ig__titleAccent{
+.hero-ig__titleAccent {
   background: none;
   -webkit-text-fill-color: unset;
 }
@@ -175,7 +174,8 @@ body,
 .phoneStack {
   position: relative;
   width: min(380px, 90vw);
-  aspect-ratio: 4 / 5; /* instagram-ish */
+  aspect-ratio: 4 / 5;
+  /* instagram-ish */
 }
 
 /* back frame (subtle depth) */
@@ -225,8 +225,10 @@ body,
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover; /* if it’s like IG post */
-  transform: scale(1.02); /* tiny zoom to avoid edge seams */
+  object-fit: cover;
+  /* if it’s like IG post */
+  transform: scale(1.02);
+  /* tiny zoom to avoid edge seams */
 }
 
 /* Dark theme tweaks */
@@ -236,6 +238,7 @@ body,
     0 34px 90px rgba(0, 0, 0, 0.55),
     0 1px 0 rgba(255, 255, 255, 0.12) inset;
 }
+
 :root[data-theme="dark"] .phoneFrame--back {
   background: color-mix(in oklab, var(--surface) 45%, transparent);
   box-shadow: 0 26px 70px rgba(0, 0, 0, 0.35);
@@ -272,6 +275,7 @@ body,
 :root[data-theme="light"] .glass {
   background: rgba(255, 255, 255, 0.82);
 }
+
 :root[data-theme="dark"] .glass {
   background: rgba(18, 20, 41, 0.70);
   border-color: rgba(255, 255, 255, 0.14);
@@ -695,13 +699,13 @@ body,
   width: 100%;
 }
 
-.hero-ig__right{
+.hero-ig__right {
   position: relative;
 }
 
-.hero-media__img{
+.hero-media__img {
   display: block;
-  width: 560px;        
+  width: 560px;
   max-width: none;
   height: auto;
 
@@ -713,11 +717,12 @@ body,
   border-radius: 0;
   box-shadow: none;
 }
+
 /* =============================================================================
    Feature cards look (as desired)
 ============================================================================= */
 
-.home .feature{
+.home .feature {
   background: var(--surface);
   border: 1px solid color-mix(in oklab, var(--stroke) 92%, transparent);
   border-radius: 18px;
@@ -731,18 +736,18 @@ body,
     transform 0.25s ease;
 }
 
-.home .feature__title{
+.home .feature__title {
   color: var(--text);
   font-weight: 700;
 }
 
-.home .feature__text{
+.home .feature__text {
   color: var(--text-weak);
   font-weight: 500;
 }
 
 /* icon badge */
-.home .feature__icon{
+.home .feature__icon {
   width: 44px;
   height: 44px;
   border-radius: 14px;
@@ -751,11 +756,9 @@ body,
   align-items: center;
   justify-content: center;
 
-  background: linear-gradient(
-    135deg,
-    rgba(var(--accent-from), 0.18),
-    rgba(var(--accent-to), 0.18)
-  );
+  background: linear-gradient(135deg,
+      rgba(var(--accent-from), 0.18),
+      rgba(var(--accent-to), 0.18));
 
   color: rgb(var(--accent-from));
 
@@ -766,7 +769,7 @@ body,
   transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
 }
 
-.home .feature__icon svg{
+.home .feature__icon svg {
   width: 22px;
   height: 22px;
   display: block;
@@ -774,29 +777,27 @@ body,
   fill: none;
 }
 
-.home .feature:hover{
+.home .feature:hover {
   border-color: rgba(var(--accent-to), 0.35);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 
-.home .feature:hover .feature__icon{
-  background: linear-gradient(
-    135deg,
-    rgba(var(--accent-from), 0.26),
-    rgba(var(--accent-to), 0.26)
-  );
+.home .feature:hover .feature__icon {
+  background: linear-gradient(135deg,
+      rgba(var(--accent-from), 0.26),
+      rgba(var(--accent-to), 0.26));
   transform: scale(1.06);
 }
 
 
-.search-stage{
+.search-stage {
   width: 100%;
   padding: 0 16px;
   margin: 28px auto 0;
 }
 
-.search-stage__shell{
+.search-stage__shell {
   max-width: 1400px;
   margin: 0 auto;
 
@@ -804,16 +805,12 @@ body,
   padding: clamp(28px, 5vw, 56px);
 
   background:
-    radial-gradient(
-      900px 600px at 15% 20%,
+    radial-gradient(900px 600px at 15% 20%,
       rgba(168, 85, 247, 0.35),
-      transparent 60%
-    ),
-    radial-gradient(
-      900px 600px at 85% 30%,
+      transparent 60%),
+    radial-gradient(900px 600px at 85% 30%,
       rgba(99, 102, 241, 0.35),
-      transparent 62%
-    ),
+      transparent 62%),
     linear-gradient(135deg, #7c3aed, #5b21b6);
 
   box-shadow: 0 40px 120px rgba(88, 28, 135, 0.45);
@@ -823,7 +820,7 @@ body,
   color: #fff;
 }
 
-.search-stage__inner{
+.search-stage__inner {
   max-width: 1280px;
   margin: 0 auto;
 
@@ -834,14 +831,14 @@ body,
   align-items: center;
 }
 
-.search-stage__left{
+.search-stage__left {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
 }
 
-.search-stage__title{
+.search-stage__title {
   margin: 0;
   font-size: clamp(34px, 4.6vw, 56px);
   font-weight: 800;
@@ -851,7 +848,7 @@ body,
   color: #fff;
 }
 
-.search-stage__desc{
+.search-stage__desc {
   margin: 0;
   font-size: 16px;
   line-height: 1.55;
@@ -859,12 +856,12 @@ body,
   color: rgba(255, 255, 255, 0.82);
 }
 
-.search-stage__left .vibe-search{
+.search-stage__left .vibe-search {
   margin-top: 18px;
   max-width: 460px;
 }
 
-.search-stage__right{
+.search-stage__right {
   background: transparent;
   border: 0;
   box-shadow: none;
@@ -876,7 +873,7 @@ body,
   align-items: center;
 }
 
-.search-stage__img{
+.search-stage__img {
   display: block;
   width: 100%;
   max-width: 520px;
@@ -890,93 +887,95 @@ body,
   object-fit: contain;
 }
 
-@media (max-width: 900px){
-  .search-stage{
+@media (max-width: 900px) {
+  .search-stage {
     padding: 0 12px;
     margin-top: 18px;
   }
 
-  .search-stage__shell{
+  .search-stage__shell {
     border-radius: 28px;
     padding: 20px;
   }
 
-  .search-stage__inner{
+  .search-stage__inner {
     grid-template-columns: 1fr;
     gap: 18px;
   }
 
-  .search-stage__right{
+  .search-stage__right {
     order: -1;
     justify-content: center;
   }
 
-  .search-stage__left{
+  .search-stage__left {
     align-items: center;
     text-align: center;
   }
 
-  .search-stage__title{
+  .search-stage__title {
     max-width: none;
   }
 }
 
-@media (max-width: 420px){
-  .search-stage__shell{
+@media (max-width: 420px) {
+  .search-stage__shell {
     border-radius: 22px;
     padding: 16px;
   }
 }
+
 /* =============================================================================
    SECTION DIVIDER (Search -> Explore)
 ============================================================================= */
 
-.home__divider{
+.home__divider {
   width: min(960px, 86vw);
   height: 1px;
   margin: clamp(28px, 5vw, 56px) auto;
 
-  background: color-mix(
-    in oklab,
-    var(--stroke) 65%,
-    transparent
-  );
+  background: color-mix(in oklab,
+      var(--stroke) 65%,
+      transparent);
 }
+
 /* =============================================================================
    SEARCH -> give it bottom spacing so Explore doesn't feel glued
 ============================================================================= */
 
-.search-stage{
+.search-stage {
   width: 100%;
   padding: 0 16px;
   margin: 28px auto 0;
-  padding-bottom: clamp(18px, 3vw, 34px); /* NEW */
+  padding-bottom: clamp(18px, 3vw, 34px);
+  /* NEW */
 }
 
 /* =============================================================================
    EXPLORE -> add top rhythm + better responsive header layout
 ============================================================================= */
 
-.home__explore{
+.home__explore {
   padding-top: clamp(18px, 3vw, 34px);
 }
 
 /* on small screens: stack title + tabs and make tabs full width */
-@media (max-width: 640px){
-  .home__explore .d-flex{
+@media (max-width: 640px) {
+  .home__explore .d-flex {
     align-items: stretch !important;
   }
 
-  .segmented{
+  .segmented {
     width: 100%;
   }
 
-  .segmented__btn{
+  .segmented__btn {
     font-size: 14px;
   }
 }
+
 .search-stage .vibe-search,
-.search-stage .vibe-search *{
+.search-stage .vibe-search * {
   box-sizing: border-box;
 }
 
@@ -986,128 +985,131 @@ body,
 
 .search-stage .vibe-search input,
 .search-stage .vibe-search textarea,
-.search-stage .vibe-search select{
+.search-stage .vibe-search select {
   width: 100%;
   min-width: 0;
 }
 
-@media (max-width: 520px){
-  .search-stage{
+@media (max-width: 520px) {
+  .search-stage {
     margin-top: 14px;
   }
 
-  .search-stage__shell{
+  .search-stage__shell {
     padding: 20px 16px 22px;
   }
 
-  .search-stage__inner{
+  .search-stage__inner {
     gap: 20px;
   }
 
-  .search-stage__right{
-    margin-bottom: 10px; 
+  .search-stage__right {
+    margin-bottom: 10px;
   }
 
-  .search-stage__left{
+  .search-stage__left {
     gap: 16px;
   }
 
-  .search-stage__title{
+  .search-stage__title {
     font-size: 30px;
     line-height: 1.12;
   }
 
-  .search-stage__desc{
+  .search-stage__desc {
     font-size: 15px;
     line-height: 1.6;
   }
 
-  .search-stage .vibe-search{
+  .search-stage .vibe-search {
     margin-top: 22px;
   }
 
-  .search-stage .vibe-search input{
+  .search-stage .vibe-search input {
     height: 56px;
-    font-size: 16px; 
+    font-size: 16px;
     padding: 0 16px;
   }
 }
+
 /* =============================================================================
    SPACE FROM HEADER → HERO
 ============================================================================= */
 
-.hero.hero--ig{
-  padding-top: clamp(48px, 8vh, 96px); /* NEW */
+.hero.hero--ig {
+  padding-top: clamp(48px, 8vh, 96px);
+  /* NEW */
 }
+
 /* =============================================================================
    HERO — phones: image on top + more breathing room
 ============================================================================= */
 
-@media (max-width: 900px){  
-  .hero-ig{
+@media (max-width: 900px) {
+  .hero-ig {
     grid-template-columns: 1fr;
     gap: 18px;
   }
 
-  .hero-ig__right{
-    order: -1;               
+  .hero-ig__right {
+    order: -1;
     justify-items: center;
-    margin: 0 0 8px;          
+    margin: 0 0 8px;
   }
 
-  .hero-media__img{
+  .hero-media__img {
     width: min(520px, 92vw);
     max-width: 100%;
-    transform: none;          
+    transform: none;
   }
 
 
-  .hero-ig__sub{
-    margin-top: 14px;         
+  .hero-ig__sub {
+    margin-top: 14px;
   }
 
-  .hero-ig__actions{
-    margin-top: 26px;        
+  .hero-ig__actions {
+    margin-top: 26px;
     gap: 12px;
-    justify-content: center; 
+    justify-content: center;
   }
 }
 
-@media (max-width: 520px){
-  .hero.hero--ig{
+@media (max-width: 520px) {
+  .hero.hero--ig {
     padding: 22px 0 26px;
   }
 
-  .hero-ig__right{
+  .hero-ig__right {
     margin-bottom: 12px;
   }
 
-  .hero-ig__title{
+  .hero-ig__title {
     font-size: clamp(30px, 9vw, 40px);
     line-height: 1.06;
   }
 
-  .hero-ig__sub{
+  .hero-ig__sub {
     font-size: 15px;
     line-height: 1.6;
     margin-top: 14px;
   }
 
-  .hero-ig__actions{
-    margin-top: 28px;          
+  .hero-ig__actions {
+    margin-top: 28px;
     gap: 10px;
 
-    flex-direction: column;    
+    flex-direction: column;
     align-items: stretch;
   }
 
   .hero-ig__actions .btn-cta,
-  .hero-ig__actions .btn-link-ghost{
+  .hero-ig__actions .btn-link-ghost {
     width: 100%;
     justify-content: center;
   }
 
-  .hero-media__img{
+  .hero-media__img {
     width: min(420px, 88vw);
   }
 }

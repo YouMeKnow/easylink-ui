@@ -5,10 +5,10 @@ import { useTranslation } from "react-i18next";
 import "./styles/About.css";
 
 const iconList = [
-  <FaKey size={30} className="about__icon about__icon--gold" aria-hidden="true" />,
-  <FaLock size={30} className="about__icon about__icon--pink" aria-hidden="true" />,
-  <FaBolt size={30} className="about__icon about__icon--violet" aria-hidden="true" />,
-  <FaUserCircle size={30} className="about__icon about__icon--amber" aria-hidden="true" />,
+  <FaKey size={28} className="about__icon" />,
+  <FaLock size={28} className="about__icon" />,
+  <FaBolt size={28} className="about__icon" />,
+  <FaUserCircle size={28} className="about__icon" />,
 ];
 
 export default function About() {
@@ -16,48 +16,70 @@ export default function About() {
   const steps = t("steps", { returnObjects: true }) || [];
 
   return (
-    <div className="container py-5 about" style={{ minHeight: 600 }}>
-      {/* Header */}
-      <div className="text-center mb-5">
-        <h1 className="fw-bold about__title">{t("title")}</h1>
-        <p className="lead text-muted mb-0 about__subtitle">
-          {t("subtitle")}
-        </p>
-      </div>
+    <div className="about-page">
+      <div className="container py-5">
 
-      {/* Steps */}
-      <div className="row g-4 justify-content-center mb-4">
-        {Array.isArray(steps) &&
-          steps.map((step, index) => (
-            <div className="col-md-3 col-12" key={index}>
-              <div
-                className={`p-4 h-100 rounded-4 about__step about__step--${(index % 4) + 1}`}
-                tabIndex={0}
-              >
-                <div className="mb-2 text-center">{iconList[index % iconList.length]}</div>
-                <h5 className="mb-2 text-center about__stepTitle">{step.title}</h5>
-                <p className="text-muted mb-0 text-center about__stepText">{step.text}</p>
-              </div>
-            </div>
-          ))}
-      </div>
+        {/* Hero Section */}
+        <section className="about__hero mb-6">
+          <span className="about__badge">Secure & Fast</span>
 
-      {/* Call to action */}
-      <div className="text-center mt-5 mb-4">
-        <Link
-          to="/signup"
-          className="btn btn-lg rounded-pill px-4 fw-semibold about__cta"
-          aria-label={t("cta")}
-        >
-          {t("cta")}
-        </Link>
-      </div>
+          <h1 className="about__title display-4 fw-bold mb-3">
+            {t("title")}
+          </h1>
 
-      {/* Mission */}
-      <div className="rounded-4 shadow p-4 mt-3 mx-auto about__mission">
-        <div className="mb-2 text-center about__spark" aria-hidden="true">🌟</div>
-        <h4 className="mb-2 text-center fw-bold">{t("mission_title")}</h4>
-        <p className="text-muted text-center mb-0 about__missionText">{t("mission")}</p>
+          <p className="about__subtitle lead mx-auto">
+            {t("subtitle")}
+          </p>
+        </section>
+
+        {/* Features / Steps Grid */}
+        <section className="about__grid-section mb-6">
+          <div className="about__grid">
+            {Array.isArray(steps) &&
+              steps.map((step, index) => (
+                <div
+                  key={index}
+                  className="about__card glass"
+                  tabIndex={0}
+                >
+                  <div
+                    className={`about__icon-wrapper about__icon-wrapper--${(index % 4) + 1}`}
+                  >
+                    {iconList[index % iconList.length]}
+                  </div>
+
+                  <h3 className="about__card-title h5 mt-3 mb-2">
+                    {step.title}
+                  </h3>
+
+                  <p className="about__card-text mb-0">
+                    {step.text}
+                  </p>
+                </div>
+              ))}
+          </div>
+        </section>
+
+        {/* Mission Statement */}
+        <section className="about__mission-section mx-auto p-5 glass rounded-4">
+          <div className="about__spark mb-3">✨</div>
+
+          <h2 className="h3 fw-bold mb-3">
+            {t("mission_title")}
+          </h2>
+
+          <p className="about__mission-text mb-4">
+            {t("mission")}
+          </p>
+
+          <Link
+            to="/signup"
+            className="btn btn-lg rounded-pill px-5 fw-semibold about__cta"
+          >
+            {t("cta")}
+          </Link>
+        </section>
+
       </div>
     </div>
   );

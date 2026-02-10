@@ -17,8 +17,10 @@
   color-scheme: light;
 
   /* brand accents (profile vibe) */
-  --accent-from: 255, 138, 181; /* #ff8ab5 */
-  --accent-to: 99, 102, 241; /* #6366f1 */
+  --accent-from: 255, 138, 181;
+  /* #ff8ab5 */
+  --accent-to: 99, 102, 241;
+  /* #6366f1 */
 
   /* LIGHT tokens */
   --bg0: #ffffff;
@@ -89,8 +91,8 @@
   --text: #0f1222;
   --text-weak: #5b6280;
 
-  --stroke: rgba(15, 18, 34, 0.14);      
-  --surface: rgba(255, 255, 255, 0.82); 
+  --stroke: rgba(15, 18, 34, 0.14);
+  --surface: rgba(255, 255, 255, 0.82);
 
   --shadow-sm: 0 6px 22px rgba(15, 18, 34, 0.10);
   --shadow-md: 0 16px 48px rgba(15, 18, 34, 0.14);
@@ -98,7 +100,7 @@
   --link: #646cff;
   --linkHover: #535bf2;
 
-  --share-icon: #4154ff; 
+  --share-icon: #4154ff;
 
   --btn-bg: #111318;
   --btn-text: #ffffff;
@@ -116,7 +118,7 @@
   --text: #e7e9f5;
   --text-weak: #aab1c6;
 
-  --surface: rgba(18, 20, 41, 0.75); 
+  --surface: rgba(18, 20, 41, 0.75);
   --stroke: rgba(255, 255, 255, 0.14);
 
   --shadow-sm: 0 12px 40px rgba(0, 0, 0, 0.55);
@@ -161,6 +163,7 @@ a {
   color: var(--link);
   text-decoration: inherit;
 }
+
 a:hover {
   color: var(--linkHover);
 }
@@ -281,6 +284,7 @@ button:focus-visible {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
