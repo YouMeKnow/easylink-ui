@@ -1,121 +1,528 @@
-.about {
-  color: var(--text);
+/* ================================
+   About Page (fits your index.css)
+   Works with:
+   - html/body[data-theme="dark"]
+   - .dark (tailwind)
+================================ */
+
+/* ---------- Local tokens + base layout ---------- */
+.about-page {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  /* brand (do NOT use global --primary) */
+  --about-brand: #6366f1;
+  /* indigo */
+  --about-accent: #ff8ab5;
+  /* pink */
+
+  /* defaults (light) */
+  --about-text: var(--text, #0f1222);
+  --about-text-weak: var(--text-weak, #5b6280);
+  --about-surface: var(--surface, rgba(255, 255, 255, 0.82));
+  --about-stroke: var(--stroke, rgba(15, 18, 34, 0.14));
+
+  /* CTA palette (readable in light) */
+  --about-cta-bg-from: #0f172a;
+  --about-cta-bg-to: #334155;
+  --about-cta-text: #ffffff;
 }
 
-/* header */
+/* dark support (covers BOTH systems) */
+html[data-theme="dark"] .about-page,
+body[data-theme="dark"] .about-page,
+.dark .about-page {
+  --about-text: var(--text, #e7e9f5);
+  --about-text-weak: var(--text-weak, #aab1c6);
+  --about-surface: var(--surface, rgba(18, 20, 41, 0.75));
+  --about-stroke: var(--stroke, rgba(255, 255, 255, 0.14));
+
+  /* CTA becomes light in dark mode (premium look) */
+  --about-cta-bg-from: #ffffff;
+  --about-cta-bg-to: #e2e8f0;
+  --about-cta-text: #0f1222;
+}
+
+/* ---------- Hero ---------- */
+.about__hero {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+  text-align: center;
+}
+
+.about__badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  color: var(--about-brand);
+
+  /* fallback first */
+  background: rgba(99, 102, 241, 0.10);
+  border: 1px solid rgba(99, 102, 241, 0.20);
+
+  /* enhancement */
+  background: color-mix(in srgb, var(--about-brand) 10%, transparent);
+  border-color: color-mix(in srgb, var(--about-brand) 20%, transparent);
+
+  border-radius: 9999px;
+}
+
 .about__title {
-  letter-spacing: 2px;
-  color: var(--text);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+
+  background: linear-gradient(135deg,
+      var(--about-text) 0%,
+      var(--about-text-weak) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .about__subtitle {
-  max-width: 500px;
-  margin: 0 auto;
-  color: var(--text-weak);
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--about-text-weak);
 }
 
-/* icons */
-.about__icon--gold { color: #efbd3e; }
-.about__icon--pink { color: #f4528e; }
-.about__icon--violet { color: #a687e7; }
-.about__icon--amber { color: #e6c455; }
+/* ---------- Grid ---------- */
+.about__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-bottom: 5rem;
+}
 
-/* step cards */
-.about__step{
-  display: block;
+.about__card {
+  padding: 2.5rem 2rem;
+  border-radius: 1.5rem;
+  cursor: default;
   position: relative;
-  cursor: pointer;
-  border-radius: 18px;
+  overflow: hidden;
 
-  background: color-mix(in oklab, var(--surface) 88%, transparent);
-  border: 1px solid var(--stroke);
+  background: var(--about-surface);
+  border: 1px solid var(--about-stroke);
   box-shadow: var(--shadow-sm);
 
-  -webkit-backdrop-filter: blur(var(--blur, 10px));
-  backdrop-filter: blur(var(--blur, 10px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-  will-change: transform;
-  transform: translateZ(0);
-  outline: none;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  animation: float 6s ease-in-out infinite;
 }
 
-.about__step:hover,
-.about__step:focus-visible{
-  transform: translateY(-6px) scale(1.04);
+.about__card:hover {
+  transform: translateY(-8px) scale(1.02);
   box-shadow: var(--shadow-md);
 }
 
-
-/* subtle tinted variants (works in dark too) */
-.about__step--1 { background: color-mix(in oklab, var(--surface) 90%, #fff4b2 10%); }
-.about__step--2 { background: color-mix(in oklab, var(--surface) 90%, #ffd6e7 10%); }
-.about__step--3 { background: color-mix(in oklab, var(--surface) 90%, #f3e8ff 10%); }
-.about__step--4 { background: color-mix(in oklab, var(--surface) 90%, #fff7d6 10%); }
-
-.about__stepTitle {
-  font-weight: 600;
-  color: var(--text);
+/* stagger float */
+.about__card:nth-child(2) {
+  animation-delay: 1.2s;
 }
 
-.about__stepText {
-  font-size: 16px;
-  color: var(--text-weak);
+.about__card:nth-child(3) {
+  animation-delay: 0.6s;
 }
 
-/* CTA */
-.about__cta {
-  border: none;
-  font-size: 19px;
-  letter-spacing: 1px;
-
-  /* keep your gradient, but make it consistent */
-  background: linear-gradient(90deg, #f8d442, #ffb877);
-  box-shadow: 0 2px 18px 0 rgba(248, 212, 66, 0.35);
-  color: #1b1b1b;
+.about__card:nth-child(4) {
+  animation-delay: 1.8s;
 }
 
-.about__cta:hover {
-  filter: brightness(1.02);
+/* ---------- Icons ---------- */
+.about__icon-wrapper {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.75rem;
+  color: var(--about-brand);
+
+  /* fallback */
+  background: rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* mission */
-.about__mission {
-  max-width: 680px;
-  background: color-mix(in oklab, var(--surface) 92%, transparent);
-  border: 1px solid var(--stroke);
-  box-shadow: var(--shadow-sm);
+.about__card:hover .about__icon-wrapper {
+  transform: scale(1.1) rotate(10deg);
+}
 
-  -webkit-backdrop-filter: blur(var(--blur, 10px));
-  backdrop-filter: blur(var(--blur, 10px));
+.about__card-title {
+  font-weight: 700;
+  color: var(--about-text);
+}
+
+.about__card-text {
+  color: var(--about-text-weak);
+  line-height: 1.6;
+}
+
+/* ---------- Mission ---------- */
+.about__mission-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+  position: relative;
+
+  border-radius: 2rem;
+  border: 1px solid var(--about-stroke);
+
+  /* fallback */
+  background: var(--about-surface);
+
+  /* enhancement */
+  background: linear-gradient(180deg,
+      color-mix(in srgb, var(--about-surface) 80%, transparent) 0%,
+      var(--about-surface) 100%);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow: var(--shadow-md);
+  text-align: center;
 }
 
 .about__spark {
-  font-size: 30px;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  animation: float 3s ease-in-out infinite;
 }
 
-.about__missionText {
-  font-size: 17px;
-  color: var(--text-weak);
+.about__mission-text {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--about-text-weak);
 }
 
-/* bootstrap overrides inside About */
-.about .text-muted{ color: var(--text-weak) !important; }
-.about .lead{ color: var(--text-weak) !important; }
-.about p{ color: var(--text) }               
-.about h1, .about h4, .about h5{ color: var(--text); }
+/* ---------- CTA ---------- */
+.about__cta {
+  margin-top: 2.5rem;
+  border-radius: 9999px;
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 700;
 
-/* hard override: ensure ALL step cards move */
-.about .about__step:hover,
-.about .about__step:focus-visible {
-  transform: translateY(-1px) !important;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38) !important;
-  z-index: 2;
+  background: linear-gradient(135deg, var(--about-cta-bg-from) 0%, var(--about-cta-bg-to) 100%);
+  color: var(--about-cta-text) !important;
+
+  border: none;
+  cursor: pointer;
+
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-.about .about__step {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.34);
+.about__cta:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.12),
+    0 0 0 1px color-mix(in srgb, var(--about-stroke) 60%, transparent);
+}
+
+.about__cta:active {
+  transform: translateY(0);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.10);
+}
+
+/* ---------- Animations ---------- */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .about__title {
+    font-size: 2.5rem;
+  }
+
+  .about__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .about__mission-section {
+    padding: 2rem 1.5rem;
+    border-radius: 1.5rem;
+  }
+
+  .about__cta {
+    width: 100%;
+  }
+}
+
+/* icon color variants */
+.about__icon-wrapper--1 {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.about__icon-wrapper--2 {
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+}
+
+.about__icon-wrapper--3 {
+  background: rgba(236, 72, 153, 0.15);
+  color: #ec4899;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.25);
+}
+
+.about__icon-wrapper--4 {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+}
+
+/* FIX: card titles color overridden by Bootstrap headings */
+.about-page .about__card .about__card-title {
+  color: var(--about-text) !important;
+}
+
+/* optional: if you want different tone in dark/light */
+html[data-theme="dark"] .about-page .about__card .about__card-title,
+body[data-theme="dark"] .about-page .about__card .about__card-title,
+.dark .about-page .about__card .about__card-title {
+  color: var(--about-text) !important;
+}
+
+/* ================================
+   Colorful grid cards (soft gradient)
+================================ */
+
+/* each card gets its own accent */
+.about__card {
+  /* fallback */
+  --card-accent: rgba(99, 102, 241, 0.35);
+  --card-accent-2: rgba(255, 138, 181, 0.25);
+}
+
+/* per-card accents */
+.about__card:nth-child(1) {
+  --card-accent: rgba(59, 130, 246, 0.40);
+  /* blue */
+  --card-accent-2: rgba(34, 211, 238, 0.22);
+  /* cyan */
+}
+
+.about__card:nth-child(2) {
+  --card-accent: rgba(139, 92, 246, 0.42);
+  /* violet */
+  --card-accent-2: rgba(99, 102, 241, 0.24);
+  /* indigo */
+}
+
+.about__card:nth-child(3) {
+  --card-accent: rgba(236, 72, 153, 0.42);
+  /* pink */
+  --card-accent-2: rgba(244, 114, 182, 0.22);
+  /* rose */
+}
+
+.about__card:nth-child(4) {
+  --card-accent: rgba(245, 158, 11, 0.42);
+  /* amber */
+  --card-accent-2: rgba(250, 204, 21, 0.20);
+  /* yellow */
+}
+
+/* gradient overlay + subtle glow */
+.about__card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+
+  /* soft color layer */
+  background:
+    radial-gradient(600px circle at 20% 10%, var(--card-accent), transparent 55%),
+    radial-gradient(500px circle at 80% 90%, var(--card-accent-2), transparent 60%);
+
+  opacity: 0.9;
+  filter: blur(0px);
+  transform: translateZ(0);
+}
+
+/* nice highlight line */
+.about__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+
+  /* glossy highlight */
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.55),
+      rgba(255, 255, 255, 0.10) 35%,
+      transparent 60%);
+  opacity: 0.25;
+  mix-blend-mode: overlay;
+}
+
+/* improve hover: more premium, but keep your animation */
+.about__card:hover::before {
+  opacity: 1;
+  filter: saturate(1.15);
+}
+
+.about__card:hover {
+  border-color: color-mix(in srgb, var(--card-accent) 35%, var(--about-stroke));
+}
+
+/* accessibility: visible focus */
+.about__card:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--card-accent) 55%, transparent),
+    var(--shadow-md);
+}
+
+/* dark mode: reduce “white gloss” */
+html[data-theme="dark"] .about__card::after,
+body[data-theme="dark"] .about__card::after,
+.dark .about__card::after {
+  opacity: 0.14;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.25),
+      rgba(255, 255, 255, 0.06) 35%,
+      transparent 60%);
+}
+
+/* ================================
+   Mission card (premium)
+================================ */
+
+.about__mission-section {
+  position: relative;
+  overflow: hidden;
+
+  /* deeper glass */
+  background:
+    radial-gradient(800px circle at 15% 10%, rgba(99, 102, 241, 0.22), transparent 55%),
+    radial-gradient(700px circle at 85% 90%, rgba(255, 138, 181, 0.18), transparent 60%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--about-surface) 88%, transparent) 0%,
+      var(--about-surface) 100%);
+
+  border: 1px solid color-mix(in srgb, var(--about-stroke) 70%, transparent);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.10);
+}
+
+.about__mission-section::before,
+.about__mission-section::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.about__mission-section::before {
+  left: -160px;
+  top: -160px;
+  background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.55), transparent 60%);
+}
+
+.about__mission-section::after {
+  right: -180px;
+  bottom: -180px;
+  background: radial-gradient(circle at 30% 30%, rgba(236, 72, 153, 0.45), transparent 60%);
+}
+
+/* headline: slightly more contrast */
+.about__mission-section h2 {
+  letter-spacing: -0.02em;
+}
+
+/* spark: add subtle glow */
+.about__spark {
+  text-shadow: 0 10px 30px rgba(255, 138, 181, 0.25);
+}
+
+/* CTA: glossy + border + micro */
+.about__cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  border: 1px solid color-mix(in srgb, var(--about-stroke) 45%, transparent);
+}
+
+.about__cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  /* shine sweep */
+  background: linear-gradient(115deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.35) 35%,
+      transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.6s ease;
+  z-index: 0;
+}
+
+.about__cta:hover::before {
+  transform: translateX(120%);
+}
+
+.about__cta span,
+.about__cta {
+  z-index: 1;
+}
+
+/* dark mode: a bit stronger shadow */
+html[data-theme="dark"] .about__mission-section,
+body[data-theme="dark"] .about__mission-section,
+.dark .about__mission-section {
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.35);
+}
+
+.about__mission-section h2 {
+  color: var(--about-text);
+}
+
+.about__cta {
   transition:
-    transform 0.28s cubic-bezier(.25,.1,.25,1),
-    box-shadow 0.28s ease;
+    background 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.35s ease;
 }

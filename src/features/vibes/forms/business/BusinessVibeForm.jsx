@@ -53,7 +53,7 @@ export default function BusinessVibeForm({
   const { offers = [], loading: loadingOffers } = useGetOffersByVibeId(safeVibeId, {
     enabled: ownerActionsEnabled,
   });
-  
+
   const itemIds = Array.isArray(items) ? items.map((x) => x.id) : [];
 
   // ----- local UI state for inline editors -----
@@ -151,7 +151,7 @@ export default function BusinessVibeForm({
   );
 
   return (
-    
+
     <div
       className="d-flex flex-column gap-4 align-items-center w-100"
       style={{ maxWidth: 1200, margin: "0 auto" }}

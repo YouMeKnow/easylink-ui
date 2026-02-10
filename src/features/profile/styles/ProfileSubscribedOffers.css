@@ -300,7 +300,7 @@
   background: transparent !important;
   box-shadow: none !important;
 
-  padding: 10px 6px !important; /* чуть воздуха без "карточки" */
+  padding: 10px 6px !important; 
   border-radius: 0 !important;
 
   align-items: flex-start;
