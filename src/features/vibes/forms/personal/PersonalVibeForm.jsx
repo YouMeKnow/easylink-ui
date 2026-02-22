@@ -9,7 +9,6 @@ import PersonalInfoBlockModal from "@/features/vibes/components/modals/PersonalI
 
 import useContactTypePicker from "@/features/vibes/contacts/hooks/useContactTypePicker";
 import ContactTypePicker from "@/features/vibes/contacts/components/ContactTypePicker/ContactTypePicker";
-import MobileSheet from "@/components/ui/MobileSheet/MobileSheet";
 import CenterModal from "@/components/ui/CenterModal/CenterModal";
 
 import VibeFormLayout from "@/features/vibes/components/layouts/VibeFormLayout/VibeFormLayout";
