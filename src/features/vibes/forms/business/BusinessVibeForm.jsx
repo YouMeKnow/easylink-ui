@@ -7,17 +7,24 @@ import useItemsByVibeId from "@/features/vibes/catalog/useItemsByVibeId";
 import useGetOffersByVibeId from "@/features/vibes/offers/hooks/useGetOffersByVibeId";
 import OfferCard from "@/features/vibes/offers/components/OfferCard/OfferCard";
 
+import VibeFormLayout from "@/features/vibes/components/layouts/VibeFormLayout/VibeFormLayout";
+
+import CenterModal from "@/components/ui/CenterModal/CenterModal";
+
 import { useBusinessVibeForm } from "./useBusinessVibeForm";
 import MenuTab from "./tabs/MenuTab.jsx";
 
-import ContactTypeModal from "@/features/vibes/components/Modals/ContactTypeModal";
-import InfoBlockTypeModal from "@/features/vibes/components/Modals/InfoBlockTypeModal";
+import InfoBlockTypeModal from "@/features/vibes/components/modals/InfoBlockTypeModal";
 
 import VibeCard from "@/features/vibes/card/components/VibeCard";
 import VibeContent from "@/features/vibes/tools/VibeContent";
 
 import BusinessTabsInCard from "./BusinessTabsInCard";
 import useQueryTab from "@/shared/router/useQueryTab";
+
+// NEW: shared contact picker
+import useContactTypePicker from "@/features/vibes/contacts/hooks/useContactTypePicker";
+import ContactTypePicker from "@/features/vibes/contacts/components/ContactTypePicker/ContactTypePicker";
 
 // helper: UUID v1-5
 const isUUID = (s) =>
@@ -31,7 +38,7 @@ export default function BusinessVibeForm({
   onCancel,
 }) {
   const navigate = useNavigate();
-  const { t } = useTranslation("business_form");
+  const { t } = useTranslation(["business_form", "common"]);
 
   const vibeId = initialData?.id;
   const safeVibeId = isUUID(vibeId) ? vibeId : undefined;
@@ -44,22 +51,19 @@ export default function BusinessVibeForm({
     fallback: "main",
   });
 
-  const {
-    items,
-    loading: loadingItems,
-    reload: reloadItems,
-  } = useItemsByVibeId(safeVibeId, { enabled: ownerActionsEnabled });
+  const { items, loading: loadingItems, reload: reloadItems } = useItemsByVibeId(
+    safeVibeId,
+    { enabled: ownerActionsEnabled }
+  );
 
-  const { offers = [], loading: loadingOffers } = useGetOffersByVibeId(safeVibeId, {
+  const { offers = [] } = useGetOffersByVibeId(safeVibeId, {
     enabled: ownerActionsEnabled,
   });
 
   const itemIds = Array.isArray(items) ? items.map((x) => x.id) : [];
 
-  // ----- local UI state for inline editors -----
-  const [typeIndex, setTypeIndex] = React.useState(null);
+  // ----- local UI state -----
   const [refocusIndex, setRefocusIndex] = React.useState(null);
-  const [showModal, setShowModal] = React.useState(false);
   const [showBlockModal, setShowBlockModal] = React.useState(false);
 
   const {
@@ -95,15 +99,18 @@ export default function BusinessVibeForm({
     [setActiveTab, reloadItems]
   );
 
-  const openContactPicker = React.useCallback((idx) => {
-    setTypeIndex(Number.isInteger(idx) ? idx : null);
-    setShowModal(true);
-  }, []);
-
+  // refocus helper
   const refocusAt = React.useCallback((index) => {
     setRefocusIndex({ index, nonce: Date.now() });
     Promise.resolve().then(() => setRefocusIndex(null));
   }, []);
+
+  // shared contact picker
+  const contactPicker = useContactTypePicker({
+    contacts,
+    setContacts,
+    onRefocus: refocusAt,
+  });
 
   // shared props for vibe content (no duplication)
   const contentProps = React.useMemo(
@@ -123,7 +130,7 @@ export default function BusinessVibeForm({
 
       resumeEditAt: refocusIndex,
 
-      onOpenContactPicker: openContactPicker,
+      onOpenContactPicker: contactPicker.openPicker,
       onRemoveContact: (idx) => removeContact(idx),
       onChangeContactValue: (idx, val) => handleContactChange(idx, val),
 
@@ -142,7 +149,7 @@ export default function BusinessVibeForm({
       setDescription,
       setPhoto,
       refocusIndex,
-      openContactPicker,
+      contactPicker.openPicker,
       removeContact,
       handleContactChange,
       handleBlockChange,
@@ -151,131 +158,162 @@ export default function BusinessVibeForm({
   );
 
   return (
+    <VibeFormLayout
+      maxWidth={1200}
+      rightOpen={contactPicker.open}
+      rightWidth={320}
+      gap={12}
+      topActions={
+        <div className="cv-top-actions">
+          {mode === "edit" && (
+            <button
+              type="button"
+              className="cv-btn cv-btn--ghost"
+              onClick={onCancel}
+              disabled={loading}
+            >
+              {t("cancel")}
+            </button>
+          )}
 
-    <div
-      className="d-flex flex-column gap-4 align-items-center w-100"
-      style={{ maxWidth: 1200, margin: "0 auto" }}
-    >
-      {/* top actions */}
-      <div className="cv-top-actions">
-        {mode === "edit" && (
-          <button type="button" className="cv-btn cv-btn--ghost" onClick={onCancel} disabled={loading}>
-            {t("cancel")}
+          <button
+            type="button"
+            className="cv-btn cv-btn--primary"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading
+              ? mode === "edit"
+                ? t("saving")
+                : t("creating")
+              : mode === "edit"
+                ? t("save_button")
+                : t("create_button")}
           </button>
-        )}
-
-        <button type="button" className="cv-btn cv-btn--primary" onClick={handleSubmit} disabled={loading}>
-          {loading ? (mode === "edit" ? t("saving") : t("creating")) : (mode === "edit" ? t("save_button") : t("create_button"))}
-        </button>
-      </div>
+        </div>
+      }
+      right={
+        <div className="only-desktop">
+          <ContactTypePicker
+            open={contactPicker.open}
+            mode={contactPicker.mode}
+            typeIndex={contactPicker.typeIndex}
+            contacts={contacts}
+            onToggleType={contactPicker.onSelectType}
+            onClose={contactPicker.closePicker}
+            titlePick={t("common:pick_type_for_contact")}
+            titleToggle={t("common:toggle_contacts")}
+            doneText={t("common:done")}
+          />
+        </div>
+      }
+    >
       <form className="w-100" onSubmit={(e) => e.preventDefault()}>
-        <VibeCard
-          {...contentProps}
-          ownerActionsEnabled={ownerActionsEnabled}
-          // cardBody => tabs only for BUSINESS
-          cardBody={
-            <BusinessTabsInCard
-              t={t}
-              activeTab={activeTab}
-              onTabChange={setTab}
-              renderMain={() => <VibeContent {...contentProps} />}
-              renderOffers={() => (
-                <>
-                  {offers.length ? (
-                    <div className="d-grid gap-3">
-                      {offers.map((offer) => (
-                        <OfferCard
-                          key={offer.id}
-                          offer={offer}
-                          onDoubleClick={() => {
-                            if (!returnState) return;
-                            navigate(`/offers/${offer.id}`, {
-                              state: { ...returnState, returnTab: "offers" },
-                            });
-                          }}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="alert alert-info text-center">
-                      {t("No offers yet", { defaultValue: "No offers yet" })}
-                    </div>
-                  )}
+        <div style={{ minWidth: 0 }}>
+          <VibeCard
+            {...contentProps}
+            ownerActionsEnabled={ownerActionsEnabled}
+            cardBody={
+              <BusinessTabsInCard
+                t={t}
+                activeTab={activeTab}
+                onTabChange={setTab}
+                renderMain={() => <VibeContent {...contentProps} />}
+                renderOffers={() => (
+                  <>
+                    {offers.length ? (
+                      <div className="d-grid gap-3">
+                        {offers.map((offer) => (
+                          <OfferCard
+                            key={offer.id}
+                            offer={offer}
+                            onDoubleClick={() => {
+                              if (!returnState) return;
+                              navigate(`/offers/${offer.id}`, {
+                                state: { ...returnState, returnTab: "offers" },
+                              });
+                            }}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="alert alert-info text-center">
+                        {t("No offers yet", { defaultValue: "No offers yet" })}
+                      </div>
+                    )}
 
-                  <div className="text-center mt-3">
-                    <button
-                      type="button"
-                      className="btn btn-outline-primary"
-                      disabled={!ownerActionsEnabled || !returnState}
-                      onClick={() => {
-                        if (!returnState) return;
-                        navigate("/offers/new", {
-                          state: { ...returnState, returnTab: "offers" },
-                        });
-                      }}
-                    >
-                      + {t("Add Offer", { defaultValue: "Add Offer" })}
-                    </button>
-                  </div>
-                </>
-              )}
-              renderMenu={() => (
-                <MenuTab
-                  t={t}
-                  loadingItems={loadingItems}
-                  items={items}
-                  itemIds={itemIds}
-                  vibeId={safeVibeId}
-                  onAddItem={() => {
-                    if (!returnState) return;
-                    navigate("/catalog/new", {
-                      state: { ...returnState, returnTab: "menu" },
-                    });
-                  }}
-                  onEditItem={(it) => {
-                    if (!returnState) return;
-                    navigate(`/catalog/${it.id}/edit`, {
-                      state: {
-                        ...returnState,
-                        returnTab: "menu",
-                        itemIds,
-                        currentIndex: itemIds.indexOf(it.id),
-                      },
-                    });
-                  }}
-                />
-              )}
-            />
-          }
-        />
-      </form>
-
-      {/* ----- Modals ----- */}
-      {showModal && (
-        <ContactTypeModal
-          contacts={contacts}
-          onClose={() => {
-            setShowModal(false);
-            setTypeIndex(null);
-          }}
-          onSelect={(typeKey) => {
-            if (typeIndex != null) {
-              setContacts((prev) => {
-                const updated = [...prev];
-                updated[typeIndex] = { ...updated[typeIndex], type: typeKey };
-                return updated;
-              });
-              refocusAt(typeIndex);
-            } else {
-              const newIndex = contacts.length;
-              setContacts((prev) => [...prev, { type: typeKey, value: "" }]);
-              refocusAt(newIndex);
+                    <div className="text-center mt-3">
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary"
+                        disabled={!ownerActionsEnabled || !returnState}
+                        onClick={() => {
+                          if (!returnState) return;
+                          navigate("/offers/new", {
+                            state: { ...returnState, returnTab: "offers" },
+                          });
+                        }}
+                      >
+                        + {t("Add Offer", { defaultValue: "Add Offer" })}
+                      </button>
+                    </div>
+                  </>
+                )}
+                renderMenu={() => (
+                  <MenuTab
+                    t={t}
+                    loadingItems={loadingItems}
+                    items={items}
+                    itemIds={itemIds}
+                    vibeId={safeVibeId}
+                    onAddItem={() => {
+                      if (!returnState) return;
+                      navigate("/catalog/new", {
+                        state: { ...returnState, returnTab: "menu" },
+                      });
+                    }}
+                    onEditItem={(it) => {
+                      if (!returnState) return;
+                      navigate(`/catalog/${it.id}/edit`, {
+                        state: {
+                          ...returnState,
+                          returnTab: "menu",
+                          itemIds,
+                          currentIndex: itemIds.indexOf(it.id),
+                        },
+                      });
+                    }}
+                  />
+                )}
+              />
             }
-            setShowModal(false);
-            setTypeIndex(null);
-          }}
-        />
-      )}
+          />
+        </div>
+      </form>
+      
+      <div className="only-mobile">
+        <CenterModal
+          open={contactPicker.open}
+          onClose={contactPicker.closePicker}
+          title={
+            contactPicker.typeIndex != null
+              ? t("common:pick_type_for_contact")
+              : t("common:toggle_contacts")
+          }
+        >
+          <ContactTypePicker
+            open={true}
+            mode={contactPicker.mode}
+            typeIndex={contactPicker.typeIndex}
+            contacts={contacts}
+            onToggleType={contactPicker.onSelectType}
+            onClose={contactPicker.closePicker}
+            titlePick={t("common:pick_type_for_contact")}
+            titleToggle={t("common:toggle_contacts")}
+            doneText={t("common:done")}
+          />
+        </CenterModal>
+      </div>
 
       {showBlockModal && (
         <InfoBlockTypeModal
@@ -322,6 +360,6 @@ export default function BusinessVibeForm({
           }}
         />
       )}
-    </div>
+    </VibeFormLayout>
   );
 }

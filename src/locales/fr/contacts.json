@@ -1,0 +1,12 @@
+{
+    "add": "Ajouter un contact",
+    "remove": "Supprimer",
+    "empty": {
+        "title": "Aucun contact pour le moment",
+        "hint": "Ajoute ton premier contact pour que les gens puissent te joindre."
+    },
+    "confirm_remove": {
+        "title": "Supprimer le contact",
+        "message": "Voulez-vous vraiment supprimer ce contact ?"
+    }
+}

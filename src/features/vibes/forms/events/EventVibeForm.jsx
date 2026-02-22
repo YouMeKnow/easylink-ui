@@ -4,7 +4,11 @@ import { useTranslation } from "react-i18next";
 
 import { useEventVibeForm } from "./useEventVibeForm";
 import VibeCard from "@/features/vibes/card/components/VibeCard";
-import ContactTypeModal from "@/features/vibes/components/Modals/ContactTypeModal";
+import VibeFormLayout from "@/features/vibes/components/layouts/VibeFormLayout/VibeFormLayout";
+import CenterModal from "@/components/ui/CenterModal/CenterModal";
+
+import useContactTypePicker from "@/features/vibes/contacts/hooks/useContactTypePicker";
+import ContactTypePicker from "@/features/vibes/contacts/components/ContactTypePicker/ContactTypePicker";
 
 // helper: UUID v1-5
 const isUUID = (s) =>
@@ -16,8 +20,8 @@ const isUUID = (s) =>
 function EventInfoBlockModal({ t, extraBlocks, onClose, onSelect }) {
   const OPTIONS = React.useMemo(
     () => [
-      { key: "date",      label: t("date"),      placeholder: t("modal_info_title") },
-      { key: "location",  label: t("location"),  placeholder: t("info.location_ph") },
+      { key: "date", label: t("date"), placeholder: t("modal_info_title") },
+      { key: "location", label: t("location"), placeholder: t("info.location_ph") },
       { key: "organizer", label: t("organizer"), placeholder: t("info.organizer_ph") },
     ],
     [t]
@@ -27,13 +31,19 @@ function EventInfoBlockModal({ t, extraBlocks, onClose, onSelect }) {
     <div
       className="modal d-block"
       tabIndex={-1}
-      style={{ background: "rgba(0,0,0,0.22)", position: "fixed", inset: 0, zIndex: 1010 }}
+      style={{
+        background: "rgba(0,0,0,0.22)",
+        position: "fixed",
+        inset: 0,
+        zIndex: 1010,
+      }}
     >
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t("modal_info_title")}</h5>
           </div>
+
           <div className="modal-body d-flex flex-wrap gap-2">
             {OPTIONS.map((b) => {
               const disabled = extraBlocks.some((x) => x.type === b.key);
@@ -41,7 +51,13 @@ function EventInfoBlockModal({ t, extraBlocks, onClose, onSelect }) {
                 <button
                   key={b.key}
                   className="btn btn-light"
-                  style={{ minWidth: 110, height: 50, display: "flex", alignItems: "center", justifyContent: "center" }}
+                  style={{
+                    minWidth: 110,
+                    height: 50,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                   onClick={() => onSelect(b)}
                   disabled={disabled}
                 >
@@ -50,6 +66,7 @@ function EventInfoBlockModal({ t, extraBlocks, onClose, onSelect }) {
               );
             })}
           </div>
+
           <div className="modal-footer">
             <button className="btn btn-secondary" onClick={onClose}>
               {t("cancel")}
@@ -68,93 +85,144 @@ export default function EventVibeForm({
   onSave,
 }) {
   const navigate = useNavigate();
-  const { t } = useTranslation("event_form");
+  const { t } = useTranslation(["event_form", "common"]);
 
-  const [typeIndex, setTypeIndex] = React.useState(null);
   const [refocusIndex, setRefocusIndex] = React.useState(null);
-  const [showModal, setShowModal] = React.useState(false);
   const [showBlockModal, setShowBlockModal] = React.useState(false);
 
   const {
-    name, setName,
-    description, setDescription,
-    photo, setPhoto,
-    contacts, setContacts,
-    extraBlocks, setExtraBlocks,
+    name,
+    setName,
+    description,
+    setDescription,
+    photo,
+    setPhoto,
+    contacts,
+    setContacts,
+    extraBlocks,
+    setExtraBlocks,
     loading,
-    handleContactChange, removeContact,
-    handleBlockChange, removeBlock,
+    handleContactChange,
+    removeContact,
+    handleBlockChange,
+    removeBlock,
     handleSubmit,
   } = useEventVibeForm({ navigate, initialData, mode, onSave });
 
-  const safeId = mode === "edit" && isUUID(initialData?.id) ? initialData.id : undefined;
+  const safeId =
+    mode === "edit" && isUUID(initialData?.id) ? initialData.id : undefined;
+
+  // refocus helper
+  const refocusAt = React.useCallback((index) => {
+    setRefocusIndex({ index, nonce: Date.now() });
+    Promise.resolve().then(() => setRefocusIndex(null));
+  }, []);
+
+  // shared contact picker
+  const contactPicker = useContactTypePicker({
+    contacts,
+    setContacts,
+    onRefocus: refocusAt,
+  });
 
   return (
-    <div
-      className="d-flex flex-column gap-3 align-items-center justify-content-start w-100"
-      style={{ maxWidth: 1200, width: "100%", margin: "0 auto", padding: "0 20px" }}
-    >
-      <div className="cv-top-actions">
-        {mode === "edit" && (
-          <button type="button" className="cv-btn cv-btn--ghost" onClick={onCancel} disabled={loading}>
-            {t("cancel")}
+    <VibeFormLayout
+      maxWidth={1200}
+      rightOpen={contactPicker.open}
+      rightWidth={320}
+      gap={12}
+      topActions={
+        <div className="cv-top-actions">
+          {mode === "edit" && (
+            <button
+              type="button"
+              className="cv-btn cv-btn--ghost"
+              onClick={onCancel}
+              disabled={loading}
+            >
+              {t("cancel")}
+            </button>
+          )}
+
+          <button
+            type="button"
+            className="cv-btn cv-btn--primary"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading
+              ? mode === "edit"
+                ? t("saving")
+                : t("creating")
+              : mode === "edit"
+                ? t("save_button")
+                : t("create_button")}
           </button>
-        )}
-
-        <button type="button" className="cv-btn cv-btn--primary" onClick={handleSubmit} disabled={loading}>
-          {loading ? (mode === "edit" ? t("saving") : t("creating")) : (mode === "edit" ? t("save_button") : t("create_button"))}
-        </button>
-      </div>
-
-      <VibeCard
-        id={safeId}
-        name={name}
-        description={description}
-        photo={photo}
-        contacts={contacts}
-        extraBlocks={extraBlocks}
-        type="OTHER"
-        editMode={true}
-        ownerActionsEnabled={Boolean(safeId)}
-        onChangeName={setName}
-        onChangeDescription={setDescription}
-        onChangePhoto={setPhoto}
-        resumeEditAt={refocusIndex}
-        onOpenContactPicker={(idx) => {
-          setTypeIndex(Number.isInteger(idx) ? idx : null);
-          setShowModal(true);
-        }}
-        onRemoveContact={(idx) => removeContact(idx)}
-        onChangeContactValue={(idx, val) => handleContactChange(idx, val)}
-        onBlockChange={(i, v) => handleBlockChange(i, v)}
-        onBlockRemove={(i) => removeBlock(i)}
-        onOpenBlockPicker={() => setShowBlockModal(true)}
-      />
-
-      {showModal && (
-        <ContactTypeModal
+        </div>
+      }
+      right={
+        <div className="only-desktop">
+          <ContactTypePicker
+            open={contactPicker.open}
+            mode={contactPicker.mode}
+            typeIndex={contactPicker.typeIndex}
+            contacts={contacts}
+            onToggleType={contactPicker.onSelectType}
+            onClose={contactPicker.closePicker}
+            titlePick={t("common:pick_type_for_contact")}
+            titleToggle={t("common:toggle_contacts")}
+            doneText={t("common:done")}
+          />
+        </div>
+      }
+    >
+      <div style={{ minWidth: 0 }}>
+        <VibeCard
+          id={safeId}
+          name={name}
+          description={description}
+          photo={photo}
           contacts={contacts}
-          onClose={() => { setShowModal(false); setTypeIndex(null); }}
-          onSelect={(typeKey) => {
-            if (typeIndex != null) {
-              setContacts(prev => {
-                const updated = [...prev];
-                updated[typeIndex] = { ...updated[typeIndex], type: typeKey };
-                return updated;
-              });
-              setRefocusIndex({ index: typeIndex, nonce: Date.now() });
-              Promise.resolve().then(() => setRefocusIndex(null));
-            } else {
-              const newIndex = contacts.length;
-              setContacts(prev => [...prev, { type: typeKey, value: "" }]);
-              setRefocusIndex({ index: newIndex, nonce: Date.now() });
-              Promise.resolve().then(() => setRefocusIndex(null));
-            }
-            setShowModal(false);
-            setTypeIndex(null);
-          }}
+          extraBlocks={extraBlocks}
+          type="OTHER"
+          editMode={true}
+          ownerActionsEnabled={Boolean(safeId)}
+          onChangeName={setName}
+          onChangeDescription={setDescription}
+          onChangePhoto={setPhoto}
+          resumeEditAt={refocusIndex}
+          onOpenContactPicker={contactPicker.openPicker}
+          onRemoveContact={(idx) => removeContact(idx)}
+          onChangeContactValue={(idx, val) => handleContactChange(idx, val)}
+          onBlockChange={(i, v) => handleBlockChange(i, v)}
+          onBlockRemove={(i) => removeBlock(i)}
+          onOpenBlockPicker={() => setShowBlockModal(true)}
         />
-      )}
+      </div>
+      
+      <div className="only-mobile">
+        <CenterModal
+          open={contactPicker.open}
+          onClose={contactPicker.closePicker}
+          title={
+            contactPicker.typeIndex != null
+              ? t("common:pick_type_for_contact")
+              : t("common:toggle_contacts")
+          }
+        >
+          <ContactTypePicker
+            open={contactPicker.open}
+            mode={contactPicker.mode}
+            typeIndex={contactPicker.typeIndex}
+            contacts={contacts}
+            onToggleType={contactPicker.onSelectType}
+            onClose={contactPicker.closePicker}
+            titlePick={t("common:pick_type_for_contact")}
+            titleToggle={t("common:toggle_contacts")}
+            doneText={t("common:done")}
+          />
+        </CenterModal>
+      </div>
 
       {showBlockModal && (
         <EventInfoBlockModal
@@ -162,14 +230,19 @@ export default function EventVibeForm({
           extraBlocks={extraBlocks}
           onClose={() => setShowBlockModal(false)}
           onSelect={(block) => {
-            setExtraBlocks(prev => [
+            setExtraBlocks((prev) => [
               ...prev,
-              { type: block.key, label: block.label, value: "", placeholder: block.placeholder }
+              {
+                type: block.key,
+                label: block.label,
+                value: "",
+                placeholder: block.placeholder,
+              },
             ]);
             setShowBlockModal(false);
           }}
         />
       )}
-    </div>
+    </VibeFormLayout>
   );
 }

@@ -16,7 +16,7 @@ export default function Avatar({ name, photo, photoUrl }) {
       if (/^https?:\/\//i.test(s)) return s;
       if (s.startsWith("/uploads/")) return `${API_BASE}${s}`;
       if (s.startsWith("uploads/")) return `${API_BASE}/${s}`;
-      if (s.startsWith("/")) return `${API_BASE}${s}`;       
+      if (s.startsWith("/")) return `${API_BASE}${s}`;
       return `${API_BASE}/${s}`;
     };
 
@@ -43,19 +43,7 @@ export default function Avatar({ name, photo, photoUrl }) {
     <>
       <div
         onDoubleClick={() => src && setOpen(true)}
-        style={{
-          width: 94,
-          height: 94,
-          borderRadius: "50%",
-          background: "linear-gradient(135deg, #e6f0fc 70%, #f6eaff 100%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-          marginBottom: 14,
-          marginTop: -8,
-          userSelect: "none",
-        }}
+        className="avatar"
       >
         {src ? (
           <SmartImage

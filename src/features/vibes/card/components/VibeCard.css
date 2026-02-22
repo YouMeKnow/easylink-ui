@@ -238,3 +238,40 @@
 :root[data-theme="dark"] .vibe-card__visibility-controls .form-check-label {
   color: var(--text);
 }
+
+.pvf-shell {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pvf-layout {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.pvf-left {
+  min-width: 0;
+}
+
+.pvf-right {
+  position: sticky;
+  top: 12px;
+}
+
+@media (max-width: 980px) {
+  .pvf-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pvf-right {
+    position: static;
+  }
+}
