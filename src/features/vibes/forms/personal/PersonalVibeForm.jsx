@@ -25,6 +25,7 @@ export default function PersonalVibeForm({
   mode = "create",
   onSave,
   onCancel,
+  maxCardWidth = 420
 }) {
   const navigate = useNavigate();
   const { t } = useTranslation(["personal_form", "common"]);
@@ -142,6 +143,7 @@ export default function PersonalVibeForm({
           onBlockChange={(i, v) => handleBlockChange(i, v)}
           onBlockRemove={(i) => removeBlock(i)}
           onOpenBlockPicker={() => setShowBlockModal(true)}
+          maxCardWidth={maxCardWidth} 
         />
       </div>
 

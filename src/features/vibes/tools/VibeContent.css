@@ -40,3 +40,58 @@
     align-items: center;
     text-align: center;
 }
+
+/* === Editable fields (name + description) === */
+.vibe-content__name-input,
+.vibe-content__desc-input {
+  background: var(--ct-chip-bg, rgba(255,255,255,0.06)) !important;
+  color: var(--ct-text, rgba(255,255,255,0.92)) !important;
+
+  border: 1px solid var(--ct-border, rgba(255,255,255,0.14)) !important;
+  border-radius: 14px;
+  padding: 10px 12px;
+
+  /* bootstrap adds shadows sometimes */
+  box-shadow: none !important;
+}
+
+/* placeholder */
+.vibe-content__name-input::placeholder,
+.vibe-content__desc-input::placeholder {
+  color: var(--ct-muted, rgba(255,255,255,0.45)) !important;
+  opacity: 1;
+}
+
+/* focus ring */
+.vibe-content__name-input:focus,
+.vibe-content__desc-input:focus {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.22) !important;
+  outline: none;
+}
+
+/* textarea behavior */
+.vibe-content__desc-input {
+  resize: none;
+  line-height: 1.25;
+}
+
+/* optional: keep it nice on light theme too (if you use data-theme) */
+[data-theme="light"] .vibe-content__name-input,
+[data-theme="light"] .vibe-content__desc-input {
+  background: rgba(0,0,0,0.04) !important;
+  color: rgba(15,23,42,0.95) !important;
+  border-color: rgba(15,23,42,0.12) !important;
+}
+
+[data-theme="light"] .vibe-content__name-input::placeholder,
+[data-theme="light"] .vibe-content__desc-input::placeholder {
+  color: rgba(15,23,42,0.45) !important;
+}
+
+[data-theme="light"] .vibe-content__name-input:focus,
+[data-theme="light"] .vibe-content__desc-input:focus {
+  border-color: rgba(99, 102, 241, 0.65) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18) !important;
+}
+

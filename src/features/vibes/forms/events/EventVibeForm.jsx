@@ -83,6 +83,7 @@ export default function EventVibeForm({
   initialData = {},
   onCancel,
   onSave,
+  maxCardWidth = 420,
 }) {
   const navigate = useNavigate();
   const { t } = useTranslation(["event_form", "common"]);
@@ -176,53 +177,56 @@ export default function EventVibeForm({
         </div>
       }
     >
-      <div style={{ minWidth: 0 }}>
-        <VibeCard
-          id={safeId}
-          name={name}
-          description={description}
-          photo={photo}
-          contacts={contacts}
-          extraBlocks={extraBlocks}
-          type="OTHER"
-          editMode={true}
-          ownerActionsEnabled={Boolean(safeId)}
-          onChangeName={setName}
-          onChangeDescription={setDescription}
-          onChangePhoto={setPhoto}
-          resumeEditAt={refocusIndex}
-          onOpenContactPicker={contactPicker.openPicker}
-          onRemoveContact={(idx) => removeContact(idx)}
-          onChangeContactValue={(idx, val) => handleContactChange(idx, val)}
-          onBlockChange={(i, v) => handleBlockChange(i, v)}
-          onBlockRemove={(i) => removeBlock(i)}
-          onOpenBlockPicker={() => setShowBlockModal(true)}
-        />
-      </div>
-      
-      <div className="only-mobile">
-        <CenterModal
-          open={contactPicker.open}
-          onClose={contactPicker.closePicker}
-          title={
-            contactPicker.typeIndex != null
-              ? t("common:pick_type_for_contact")
-              : t("common:toggle_contacts")
-          }
-        >
-          <ContactTypePicker
-            open={contactPicker.open}
-            mode={contactPicker.mode}
-            typeIndex={contactPicker.typeIndex}
+      <form className="w-100" onSubmit={(e) => e.preventDefault()}>
+        <div className="w-100" style={{ minWidth: 0 }}>
+          <VibeCard
+            id={safeId}
+            name={name}
+            description={description}
+            photo={photo}
             contacts={contacts}
-            onToggleType={contactPicker.onSelectType}
-            onClose={contactPicker.closePicker}
-            titlePick={t("common:pick_type_for_contact")}
-            titleToggle={t("common:toggle_contacts")}
-            doneText={t("common:done")}
+            extraBlocks={extraBlocks}
+            type="OTHER"
+            editMode={true}
+            ownerActionsEnabled={Boolean(safeId)}
+            onChangeName={setName}
+            onChangeDescription={setDescription}
+            onChangePhoto={setPhoto}
+            resumeEditAt={refocusIndex}
+            onOpenContactPicker={contactPicker.openPicker}
+            onRemoveContact={(idx) => removeContact(idx)}
+            onChangeContactValue={(idx, val) => handleContactChange(idx, val)}
+            onBlockChange={(i, v) => handleBlockChange(i, v)}
+            onBlockRemove={(i) => removeBlock(i)}
+            onOpenBlockPicker={() => setShowBlockModal(true)}
+            maxCardWidth={maxCardWidth}
           />
-        </CenterModal>
-      </div>
+        </div>
+        
+        <div className="only-mobile">
+          <CenterModal
+            open={contactPicker.open}
+            onClose={contactPicker.closePicker}
+            title={
+              contactPicker.typeIndex != null
+                ? t("common:pick_type_for_contact")
+                : t("common:toggle_contacts")
+            }
+          >
+            <ContactTypePicker
+              open={contactPicker.open}
+              mode={contactPicker.mode}
+              typeIndex={contactPicker.typeIndex}
+              contacts={contacts}
+              onToggleType={contactPicker.onSelectType}
+              onClose={contactPicker.closePicker}
+              titlePick={t("common:pick_type_for_contact")}
+              titleToggle={t("common:toggle_contacts")}
+              doneText={t("common:done")}
+            />
+          </CenterModal>
+        </div>
+      </form>
 
       {showBlockModal && (
         <EventInfoBlockModal

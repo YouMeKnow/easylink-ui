@@ -8,7 +8,6 @@ const getButtonStyle = (type) => {
     bg: "var(--ct-chip-bg)",
     text: "var(--ct-text)",
     border: "var(--ct-chip-border)",
-    // optional accent for icon bubble (we’ll use it below)
     accent: "rgba(99, 102, 241, .22)",
   };
 
@@ -23,49 +22,119 @@ const getButtonStyle = (type) => {
       };
 
     case "whatsapp":
-      return { ...base, bg: "rgba(46,204,113,.16)", border: "rgba(46,204,113,.30)", accent: "rgba(46,204,113,.35)" };
+      return {
+        ...base,
+        bg: "rgba(46,204,113,.16)",
+        border: "rgba(46,204,113,.30)",
+        accent: "rgba(46,204,113,.35)",
+      };
 
     case "telegram":
-      return { ...base, bg: "rgba(52,152,219,.16)", border: "rgba(52,152,219,.30)", accent: "rgba(52,152,219,.35)" };
+      return {
+        ...base,
+        bg: "rgba(52,152,219,.16)",
+        border: "rgba(52,152,219,.30)",
+        accent: "rgba(52,152,219,.35)",
+      };
 
     case "phone":
-      return { ...base, bg: "rgba(99,102,241,.16)", border: "rgba(99,102,241,.30)", accent: "rgba(99,102,241,.35)" };
+      return {
+        ...base,
+        bg: "rgba(99,102,241,.16)",
+        border: "rgba(99,102,241,.30)",
+        accent: "rgba(99,102,241,.35)",
+      };
 
     case "email":
-      return { ...base, bg: "rgba(14,165,233,.14)", border: "rgba(14,165,233,.28)", accent: "rgba(14,165,233,.36)" };
+      return {
+        ...base,
+        bg: "rgba(14,165,233,.14)",
+        border: "rgba(14,165,233,.28)",
+        accent: "rgba(14,165,233,.36)",
+      };
 
     case "website":
-      return { ...base, bg: "rgba(148,163,184,.14)", border: "rgba(148,163,184,.28)", accent: "rgba(148,163,184,.40)" };
+      return {
+        ...base,
+        bg: "rgba(148,163,184,.14)",
+        border: "rgba(148,163,184,.28)",
+        accent: "rgba(148,163,184,.40)",
+      };
 
     case "linkedin":
-      return { ...base, bg: "rgba(10,102,194,.16)", border: "rgba(10,102,194,.30)", accent: "rgba(10,102,194,.36)" };
+      return {
+        ...base,
+        bg: "rgba(10,102,194,.16)",
+        border: "rgba(10,102,194,.30)",
+        accent: "rgba(10,102,194,.36)",
+      };
 
     case "youtube":
-      return { ...base, bg: "rgba(255,0,0,.12)", border: "rgba(255,0,0,.26)", accent: "rgba(255,0,0,.32)" };
+      return {
+        ...base,
+        bg: "rgba(255,0,0,.12)",
+        border: "rgba(255,0,0,.26)",
+        accent: "rgba(255,0,0,.32)",
+      };
 
     case "tiktok":
-      // neon-ish, but subtle
-      return { ...base, bg: "linear-gradient(135deg, rgba(0,0,0,.06), rgba(0,0,0,.02))", border: "rgba(255,255,255,.14)", accent: "rgba(0,242,234,.35)" };
+      return {
+        ...base,
+        bg: "linear-gradient(135deg, rgba(0,0,0,.06), rgba(0,0,0,.02))",
+        border: "rgba(255,255,255,.14)",
+        accent: "rgba(0,242,234,.35)",
+      };
 
     case "twitter":
     case "x":
-      return { ...base, bg: "rgba(56,189,248,.14)", border: "rgba(56,189,248,.28)", accent: "rgba(56,189,248,.36)" };
+      return {
+        ...base,
+        bg: "rgba(56,189,248,.14)",
+        border: "rgba(56,189,248,.28)",
+        accent: "rgba(56,189,248,.36)",
+      };
 
     case "facebook":
-      return { ...base, bg: "rgba(24,119,242,.14)", border: "rgba(24,119,242,.28)", accent: "rgba(24,119,242,.36)" };
+      return {
+        ...base,
+        bg: "rgba(24,119,242,.14)",
+        border: "rgba(24,119,242,.28)",
+        accent: "rgba(24,119,242,.36)",
+      };
 
     case "discord":
-      return { ...base, bg: "rgba(88,101,242,.14)", border: "rgba(88,101,242,.28)", accent: "rgba(88,101,242,.36)" };
+      return {
+        ...base,
+        bg: "rgba(88,101,242,.14)",
+        border: "rgba(88,101,242,.28)",
+        accent: "rgba(88,101,242,.36)",
+      };
 
     case "github":
-      return { ...base, bg: "rgba(148,163,184,.12)", border: "rgba(148,163,184,.26)", accent: "rgba(148,163,184,.40)" };
+      return {
+        ...base,
+        bg: "rgba(148,163,184,.12)",
+        border: "rgba(148,163,184,.26)",
+        accent: "rgba(148,163,184,.40)",
+      };
 
     case "snapchat":
-      return { ...base, bg: "rgba(255,252,0,.14)", border: "rgba(255,252,0,.26)", accent: "rgba(255,252,0,.35)", text: "#111" };
+      return {
+        ...base,
+        bg: "rgba(255,252,0,.14)",
+        border: "rgba(255,252,0,.26)",
+        accent: "rgba(255,252,0,.35)",
+        text: "#111",
+      };
 
     case "location":
     case "address":
-      return { ...base, bg: "rgba(34,197,94,.12)", border: "rgba(34,197,94,.26)", accent: "rgba(34,197,94,.34)" };
+      return {
+        ...base,
+        bg: "rgba(34,197,94,.12)",
+        border: "rgba(34,197,94,.26)",
+        accent: "rgba(34,197,94,.34)",
+      };
 
     default:
       return base;
@@ -99,19 +168,23 @@ export default function ContactButton({
   const placeholder = "enter a value";
 
   const baseStyle = {
-    minWidth: 150,
+    minWidth: 0,
+    width: "100%",
     height: 46,
+
     display: "flex",
     alignItems: "center",
     gap: 10,
     padding: "0 12px",
+
     borderRadius: 999,
     background: s.bg,
     border: `1px solid ${s.border}`,
     color: s.text,
     textDecoration: "none",
     boxShadow: "var(--ct-shadow)",
-    transition: "transform .12s ease, box-shadow .12s ease, border-color .12s ease, filter .12s ease",
+    transition:
+      "transform .12s ease, box-shadow .12s ease, border-color .12s ease, filter .12s ease",
     userSelect: "none",
     WebkitTapHighlightColor: "transparent",
     position: "relative",
@@ -132,16 +205,18 @@ export default function ContactButton({
     color: "var(--ct-text)",
   };
 
+  // ✅ one-line, but full value is available via title + print override
   const textStyle = {
     flex: 1,
     minWidth: 0,
+
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    lineHeight: "1.35",
-    fontSize: 15.5,
+
+    lineHeight: "1.25",
+    fontSize: 14.5,
     letterSpacing: ".1px",
-    color: "var(--ct-text)",
   };
 
   const typeBtnStyle = {
@@ -197,7 +272,9 @@ export default function ContactButton({
         }}
         onMouseDown={() => (skipCommitRef.current = false)}
       >
-        <span style={iconStyle} aria-hidden="true">{icon}</span>
+        <span style={iconStyle} aria-hidden="true">
+          {icon}
+        </span>
 
         <input
           key={inputKey}
@@ -272,9 +349,15 @@ export default function ContactButton({
           if (e.key === "Enter" || e.key === " ") onStartEdit?.();
         }}
       >
-        <span style={iconStyle} aria-hidden="true">{icon}</span>
+        <span style={iconStyle} aria-hidden="true">
+          {icon}
+        </span>
 
-        <span style={{ ...textStyle, color: isEmpty ? "var(--ct-text-muted)" : "var(--ct-text)" }}>
+        <span
+          data-ct-text="1"
+          style={{ ...textStyle, color: isEmpty ? "var(--ct-text-muted)" : "var(--ct-text)" }}
+          title={isEmpty ? placeholder : displayValue}
+        >
           {isEmpty ? placeholder : displayValue}
         </span>
 
@@ -317,9 +400,14 @@ export default function ContactButton({
           cursor: "default",
           boxShadow: "var(--ct-shadow)",
         }}
+        title={placeholder}
       >
-        <span style={iconStyle} aria-hidden="true">{icon}</span>
-        <span style={{ ...textStyle, color: "var(--ct-text-muted)" }}>{placeholder}</span>
+        <span style={iconStyle} aria-hidden="true">
+          {icon}
+        </span>
+        <span data-ct-text="1" style={{ ...textStyle, color: "var(--ct-text-muted)" }}>
+          {placeholder}
+        </span>
       </div>
     );
   }
@@ -332,9 +420,14 @@ export default function ContactButton({
       target="_blank"
       rel="noopener noreferrer"
       {...interactiveHandlers}
+      title={displayValue}
     >
-      <span style={iconStyle} aria-hidden="true">{icon}</span>
-      <span style={textStyle}>{displayValue}</span>
+      <span style={iconStyle} aria-hidden="true">
+        {icon}
+      </span>
+      <span data-ct-text="1" style={textStyle}>
+        {displayValue}
+      </span>
     </a>
   );
 }

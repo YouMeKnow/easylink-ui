@@ -123,7 +123,6 @@ export default function VibeCard({
       data-bg={vibeBg}
       style={{
         width: "100%",
-        maxWidth: maxCardWidth,
         margin: "0 auto",
       }}
     >

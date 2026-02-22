@@ -34,6 +34,7 @@ export default function CreateVibe() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const isMobile = useIsMobile();
+  const CARD_WIDTH = 520;
 
   const queryType = (searchParams.get("type") || "").toUpperCase();
   const stateType = (location.state?.prefillType || "").toUpperCase();
@@ -108,7 +109,7 @@ export default function CreateVibe() {
       </section>
       <section className="cv-form">
         <div className="cv-form__inner">
-          <Form mode="create" />
+          <Form mode="create" maxCardWidth={CARD_WIDTH} />
         </div>
       </section>
     </main>
