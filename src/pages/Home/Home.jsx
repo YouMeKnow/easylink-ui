@@ -137,21 +137,21 @@ export default function Home() {
 
             {/* RIGHT */}
             <motion.div className="hero-ig__right" variants={fadeUp} aria-hidden="true">
-            <div className="hero-media">
-              <img
-                src="/home_page/example3.png"
-                alt=""
-                className="hero-media__img"
-                loading="eager"
-                decoding="async"
-              />
-            </div>
+              <div className="hero-media">
+                <img
+                  src="/home_page/example3.png"
+                  alt=""
+                  className="hero-media__img"
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
             </motion.div>
           </div>
         </div>
       </motion.section>
 
-      {/* Search — empty visual block (WIP) */}
+      {/* Search */}
       <section className="search-stage">
         <div className="search-stage__shell">
           <div className="search-stage__inner">
@@ -178,7 +178,7 @@ export default function Home() {
                 decoding="async"
               />
             </div>
-            </div>
+          </div>
         </div>
       </section>
 

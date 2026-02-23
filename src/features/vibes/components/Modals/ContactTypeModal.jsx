@@ -1,61 +1,94 @@
-import React from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import CONTACT_TYPES from "@/data/contactTypes";
 import iconMap from "@/data/contactIcons";
 import { FaGlobe } from "react-icons/fa";
+import "./styles/ContactTypeModal.css";
 
 export default function ContactTypeModal({ contacts = [], onSelect, onClose }) {
+  const dialogRef = useRef(null);
+
+  const disabledSet = useMemo(() => {
+    return new Set((contacts || []).map((c) => c.type));
+  }, [contacts]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") onClose?.();
+    };
+    document.addEventListener("keydown", onKeyDown);
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    setTimeout(() => dialogRef.current?.focus(), 0);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose]);
+
+  const onBackdropDown = (e) => {
+    if (e.target === e.currentTarget) onClose?.();
+  };
+
   return (
-    <div
-      className="modal d-block"
-      tabIndex={-1}
-      style={{
-        background: "rgba(0, 0, 0, 0.25)",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: 1000,
-      }}
-    >
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Choose Contact Type</h5>
+    <div className="ctm-backdrop" onMouseDown={onBackdropDown}>
+      <div
+        className="ctm-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="ctm-title"
+        tabIndex={-1}
+        ref={dialogRef}
+      >
+        <div className="ctm-card">
+          <div className="ctm-header">
+            <div>
+              <div className="ctm-title" id="ctm-title">
+                Choose Contact Type
+              </div>
+              <div className="ctm-subtitle">Pick one to add it to your vibe</div>
+            </div>
+
             <button
               type="button"
-              className="btn-close"
+              className="ctm-x"
               onClick={onClose}
               aria-label="Close"
-            ></button>
+            >
+              ✕
+            </button>
           </div>
-          <div className="modal-body d-flex flex-wrap gap-2">
-            {CONTACT_TYPES.map((type) => (
-              <button
-                key={type.key}
-                className="btn btn-light"
-                style={{
-                  width: 110,
-                  height: 70,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  textAlign: "center",
-                  fontSize: 14,
-                }}
-                onClick={() => onSelect(type.key)}
-                disabled={contacts.some((c) => c.type === type.key)}
-              >
-                <div style={{ fontSize: 24 }}>
-                  {iconMap[type.key] || <FaGlobe />}
-                </div>
-                <div>{type.label}</div>
-              </button>
-            ))}
+
+          <div className="ctm-body">
+            <div className="ctm-grid">
+              {CONTACT_TYPES.map((type) => {
+                const isDisabled = disabledSet.has(type.key);
+
+                return (
+                  <button
+                    key={type.key}
+                    type="button"
+                    className={`ctm-tile ${isDisabled ? "is-disabled" : ""}`}
+                    onClick={() => onSelect?.(type.key)}
+                    disabled={isDisabled}
+                  >
+                    <div className="ctm-icon">
+                      {iconMap[type.key] || <FaGlobe />}
+                    </div>
+
+                    <div className="ctm-label">{type.label}</div>
+
+                    {isDisabled && <div className="ctm-badge">Added</div>}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div className="modal-footer">
-            <button className="btn btn-secondary w-100" onClick={onClose}>
+
+          <div className="ctm-footer">
+            <button className="ctm-cancel" onClick={onClose}>
               Cancel
             </button>
           </div>

@@ -91,6 +91,7 @@
 .btn-text-full {
   display: inline;
 }
+
 .btn-text-short {
   display: none;
 }
@@ -117,6 +118,7 @@
 
 /* no “hover lift” on touch devices */
 @media (hover: none) {
+
   .btn-white:hover,
   .btn-light-outline:hover {
     transform: none;
@@ -144,6 +146,7 @@
   .vibe-actions--desktop {
     display: none;
   }
+
   .vibe-actions--mobile {
     display: flex;
   }
@@ -151,6 +154,7 @@
   .btn-text-full {
     display: none;
   }
+
   .btn-text-short {
     display: inline-flex;
     align-items: center;
@@ -189,7 +193,8 @@
 /* ---------- Desktop polish ---------- */
 @media (min-width: 769px) {
   .vibe-topbar {
-    position: relative; /* sticky not needed */
+    position: relative;
+    /* sticky not needed */
     background: transparent;
     border-bottom: none;
     backdrop-filter: none;

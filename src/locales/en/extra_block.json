@@ -1,5 +1,23 @@
 {
-  "not_specified": "not specified",
+  "add": "Add info",
+  "hours": "Hours",
+  "remove_title": "Remove info",
+  "remove_msg": "Are you sure you want to remove this block?",
+  "cancel": "Cancel",
+  "remove": "Remove",
+
+  "mon_fri": "Mon–Fri",
+  "all_days": "All",
+  "weekend": "Weekend",
+  "clear_all": "Clear all",
+  "start": "Start",
+  "end": "End",
+  "apply": "Apply",
+  "closed": "Closed",
+  "clear_day": "Clear day",
+  "edit_day_scope": "Click to select this day",
+  "hours_scope_hint": "Pick a scope, choose Start/End, then Apply.",
+
   "weekdays": {
     "monday": "Monday",
     "tuesday": "Tuesday",
@@ -8,5 +26,15 @@
     "friday": "Friday",
     "saturday": "Saturday",
     "sunday": "Sunday"
+  },
+  "picker_title": "Choose info block",
+  "close": "Close",
+
+  "type": {
+    "hours": "Hours",
+    "birthday": "Birthday"
+  },
+  "hint": {
+    "hours": "Set opening hours for each day"
   }
 }

@@ -49,17 +49,6 @@ export default function VibeCard({
   const origin = typeof window !== "undefined" ? window.location.origin : "";
   const shareUrl = hasId ? `${origin}/view/${id}` : "";
 
-  // --- background from extraBlocks (system block: type="BACKGROUND") ---
-  const getBgFromBlocks = (blocks) => {
-    if (!Array.isArray(blocks)) return "default";
-    const b = blocks.find((x) => x?.type === "BACKGROUND");
-    const v = String(b?.value || "").trim().toLowerCase();
-    if (!v) return "default";
-    if (v === "default" || v === "gradient" || v === "matrix") return v;
-    return "default";
-  };
-  const vibeBg = getBgFromBlocks(extraBlocks);
-
   // visibility (owner only)
   const [vibeVisible, code, visibilityToggleUI] = useVisibilityToggle(
     id,
@@ -118,15 +107,7 @@ export default function VibeCard({
   };
 
   return (
-    <div
-      className="vibe-card"
-      data-bg={vibeBg}
-      style={{
-        width: "100%",
-        maxWidth: maxCardWidth,
-        margin: "0 auto",
-      }}
-    >
+    <div className="vibe-card" style={{ width:"100%", margin:"0 auto" }}>
       {/* Background layer */}
       <div className="vibe-card__bg" aria-hidden="true" />
 

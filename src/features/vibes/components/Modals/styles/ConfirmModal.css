@@ -1,0 +1,150 @@
+/* ConfirmModal uses global theme tokens:
+   --surface, --stroke, --shadow-md, --blur, --radius, --text, --text-weak
+   --accent-to (rgb triplet), --destructive (oklch), etc.
+*/
+
+.confirm-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    /* keep it theme-friendly */
+    background: rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(calc(var(--blur) * 0.8));
+    -webkit-backdrop-filter: blur(calc(var(--blur) * 0.8));
+}
+
+:root[data-theme="light"] .confirm-backdrop {
+    background: rgba(15, 18, 34, 0.28);
+}
+
+:root[data-theme="dark"] .confirm-backdrop {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.confirm-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 2001;
+
+    display: grid;
+    place-items: center;
+
+    padding: 18px;
+}
+
+.confirm-card {
+    width: min(460px, 100%);
+    border-radius: calc(var(--radius) + 10px);
+
+    /* glass like the rest of your UI */
+    background: var(--surface);
+    border: 1px solid var(--stroke);
+
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+
+    padding: 16px;
+    animation: confirmPop 140ms ease-out;
+
+    color: var(--text);
+}
+
+@keyframes confirmPop {
+    from {
+        transform: translateY(10px) scale(0.985);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.confirm-head {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.confirm-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+
+    display: grid;
+    place-items: center;
+
+    font-weight: 800;
+
+    /* soft destructive badge that works in both themes */
+    color: oklch(0.62 0.23 27);
+    /* close to destructive */
+    background: color-mix(in srgb, oklch(0.62 0.23 27) 16%, transparent);
+    border: 1px solid color-mix(in srgb, oklch(0.62 0.23 27) 22%, transparent);
+
+    flex: 0 0 auto;
+}
+
+.confirm-title {
+    font-weight: 800;
+    font-size: 15px;
+    margin-top: 1px;
+}
+
+.confirm-msg {
+    margin-top: 3px;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--text-weak);
+}
+
+.confirm-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+/* Important: avoid fighting your global button styles.
+   We style only buttons inside the modal with higher specificity. */
+.confirm-actions button {
+    border-radius: 12px;
+    padding: 8px 12px;
+    height: 38px;
+    font-weight: 700;
+}
+
+/* Secondary/cancel: "glass" */
+.confirm-actions .confirm-btn--cancel {
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    border: 1px solid var(--stroke);
+    color: var(--text);
+    box-shadow: none;
+}
+
+.confirm-actions .confirm-btn--cancel:hover {
+    border-color: color-mix(in srgb, var(--stroke) 85%, transparent);
+    transform: translateY(-1px);
+}
+
+/* Danger/confirm */
+.confirm-actions .confirm-btn--danger {
+    background: oklch(0.62 0.23 27);
+    border: 1px solid color-mix(in srgb, oklch(0.62 0.23 27) 70%, black 30%);
+    color: white;
+}
+
+.confirm-actions .confirm-btn--danger:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+}
+
+/* focus ring consistent with your global accent */
+.confirm-actions button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, rgb(var(--accent-to)) 35%, transparent);
+}

@@ -106,6 +106,21 @@
   --btn-text: #ffffff;
   --btn-border: transparent;
   --btn-hover-border: #646cff;
+  
+  --ct-text: #0f172a;
+  --ct-text-muted: rgba(15,23,42,.45);
+
+  --ct-chip-bg: rgba(0,0,0,.04);
+  --ct-chip-border: rgba(0,0,0,.10);
+
+  --ct-icon-bg: rgba(255,255,255,.55);
+  --ct-icon-border: rgba(0,0,0,.06);
+
+  --ct-type-bg: rgba(255,255,255,.70);
+  --ct-type-border: rgba(0,0,0,.10);
+  --ct-type-text: rgba(0,0,0,.72);
+
+  --ct-shadow: 0 10px 30px rgba(0,0,0,.06);
 }
 
 /* explicit DARK (profile dark vibe) */
@@ -133,6 +148,21 @@
   --btn-text: rgba(255, 255, 255, 0.92);
   --btn-border: rgba(255, 255, 255, 0.14);
   --btn-hover-border: rgba(255, 255, 255, 0.28);
+
+  --ct-text: rgba(255,255,255,.92);
+  --ct-text-muted: rgba(255,255,255,.55);
+
+  --ct-chip-bg: rgba(255,255,255,.08);
+  --ct-chip-border: rgba(255,255,255,.14);
+
+  --ct-icon-bg: rgba(255,255,255,.10);
+  --ct-icon-border: rgba(255,255,255,.14);
+
+  --ct-type-bg: rgba(255,255,255,.10);
+  --ct-type-border: rgba(255,255,255,.16);
+  --ct-type-text: rgba(255,255,255,.78);
+
+  --ct-shadow: 0 14px 40px rgba(0,0,0,.35);
 }
 
 /* page base */
@@ -288,4 +318,12 @@ button:focus-visible {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.only-mobile { display: none; }
+.only-desktop { display: block; }
+
+@media (max-width: 991px) {
+  .only-mobile { display: block; }
+  .only-desktop { display: none; }
 }

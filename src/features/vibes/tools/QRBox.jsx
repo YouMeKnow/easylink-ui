@@ -1,7 +1,8 @@
 import React from "react";
 import { QRCodeCanvas } from "qrcode.react";
+import "./QRBox.css";
 
-export default function QRBox({ id, shareUrl, t, size = 60 }) {
+export default function QRBox({ id, shareUrl, t, size = 100 }) {
   const origin =
     typeof window !== "undefined" && window.location?.origin
       ? window.location.origin
@@ -12,12 +13,15 @@ export default function QRBox({ id, shareUrl, t, size = 60 }) {
   if (value) {
     return (
       <>
-        <QRCodeCanvas
-          value={value}
-          size={size}
-          includeMargin={false}
-          aria-label={t("qr_aria", { defaultValue: "QR code for sharing" })}
-        />
+<QRCodeCanvas
+  value={value}
+  size={size}
+  bgColor="#ffffff"
+  fgColor="#000000"
+  includeMargin={true}
+  className="vibe-qr-canvas"
+  aria-label={t("qr_aria", { defaultValue: "QR code for sharing" })}
+/>
         <div style={{ fontSize: 12, color: "#aaa" }}>
           {t("share_qr", { defaultValue: "Share QR code" })}
         </div>

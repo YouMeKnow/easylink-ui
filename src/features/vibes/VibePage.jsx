@@ -68,7 +68,7 @@ export default function VibePage() {
   return (
     <div className={`route-shell ${editing ? "is-editing" : ""}`}>
       <div className="container py-4 vibe-container">
-        {/* ✅ one header system */}
+        {/* one header system */}
         <header className="vibe-topbar">
           <div className="vibe-topbar__left">
             <BackButton

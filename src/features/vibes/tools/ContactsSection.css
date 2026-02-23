@@ -1,0 +1,205 @@
+/* ContactsSection.css */
+
+/* ===============================
+   SECTIONS
+=================================*/
+.contacts-section{
+  margin-bottom: 22px;
+}
+
+.contacts-section__title{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ct-text-muted);
+  margin-bottom: 10px;
+}
+
+/* ===============================
+   GRID (chips)
+=================================*/
+.contacts-grid{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* ===============================
+   CHIP WRAPPER
+=================================*/
+.contact-chip{
+  position: relative;
+  flex: 0 0 auto;
+  margin: 0 !important;
+  border-radius: 16px;
+  will-change: transform;
+  transition: transform .15s ease;
+}
+
+.contact-chip:hover{
+  transform: translateY(-1px);
+}
+
+/* если хочешь подсветку при редактировании */
+.contact-chip.is-editing{
+  box-shadow: 0 0 0 3px color-mix(in srgb, rgba(var(--accent-to), .18) 55%, transparent);
+}
+
+/* ===============================
+   REMOVE (X)
+=================================*/
+.contact-remove{
+  position: absolute;
+  top: -8px;
+  right: -8px;
+
+  width: 26px;
+  height: 26px;
+  border-radius: 12px;
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  color: rgba(220, 53, 69, .95);
+
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+  cursor: pointer;
+
+  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+}
+
+.contact-remove:hover{
+  transform: scale(1.05);
+  filter: brightness(.98);
+  box-shadow: 0 14px 30px rgba(0,0,0,.16);
+}
+
+.contact-remove:active{
+  transform: scale(.97);
+}
+
+.contact-remove:focus-visible{
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, rgba(var(--accent-to), .22) 55%, transparent),
+    0 14px 30px rgba(0,0,0,.16);
+}
+
+/* dark: чтобы не было белой “таблетки” */
+:root[data-theme="dark"] .contact-remove{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.12);
+  box-shadow: 0 14px 30px rgba(0,0,0,.35);
+}
+
+:root[data-theme="dark"] .contact-remove:hover{
+  filter: brightness(1.06);
+}
+
+/* ===============================
+   ADD BUTTON (single, bottom, full width)
+=================================*/
+.contacts-add-wrapper{
+  margin-top: 18px;
+  width: 100%;
+}
+
+.contact-add-tile{
+  width: 100%;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border-radius: 14px;
+  border: 1.5px dashed color-mix(in srgb, rgba(var(--accent-to), .45) 60%, var(--ct-chip-border));
+  background: color-mix(in srgb, rgba(var(--accent-to), .10) 55%, var(--ct-chip-bg));
+  color: rgba(var(--accent-to), .95);
+
+  font-size: 14px;
+  font-weight: 800;
+
+  transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.contact-add-tile:hover{
+  transform: translateY(-1px);
+  background: color-mix(in srgb, rgba(var(--accent-to), .14) 55%, var(--ct-chip-bg));
+  border-color: color-mix(in srgb, rgba(var(--accent-to), .65) 55%, var(--ct-chip-border));
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+}
+
+:root[data-theme="dark"] .contact-add-tile:hover{
+  box-shadow: 0 16px 34px rgba(0,0,0,.30);
+}
+
+.contact-add-tile:active{
+  transform: scale(.99);
+}
+
+/* ===============================
+   EMPTY STATE (если используешь)
+=================================*/
+.contacts-empty{
+  width: 100%;
+  max-width: 520px;
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  text-align: center;
+}
+
+.contacts-empty__title{
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--ct-text);
+  opacity: .9;
+}
+
+.contacts-empty__hint{
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--ct-text-muted);
+}
+
+.contacts-empty__cta{
+  margin-top: 10px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+
+  border: 1px solid var(--ct-chip-border);
+  background: var(--ct-chip-bg);
+  color: var(--ct-text);
+
+  font-weight: 800;
+  font-size: 13px;
+  transition: transform .15s ease, filter .15s ease;
+}
+
+.contacts-empty__cta:hover{
+  transform: translateY(-1px);
+  filter: brightness(.98);
+}
+
+:root[data-theme="dark"] .contacts-empty__cta:hover{
+  filter: brightness(1.06);
+}
+
+/* ===============================
+   SAFETY
+=================================*/
+.contact-btn{
+  margin: 0 !important;
+  max-width: 100%;
+}
