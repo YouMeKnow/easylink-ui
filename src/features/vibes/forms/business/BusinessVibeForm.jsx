@@ -11,6 +11,8 @@ import VibeFormLayout from "@/features/vibes/components/layouts/VibeFormLayout/V
 
 import CenterModal from "@/components/ui/CenterModal/CenterModal";
 
+import BUSINESS_BLOCK_TYPES from "@/data/infoBlockTypes/business";
+
 import { useBusinessVibeForm } from "./useBusinessVibeForm";
 import MenuTab from "./tabs/MenuTab.jsx";
 
@@ -80,6 +82,7 @@ export default function BusinessVibeForm({
     loading,
     handleContactChange,
     removeContact,
+    addInfoBlock,
     handleBlockChange,
     removeBlock,
     handleSubmit,
@@ -317,45 +320,11 @@ export default function BusinessVibeForm({
 
       {showBlockModal && (
         <InfoBlockTypeModal
+          types={BUSINESS_BLOCK_TYPES}
           extraBlocks={extraBlocks}
           onClose={() => setShowBlockModal(false)}
           onSelect={(block) => {
-            const isHours =
-              String(block.key).toLowerCase() === "hours" ||
-              String(block.label).toLowerCase() === "hours";
-
-            if (
-              isHours &&
-              extraBlocks.some(
-                (b) =>
-                  String(b.type).toLowerCase() === "hours" ||
-                  String(b.label).toLowerCase() === "hours"
-              )
-            ) {
-              setShowBlockModal(false);
-              return;
-            }
-
-            const initHours = {
-              monday: "",
-              tuesday: "",
-              wednesday: "",
-              thursday: "",
-              friday: "",
-              saturday: "",
-              sunday: "",
-            };
-
-            setExtraBlocks((prev) => [
-              ...prev,
-              {
-                type: isHours ? "hours" : block.key,
-                label: block.label || (isHours ? "Hours" : "Custom"),
-                value: isHours ? initHours : "",
-                placeholder: isHours ? undefined : block.placeholder,
-              },
-            ]);
-
+            addInfoBlock(block);     
             setShowBlockModal(false);
           }}
         />

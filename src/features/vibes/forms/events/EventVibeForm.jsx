@@ -7,6 +7,9 @@ import VibeCard from "@/features/vibes/card/components/VibeCard";
 import VibeFormLayout from "@/features/vibes/components/layouts/VibeFormLayout/VibeFormLayout";
 import CenterModal from "@/components/ui/CenterModal/CenterModal";
 
+import InfoBlockTypeModal from "@/features/vibes/components/modals/InfoBlockTypeModal";
+import OTHER_BLOCK_TYPES from "@/data/infoBlockTypes/other"; 
+
 import useContactTypePicker from "@/features/vibes/contacts/hooks/useContactTypePicker";
 import ContactTypePicker from "@/features/vibes/contacts/components/ContactTypePicker/ContactTypePicker";
 
@@ -229,10 +232,12 @@ export default function EventVibeForm({
       </form>
 
       {showBlockModal && (
-        <EventInfoBlockModal
-          t={t}
+        <InfoBlockTypeModal
+          title={t("modal_info_title", { defaultValue: "Choose info block" })}
+          types={OTHER_BLOCK_TYPES}
           extraBlocks={extraBlocks}
           onClose={() => setShowBlockModal(false)}
+          singletons={OTHER_BLOCK_TYPES.map((x) => String(x.key).trim().toLowerCase())}
           onSelect={(block) => {
             setExtraBlocks((prev) => [
               ...prev,

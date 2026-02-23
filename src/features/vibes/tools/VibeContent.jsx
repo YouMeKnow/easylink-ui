@@ -86,27 +86,45 @@ export default function VibeContent({
           )}
         </div>
 
-        <div className="vibe-content__section">
-          <ContactsSection
-            t={t}
-            contacts={contacts}
-            editMode={editMode}
-            onOpenContactPicker={onOpenContactPicker}
-            onRemoveContact={onRemoveContact}
-            onChangeContactValue={onChangeContactValue}
-            resumeEditAt={resumeEditAt}
-          />
-        </div>
+        {(contacts?.length > 0 || editMode) && (
+          <div className="vibe-content__section vibe-content__section--contacts">
+            <div className="vibe-content__section-head">
+              <h4 className="vibe-content__section-title">
+                {t("sections.contacts", "Contacts")}
+              </h4>
+              <div className="vibe-content__section-line" />
+            </div>
 
-        <div className="vibe-content__section">
-          <ExtraBlocksList
-            extraBlocks={extraBlocks}
-            editMode={editMode}
-            onBlockChange={onBlockChange}
-            onBlockRemove={onBlockRemove}
-            onOpenBlockPicker={onOpenBlockPicker}
-          />
-        </div>
+            <ContactsSection
+              t={t}
+              contacts={contacts}
+              editMode={editMode}
+              onOpenContactPicker={onOpenContactPicker}
+              onRemoveContact={onRemoveContact}
+              onChangeContactValue={onChangeContactValue}
+              resumeEditAt={resumeEditAt}
+            />
+          </div>
+        )}
+
+        {(extraBlocks?.length > 0 || editMode) && (
+          <div className="vibe-content__section vibe-content__section--blocks">
+            <div className="vibe-content__section-head">
+              <h4 className="vibe-content__section-title">
+                {t("sections.blocks", "Info blocks")}
+              </h4>
+              <div className="vibe-content__section-line" />
+            </div>
+
+            <ExtraBlocksList
+              extraBlocks={extraBlocks}
+              editMode={editMode}
+              onBlockChange={onBlockChange}
+              onBlockRemove={onBlockRemove}
+              onOpenBlockPicker={onOpenBlockPicker}
+            />
+          </div>
+        )}
 
         <div className="vibe-content__qr">
           <QRBox id={id} shareUrl={shareUrl} t={t} />

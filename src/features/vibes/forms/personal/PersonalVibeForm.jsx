@@ -5,7 +5,8 @@ import { useTranslation } from "react-i18next";
 import { usePersonalVibeForm } from "./usePersonalVibeForm";
 import VibeCard from "@/features/vibes/card/components/VibeCard";
 
-import PersonalInfoBlockModal from "@/features/vibes/components/modals/PersonalInfoBlockModal";
+import InfoBlockTypeModal from "@/features/vibes/components/modals/InfoBlockTypeModal";
+import PERSONAL_BLOCK_TYPES from "@/data/infoBlockTypes/personal"; 
 
 import useContactTypePicker from "@/features/vibes/contacts/hooks/useContactTypePicker";
 import ContactTypePicker from "@/features/vibes/contacts/components/ContactTypePicker/ContactTypePicker";
@@ -173,9 +174,12 @@ export default function PersonalVibeForm({
       
       {/* EXTRA BLOCK MODAL */}
       {showBlockModal && (
-        <PersonalInfoBlockModal
+        <InfoBlockTypeModal
+
+          types={PERSONAL_BLOCK_TYPES}
           extraBlocks={extraBlocks}
           onClose={() => setShowBlockModal(false)}
+          singletons={PERSONAL_BLOCK_TYPES.map((x) => String(x.key).trim().toLowerCase())}
           onSelect={(block) => {
             setExtraBlocks((prev) => [
               ...prev,
