@@ -5,11 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   const { t } = useTranslation("footer");
-
-  const startYear = 2025;
   const currentYear = new Date().getFullYear();
-  const yearLabel =
-    currentYear > startYear ? `${startYear}-${currentYear}` : startYear;
 
   return (
     <footer className="footer" role="contentinfo">
@@ -23,7 +19,7 @@ export default function Footer() {
       </nav>
 
       <div className="footer__copy">
-        © {yearLabel} {t("brand")}. {t("copyright")}
+        © {currentYear} {t("brand")}. {t("copyright")}
       </div>
     </footer>
   );

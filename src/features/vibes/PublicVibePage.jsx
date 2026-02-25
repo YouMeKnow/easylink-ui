@@ -38,6 +38,7 @@ export default function PublicVibePage() {
     publicCode,
     subscriberVibes,
     subscriberCount,
+    followingCount,
     reload,
   } = useVibeLoader(id, token);
 
@@ -77,49 +78,52 @@ export default function PublicVibePage() {
   return (
     <PageLayout title={t("Vibe", { defaultValue: "Vibe" })}>
       <div className="public-vibe-layout">
-        <aside className="public-vibe-layout__left">
+        <div className="public-vibe-layout__main">
+          <main className="public-vibe-layout__right">
+            {vibe.type === "BUSINESS" ? (
+              <BusinessCustomerCard
+                {...commonProps}
+                subscriberVibes={subscriberVibes}
+                onRefresh={reload}
+              />
+            ) : (
+              <VibeCard
+                id={vibeId}
+                name={name}
+                description={description}
+                photo={vibe?.photo}
+                contacts={contacts}
+                extraBlocks={extraBlocks}
+                type={vibe?.type || "OTHER"}
+                visible={visible}
+                publicCode={publicCode}
+                editMode={false}
+                ownerActionsEnabled={false}
+                shareEnabled={true}
+                onShare={({ vibeId: vid, shareUrl }) => {
+                  trackEvent("Vibe Share Button Clicked", {
+                    vibeId: vid,
+                    location: "PublicVibePage",
+                    shareUrl,
+                    type: vibe?.type || "OTHER",
+                  });
+                }}
+              />
+            )}
+          </main>
+        </div>
+        
+        <aside className="public-vibe-layout__side">
           <PublicSubscribePanel
             t={t}
             vibeId={vibeId}
             subscriberCount={subscriberCount}
             subscriberVibes={subscriberVibes}
             authed={authed}
+            followingCount={followingCount}
             onRefresh={reload}
           />
         </aside>
-
-        <main className="public-vibe-layout__right">
-          {vibe.type === "BUSINESS" ? (
-            <BusinessCustomerCard
-              {...commonProps}
-              subscriberVibes={subscriberVibes}
-              onRefresh={reload}
-            />
-          ) : (
-            <VibeCard
-              id={vibeId}
-              name={name}
-              description={description}
-              photo={vibe?.photo}
-              contacts={contacts}
-              extraBlocks={extraBlocks}
-              type={vibe?.type || "OTHER"}
-              visible={visible}
-              publicCode={publicCode}
-              editMode={false}
-              ownerActionsEnabled={false}
-              shareEnabled={true}
-              onShare={({ vibeId: vid, shareUrl }) => {
-                trackEvent("Vibe Share Button Clicked", {
-                  vibeId: vid,
-                  location: "PublicVibePage",
-                  shareUrl,
-                  type: vibe?.type || "OTHER",
-                });
-              }}
-            />
-          )}
-        </main>
       </div>
 
     </PageLayout>

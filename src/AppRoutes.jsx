@@ -37,6 +37,9 @@ import OfferDetailsPage from "@/features/vibes/offers/pages/OfferDetailsPage";
 import CatalogForm from "@/features/vibes/catalog/catalogForm";
 import CatalogItemPage from "@/features/vibes/catalog/pages/CatalogItemPage";
 
+import NetworkPage from "@/features/vibes/network/NetworkPage";
+import FollowersList from "@/features/vibes/network/FollowersList";
+import FollowingList from "@/features/vibes/network/FollowingList";
 
 export default function AppRoutes({ questions, setQuestions }) {
   return (
@@ -82,6 +85,16 @@ export default function AppRoutes({ questions, setQuestions }) {
 
       <Route path="/email-verification-sent" element={<EmailVerificationSentPage />} />
       <Route path="/email-verified" element={<EmailVerifiedPage />} />
+
+      <Route path="/view/:id/network" element={<NetworkPage />}>
+        <Route path="followers" element={<FollowersList />} />
+        <Route path="following" element={<FollowingList />} />
+      </Route>
+      
+      <Route
+        path="/view/:id/network"
+        element={<Navigate to="followers" replace />}
+      />
 
       <Route path="/catalog/new" element={<CatalogForm />} />
       <Route path="/catalog/:id/edit" element={<CatalogForm />} />

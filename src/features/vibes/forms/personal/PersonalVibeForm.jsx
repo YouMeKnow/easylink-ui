@@ -175,7 +175,6 @@ export default function PersonalVibeForm({
       {/* EXTRA BLOCK MODAL */}
       {showBlockModal && (
         <InfoBlockTypeModal
-
           types={PERSONAL_BLOCK_TYPES}
           extraBlocks={extraBlocks}
           onClose={() => setShowBlockModal(false)}

@@ -160,6 +160,11 @@ export default function useVibeLoader(id, token) {
   const [subscriberCount, setSubscriberCount] = useState(
     typeof cached?.subscriberCount === "number" ? cached.subscriberCount : 0
   );
+  
+  const [followingCount, setFollowingCount] = useState(
+    typeof cached?.followingCount === "number" ? cached.followingCount : 0
+  );
+
   const [subscriberVibes, setSubscriberVibes] = useState(
     Array.isArray(cached?.subscriberVibes) ? cached.subscriberVibes : []
   );
@@ -190,7 +195,7 @@ export default function useVibeLoader(id, token) {
       setExtraBlocks([]);
       setVisible(false);
       setPublicCode("");
-
+      setFollowingCount(0);
       setSubscriberCount(0);
       setSubscriberVibes([]);
       return;
@@ -239,11 +244,11 @@ export default function useVibeLoader(id, token) {
     setDescription(vibe.description || "");
     setVisible(Boolean(vibe.visible));
     setPublicCode(vibe.publicCode || "");
+    
 
     const parsed = parseFields(vibe.fieldsDTO || []);
     setContacts(parsed?.contacts || []);
 
-    // 🔥 убираем реликт BACKGROUND и нормализуем оставшееся
     const rawBlocks = (parsed?.extraBlocks || []).filter(
       (b) => String(b?.type || "").trim().toUpperCase() !== "BACKGROUND"
     );
@@ -252,6 +257,9 @@ export default function useVibeLoader(id, token) {
 
     setSubscriberCount(
       typeof vibe.subscriberCount === "number" ? vibe.subscriberCount : 0
+    );
+    setFollowingCount(
+      typeof vibe.followingCount === "number" ? vibe.followingCount : 0
     );
     setSubscriberVibes(
       Array.isArray(vibe.subscriberVibes) ? vibe.subscriberVibes : []
@@ -264,7 +272,8 @@ export default function useVibeLoader(id, token) {
     loading,
     refreshing,
     reload,
-
+    
+    followingCount,
     name,
     description,
     contacts,

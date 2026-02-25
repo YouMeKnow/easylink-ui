@@ -92,7 +92,6 @@
     0 14px 30px rgba(0,0,0,.16);
 }
 
-/* dark: чтобы не было белой “таблетки” */
 :root[data-theme="dark"] .contact-remove{
   background: rgba(255,255,255,.06);
   border-color: rgba(255,255,255,.12);

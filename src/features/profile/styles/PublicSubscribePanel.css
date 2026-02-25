@@ -50,101 +50,6 @@
   white-space: nowrap;
 }
 
-/* META clickable card */
-.public-subscribe__meta {
-  margin-top: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-
-  padding: 12px 12px;
-  border-radius: 14px;
-
-  /* ✅ dark/light safe */
-  border: 1px solid color-mix(in oklab, var(--stroke) 80%, transparent);
-  background: color-mix(in oklab, var(--surface) 78%, transparent);
-}
-
-.public-subscribe__meta--clickable {
-  cursor: pointer;
-  user-select: none;
-  transition:
-    transform 120ms ease,
-    box-shadow 120ms ease,
-    border-color 120ms ease,
-    background 120ms ease;
-}
-
-.public-subscribe__meta--clickable:hover {
-  border-color: color-mix(in oklab, rgba(var(--accent-to), 1) 28%, var(--stroke));
-  background: color-mix(in oklab, rgba(var(--accent-to), 1) 10%, var(--surface));
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
-}
-
-.public-subscribe__meta--clickable:active {
-  transform: translateY(0px) scale(0.99);
-}
-
-.public-subscribe__meta--clickable:focus-visible {
-  outline: 3px solid color-mix(in oklab, rgba(var(--accent-to), 1) 35%, transparent);
-  outline-offset: 2px;
-}
-
-.public-subscribe__metaLeft {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
-.public-subscribe__metaIcon {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-
-  /* ✅ dark/light safe */
-  background: color-mix(in oklab, rgba(var(--accent-to), 1) 12%, transparent);
-  border: 1px solid color-mix(in oklab, rgba(var(--accent-to), 1) 20%, transparent);
-
-  flex: 0 0 auto;
-}
-
-.public-subscribe__metaText {
-  min-width: 0;
-}
-
-.public-subscribe__metaTop {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  min-width: 0;
-  flex-wrap: wrap;
-}
-
-.public-subscribe__metaCount {
-  font-size: 1rem;
-  font-weight: 800;
-  color: var(--text);
-}
-
-.public-subscribe__metaLabel {
-  color: var(--text-weak);
-  font-weight: 600;
-}
-
-.public-subscribe__metaNames {
-  color: var(--text);
-  opacity: 0.92; /* ✅ was 0.85, too washed in dark */
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 360px;
-}
 
 .public-subscribe__dot {
   opacity: 0.45;
@@ -268,4 +173,72 @@
   .public-subscribe__metaNames {
     max-width: 220px;
   }
+}
+
+/* ===== (Followers / Following) ===== */
+.public-subscribe__links{
+  margin-top: 6px;
+
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+
+  padding: 6px 0;
+  background: transparent;
+  border: none;
+}
+
+/* recommended: use <button> for stats */
+.public-subscribe__stat{
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 6px 4px;
+
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+
+  cursor: pointer;
+  color: var(--text);
+
+  transition: opacity 140ms ease;
+}
+
+/* lighter, not “black bold” */
+.public-subscribe__statNum{
+  font-size: 0.98rem;
+  font-weight: 650;
+  letter-spacing: 0.1px;
+  line-height: 1.05;
+  color: color-mix(in oklab, var(--text) 80%, transparent);
+}
+
+.public-subscribe__statLabel{
+  font-size: 0.84rem;
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--text-weak);
+}
+
+/* hover = subtle fade only (no bg, no lift) */
+.public-subscribe__stat:hover{
+  opacity: 0.72;
+}
+
+.public-subscribe__stat:active{
+  opacity: 0.6;
+}
+
+/* focus = clean ring */
+.public-subscribe__stat:focus-visible{
+  outline: 3px solid color-mix(in oklab, rgba(var(--accent-to), 1) 30%, transparent);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+.public-subscribe__links{
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
 }

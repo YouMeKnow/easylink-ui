@@ -121,20 +121,6 @@ export default function BusinessCustomerCard({
     ownerActionsEnabled: false,
   };
 
-  const actions = (
-    <div className="d-flex justify-content-center mt-3">
-      <button
-        type="button"
-        className={isSubscribed ? "btn btn-outline-primary" : "btn btn-primary"}
-        onClick={handleOpenModal}
-      >
-        {isSubscribed
-          ? t("Manage", { defaultValue: "Manage" })
-          : t("Subscribe", { defaultValue: "Subscribe" })}
-      </button>
-    </div>
-  );
-
   return (
     <VibeCard
       {...baseProps}
@@ -165,9 +151,7 @@ export default function BusinessCustomerCard({
                 type="BUSINESS"
                 editMode={false}
               />
-
-              {actions}
-
+              
               {showModal && (
                 <SelectVibeModalWithLogic
                   t={t}
@@ -216,7 +200,6 @@ export default function BusinessCustomerCard({
                 navigate(`/catalog/${it.id}`, { state: { vibeId } });
               }}
             />
-
           )}
         />
       }
