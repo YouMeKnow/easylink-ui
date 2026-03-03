@@ -1,6 +1,12 @@
 import React from "react";
 
-export default function NetworkTabs({ active, onFollowers, onFollowing }) {
+export default function NetworkTabs({
+  active,
+  onFollowers,
+  onFollowing,
+  followersLabel = "Followers",
+  followingLabel = "Following",
+}) {
   return (
     <div className="network-tabs" role="tablist" aria-label="Network tabs">
       <button
@@ -10,7 +16,7 @@ export default function NetworkTabs({ active, onFollowers, onFollowing }) {
         className={`network-tabs__tab ${active === "followers" ? "is-active" : ""}`}
         onClick={onFollowers}
       >
-        Followers
+        {followersLabel}
       </button>
 
       <button
@@ -20,7 +26,7 @@ export default function NetworkTabs({ active, onFollowers, onFollowing }) {
         className={`network-tabs__tab ${active === "following" ? "is-active" : ""}`}
         onClick={onFollowing}
       >
-        Following
+        {followingLabel}
       </button>
     </div>
   );

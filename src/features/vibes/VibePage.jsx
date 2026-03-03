@@ -3,6 +3,8 @@ import React, { useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+import { Link } from "react-router-dom";
+
 import VibeFormRenderer from "@/features/vibes/components/VibeFormRenderer";
 import VibeCard from "@/features/vibes/card/components/VibeCard";
 import BusinessOwnerCard from "@/features/vibes/components/BusinessOwnerCard";
@@ -41,9 +43,8 @@ export default function VibePage() {
   const isBusiness = vibe?.type === "BUSINESS";
 
   const goToInteractions = useCallback(() => {
-    const base = `/vibes/${id}`;
-    navigate(isBusiness ? `${base}/interactions` : `${base}/interactions-basic`);
-  }, [navigate, id, isBusiness]);
+    navigate(`/view/${id}/network`);
+  }, [navigate, id]);
 
   if (loading) {
     return (
@@ -88,10 +89,8 @@ export default function VibePage() {
           <div className="vibe-topbar__right">
             {/* desktop/tablet */}
             <div className="vibe-actions vibe-actions--desktop">
-              <a
-                href={`/view/${id}`}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to={`/view/${id}`}
                 className="btn-light-outline btn-compact d-flex align-items-center gap-2"
               >
                 <svg
@@ -108,7 +107,7 @@ export default function VibePage() {
                   <path d="M21 14v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6" />
                 </svg>
                 {t("view")}
-              </a>
+              </Link>
 
               <button
                 type="button"

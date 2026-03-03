@@ -1,7 +1,7 @@
 import { apiFetch } from "@/api/apiFetch";
 
 export async function fetchFollowing(vibeId) {
-  const res = await apiFetch(`/api/v3/vibes/${vibeId}/following`, {
+  const res = await apiFetch(`/api/v3/interactions/${vibeId}/following`, {
     method: "GET",
   });
 

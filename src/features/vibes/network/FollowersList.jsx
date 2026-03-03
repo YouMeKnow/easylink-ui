@@ -14,20 +14,10 @@ export default function FollowersList() {
   return (
     <div className="container py-5" style={{ maxWidth: 980 }}>
       <div className="d-flex align-items-center justify-content-between mb-4">
-        <button
-          className="btn btn-outline-secondary"
-          onClick={() => navigate(-1)}
-        >
-          {t("back", { defaultValue: "Back" })}
-        </button>
-
         <div className="text-center">
           <h2 className="fw-bold mb-0">
-            {t("Followers", { defaultValue: "Followers" })}
+            {t("followers", { defaultValue: "Followers" })}
           </h2>
-          <div className="text-muted" style={{ fontSize: 13 }}>
-            {items.length}
-          </div>
         </div>
 
         <div style={{ width: 88 }} />
