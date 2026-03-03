@@ -1,6 +1,6 @@
 // src/features/vibes/pages/PublicVibePage.jsx
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import PageLayout from "@/components/common/PageLayout";
@@ -19,6 +19,7 @@ import "@/features/vibes/styles/PublicVibePage.css";
 export default function PublicVibePage() {
   const { t } = useTranslation("vibe");
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const { accessToken } = useAuth();
   const token =
@@ -44,11 +45,15 @@ export default function PublicVibePage() {
 
   if (loading) {
     return (
-    <PageLayout title={t("Vibe", { defaultValue: "Vibe" })}>
-      <div className="public-loading">
-        <div className="spinner-border public-spinner" role="status" aria-label="Loading" />
-      </div>
-    </PageLayout>
+      <PageLayout title={t("Vibe", { defaultValue: "Vibe" })}>
+        <div className="public-loading">
+          <div
+            className="spinner-border public-spinner"
+            role="status"
+            aria-label={t("loading", { defaultValue: "Loading" })}
+          />
+        </div>
+      </PageLayout>
     );
   }
 
@@ -62,6 +67,8 @@ export default function PublicVibePage() {
     );
   }
 
+  const vibeId = vibe?.id;
+
   const commonProps = {
     t,
     vibe,
@@ -73,13 +80,26 @@ export default function PublicVibePage() {
     publicCode,
   };
 
-  const vibeId = vibe?.id;
-
   return (
-    <PageLayout title={t("Vibe", { defaultValue: "Vibe" })}>
+    <PageLayout
+      title={t("Vibe", { defaultValue: "Vibe" })}
+      left={
+        <button
+          type="button"
+          className="back-btn"
+          aria-label={t("back", { defaultValue: "Back" })}
+          title={t("back", { defaultValue: "Back" })}
+          onClick={() => {
+            if (window.history.length > 1) navigate(-1);
+            else navigate("/");
+          }}
+        />
+      }
+    >
+      {/* Main layout */}
       <div className="public-vibe-layout">
         <div className="public-vibe-layout__main">
-          <main className="public-vibe-layout__right">
+          <main className="public-vibe-layout__card">
             {vibe.type === "BUSINESS" ? (
               <BusinessCustomerCard
                 {...commonProps}
@@ -100,19 +120,11 @@ export default function PublicVibePage() {
                 editMode={false}
                 ownerActionsEnabled={false}
                 shareEnabled={true}
-                onShare={({ vibeId: vid, shareUrl }) => {
-                  trackEvent("Vibe Share Button Clicked", {
-                    vibeId: vid,
-                    location: "PublicVibePage",
-                    shareUrl,
-                    type: vibe?.type || "OTHER",
-                  });
-                }}
               />
             )}
           </main>
         </div>
-        
+
         <aside className="public-vibe-layout__side">
           <PublicSubscribePanel
             t={t}
@@ -125,7 +137,6 @@ export default function PublicVibePage() {
           />
         </aside>
       </div>
-
     </PageLayout>
   );
 }

@@ -1,19 +1,20 @@
 import React from "react";
 import VibeCircleTile from "./VibeCircleTile";
+import "./VibeCircleGrid.css";
 
 function normalizeVibe(item) {
   const id =
-    item.id ||
-    item.vibeId ||
-    item.targetVibeId ||
-    item.targetVibe?.id ||
-    item.vibe?.id;
+    item?.id ||
+    item?.vibeId ||
+    item?.targetVibeId ||
+    item?.targetVibe?.id ||
+    item?.vibe?.id;
 
-  const name = item.name || item.targetVibe?.name || item.vibe?.name || "Vibe";
-  const type = item.type || item.targetVibe?.type || item.vibe?.type || "";
-  const photo = item.photo || item.targetVibe?.photo || item.vibe?.photo || null;
+  const name = item?.name || item?.targetVibe?.name || item?.vibe?.name || "";
+  const type = item?.type || item?.targetVibe?.type || item?.vibe?.type || "";
+  const photo = item?.photo || item?.targetVibe?.photo || item?.vibe?.photo || null;
   const description =
-    item.description || item.targetVibe?.description || item.vibe?.description || "";
+    item?.description || item?.targetVibe?.description || item?.vibe?.description || "";
 
   return { id, name, type, photo, description };
 }
@@ -58,11 +59,14 @@ function Section({ title, count, children }) {
 }
 
 export default function VibeCircleGrid({ vibes = [], t }) {
-  const list = Array.isArray(vibes)
-    ? vibes.map(normalizeVibe).filter((v) => !!v.id)
-    : [];
+  const list = React.useMemo(() => {
+    return Array.isArray(vibes)
+      ? vibes.map(normalizeVibe).filter((v) => !!v.id)
+      : [];
+  }, [vibes]);
 
   const [q, setQ] = React.useState("");
+  const inputRef = React.useRef(null);
 
   const filtered = React.useMemo(() => {
     const s = q.trim().toLowerCase();
@@ -75,6 +79,11 @@ export default function VibeCircleGrid({ vibes = [], t }) {
   const total = list.length;
   const shown = filtered.length;
 
+  const emptyTitle = t("empty.circle", { defaultValue: "No vibes yet." });
+  const emptyHint = t("empty.circle_hint", { defaultValue: "" });
+
+  const unnamed = t("labels.unnamed", { defaultValue: "Unnamed" });
+
   if (total === 0) {
     return (
       <div className="text-center py-5">
@@ -84,7 +93,8 @@ export default function VibeCircleGrid({ vibes = [], t }) {
             height: 62,
             borderRadius: "50%",
             margin: "0 auto 10px",
-            background: "linear-gradient(135deg, rgba(71,109,254,.18), rgba(160,115,255,.16))",
+            background:
+              "linear-gradient(135deg, rgba(71,109,254,.18), rgba(160,115,255,.16))",
             display: "grid",
             placeItems: "center",
             color: "#476dfe",
@@ -95,69 +105,105 @@ export default function VibeCircleGrid({ vibes = [], t }) {
         >
           ✦
         </div>
+
         <div className="fw-semibold" style={{ fontSize: 16 }}>
-          {t("empty.circle") || "Your Vibe Circle is empty."}
+          {emptyTitle}
         </div>
-        <div className="text-muted" style={{ fontSize: 13, marginTop: 6 }}>
-          {t("empty.circle_hint") || "Start following vibes to see them here."}
-        </div>
+
+        {emptyHint ? (
+          <div className="text-muted" style={{ fontSize: 13, marginTop: 6 }}>
+            {emptyHint}
+          </div>
+        ) : null}
       </div>
     );
   }
 
   return (
     <div>
-      {/* search + counter */}
-      <div className="d-flex flex-wrap gap-2 align-items-center mb-3">
-        <div className="input-group" style={{ maxWidth: 420 }}>
-          <span className="input-group-text" style={{ background: "transparent" }}>
-            🔎
-          </span>
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            className="form-control"
-            placeholder={t("search_placeholder") || "Search by name..."}
-          />
+      {/* toolbar */}
+      <div className="vc-toolbar">
+        <div className="vc-toolbar__left">
+          <div className="vc-count">
+            {q.trim()
+              ? t("count_filtered", {
+                  shown,
+                  total,
+                  defaultValue: `${shown} / ${total}`,
+                })
+              : t("count", { count: total, defaultValue: `${total} vibes` })}
+          </div>
         </div>
 
-        <div className="text-muted" style={{ fontSize: 13 }}>
-          {q.trim()
-            ? (t("count_filtered", { shown, total }) || `${shown} / ${total}`)
-            : (t("count", { count: total }) || `${total} vibes`)}
+        <div className="vc-toolbar__right">
+          <div className="vc-search" role="search">
+            <span className="vc-searchIcon" aria-hidden="true" />
+            <input
+              ref={inputRef}
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              className="vc-searchInput"
+              placeholder={t("search_placeholder", {
+                defaultValue: "Search by name...",
+              })}
+            />
+            {q ? (
+              <button
+                type="button"
+                className="vc-iconBtn"
+                onClick={() => setQ("")}
+                aria-label={t("clear", { defaultValue: "Clear" })}
+                title={t("clear", { defaultValue: "Clear" })}
+              >
+                ✕
+              </button>
+            ) : null}
+          </div>
         </div>
       </div>
 
       {/* sections */}
       {grouped.business.length > 0 && (
         <Section
-          title={t("sections.business") || "Business"}
+          title={t("sections.business", { defaultValue: "Business" })}
           count={grouped.business.length}
         >
           {grouped.business.map((v) => (
-            <VibeCircleTile key={v.id} vibe={v} t={t} />
+            <VibeCircleTile
+              key={v.id}
+              vibe={{ ...v, name: v.name || unnamed }}
+              t={t}
+            />
           ))}
         </Section>
       )}
 
       {grouped.personal.length > 0 && (
         <Section
-          title={t("sections.personal") || "Personal"}
+          title={t("sections.personal", { defaultValue: "Personal" })}
           count={grouped.personal.length}
         >
           {grouped.personal.map((v) => (
-            <VibeCircleTile key={v.id} vibe={v} t={t} />
+            <VibeCircleTile
+              key={v.id}
+              vibe={{ ...v, name: v.name || unnamed }}
+              t={t}
+            />
           ))}
         </Section>
       )}
 
       {grouped.other.length > 0 && (
         <Section
-          title={t("sections.other") || "Others"}
+          title={t("sections.other", { defaultValue: "Others" })}
           count={grouped.other.length}
         >
           {grouped.other.map((v) => (
-            <VibeCircleTile key={v.id} vibe={v} t={t} />
+            <VibeCircleTile
+              key={v.id}
+              vibe={{ ...v, name: v.name || unnamed }}
+              t={t}
+            />
           ))}
         </Section>
       )}
@@ -165,7 +211,7 @@ export default function VibeCircleGrid({ vibes = [], t }) {
       {/* empty after search */}
       {shown === 0 && (
         <div className="text-center text-muted py-4">
-          {t("no_results") || "No results."}
+          {t("no_results", { defaultValue: "No results." })}
         </div>
       )}
     </div>

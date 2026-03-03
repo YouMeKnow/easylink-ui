@@ -42,9 +42,16 @@
   "count": "{{count}} вайбов",
   "count_filtered": "{{shown}} / {{total}}",
   "no_results": "Ничего не найдено.",
-
+  "network": {
+    "title": "Сеть",
+    "tabs": {
+      "followers": "Подписчики",
+      "following": "Подписки"
+    },
+    "back": "Назад"
+  },
   "empty": {
-    "circle": "Ваш круг вайбов пуст.",
-    "circle_hint": "Начните подписываться на вайбы, чтобы видеть их здесь."
+    "circle": "Пока пусто.",
+    "circle_hint": ""
   }
 }

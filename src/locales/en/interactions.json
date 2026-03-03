@@ -42,9 +42,16 @@
   "count": "{{count}} vibes",
   "count_filtered": "{{shown}} / {{total}}",
   "no_results": "No results.",
-
+  "network": {
+    "title": "Network",
+    "tabs": {
+      "followers": "Followers",
+      "following": "Following"
+    },
+    "back": "Back"
+  },
   "empty": {
-    "circle": "Your Vibe Circle is empty.",
-    "circle_hint": "Start following vibes to see them here."
+    "circle": "No vibes yet.",
+    "circle_hint": ""
   }
 }
