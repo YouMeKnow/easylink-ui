@@ -25,6 +25,8 @@ export default function useVibeSave({ vibe, setVibe, setEditing }) {
           description: updated.description,
           photo: updated.photo,
           fieldsDTO: cleanFields,
+          privacy: updated.privacy,
+          subscribeMode: updated.subscribeMode,
         });
 
         const fresh = await getVibe(currentId);

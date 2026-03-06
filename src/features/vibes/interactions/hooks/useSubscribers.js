@@ -1,7 +1,8 @@
+// src/features/vibes/interactions/hooks/useSubscribers.js
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { fetchSubscribers } from "@/features/vibes/interactions/api/subscribersApi";
+import { fetchSubscribers, removeSubscriber } from "@/features/vibes/interactions/api/subscribersApi";
 
-export function useSubscribers({ vibeId, enabled = true } = {}) {
+export function useSubscribers({ vibeId, myVibeId = null, enabled = true } = {}) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -13,7 +14,7 @@ export function useSubscribers({ vibeId, enabled = true } = {}) {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchSubscribers(vibeId);
+      const data = await fetchSubscribers(vibeId, { myVibeId });
       setItems(Array.isArray(data) ? data : []);
     } catch (e) {
       setError(e?.message || "Failed to load subscribers");
@@ -21,17 +22,26 @@ export function useSubscribers({ vibeId, enabled = true } = {}) {
     } finally {
       setLoading(false);
     }
-  }, [enabled, vibeId]);
+  }, [enabled, vibeId, myVibeId]);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  return {
-    items,
-    count,
-    loading,
-    error,
-    refetch: load,
-  };
+  const remove = useCallback(
+    async (subscriberVibeId) => {
+      if (!vibeId || !subscriberVibeId) return;
+      try {
+        await removeSubscriber(vibeId, subscriberVibeId);
+        setItems((prev) =>
+          prev.filter((x) => (x.id || x.vibeId || x.subscriberVibeId) !== subscriberVibeId)
+        );
+      } catch (e) {
+        setError(e?.message || "Failed to remove subscriber");
+      }
+    },
+    [vibeId]
+  );
+
+  return { items, count, loading, error, refetch: load, remove };
 }
