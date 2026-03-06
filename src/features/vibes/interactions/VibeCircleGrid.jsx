@@ -1,3 +1,4 @@
+// VibeCircleGrid.jsx
 import React from "react";
 import VibeCircleTile from "./VibeCircleTile";
 import "./VibeCircleGrid.css";
@@ -16,7 +17,14 @@ function normalizeVibe(item) {
   const description =
     item?.description || item?.targetVibe?.description || item?.vibe?.description || "";
 
-  return { id, name, type, photo, description };
+  return {
+    id,
+    name,
+    type,
+    photo,
+    description,
+    interactionId: item?.interactionId || null,
+  };
 }
 
 function normType(type) {
@@ -58,11 +66,15 @@ function Section({ title, count, children }) {
   );
 }
 
-export default function VibeCircleGrid({ vibes = [], t }) {
+export default function VibeCircleGrid({
+  vibes = [],
+  t,
+  canRemove = false,
+  onRemove,
+  renderActions,
+}) {
   const list = React.useMemo(() => {
-    return Array.isArray(vibes)
-      ? vibes.map(normalizeVibe).filter((v) => !!v.id)
-      : [];
+    return Array.isArray(vibes) ? vibes.map(normalizeVibe).filter((v) => !!v.id) : [];
   }, [vibes]);
 
   const [q, setQ] = React.useState("");
@@ -84,6 +96,47 @@ export default function VibeCircleGrid({ vibes = [], t }) {
 
   const unnamed = t("labels.unnamed", { defaultValue: "Unnamed" });
 
+  const removeLabel = t("remove", { defaultValue: "Remove" });
+  const removeConfirm = t("remove_confirm", {
+    defaultValue: "Remove this subscriber? They will need to subscribe again.",
+  });
+
+  const renderTile = (v) => (
+    <VibeCircleTile
+      key={v.id}
+      vibe={{ ...v, name: v.name || unnamed }}
+      t={t}
+      actions={
+        renderActions
+          ? renderActions(v)
+          : canRemove ? (
+              <button
+                type="button"
+                className="vc-removeBtn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!onRemove) return;
+                  if (!window.confirm(removeConfirm)) return;
+                  onRemove(v.id);
+                }}
+                title={removeLabel}
+                aria-label={removeLabel}
+              >
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                  <path
+                    d="M6 6L18 18M18 6L6 18"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            ) : null
+      }
+    />
+  );
+
   if (total === 0) {
     return (
       <div className="text-center py-5">
@@ -93,8 +146,7 @@ export default function VibeCircleGrid({ vibes = [], t }) {
             height: 62,
             borderRadius: "50%",
             margin: "0 auto 10px",
-            background:
-              "linear-gradient(135deg, rgba(71,109,254,.18), rgba(160,115,255,.16))",
+            background: "linear-gradient(135deg, rgba(71,109,254,.18), rgba(160,115,255,.16))",
             display: "grid",
             placeItems: "center",
             color: "#476dfe",
@@ -126,11 +178,7 @@ export default function VibeCircleGrid({ vibes = [], t }) {
         <div className="vc-toolbar__left">
           <div className="vc-count">
             {q.trim()
-              ? t("count_filtered", {
-                  shown,
-                  total,
-                  defaultValue: `${shown} / ${total}`,
-                })
+              ? t("count_filtered", { shown, total, defaultValue: `${shown} / ${total}` })
               : t("count", { count: total, defaultValue: `${total} vibes` })}
           </div>
         </div>
@@ -143,9 +191,7 @@ export default function VibeCircleGrid({ vibes = [], t }) {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               className="vc-searchInput"
-              placeholder={t("search_placeholder", {
-                defaultValue: "Search by name...",
-              })}
+              placeholder={t("search_placeholder", { defaultValue: "Search by name..." })}
             />
             {q ? (
               <button
@@ -168,13 +214,7 @@ export default function VibeCircleGrid({ vibes = [], t }) {
           title={t("sections.business", { defaultValue: "Business" })}
           count={grouped.business.length}
         >
-          {grouped.business.map((v) => (
-            <VibeCircleTile
-              key={v.id}
-              vibe={{ ...v, name: v.name || unnamed }}
-              t={t}
-            />
-          ))}
+          {grouped.business.map(renderTile)}
         </Section>
       )}
 
@@ -183,13 +223,7 @@ export default function VibeCircleGrid({ vibes = [], t }) {
           title={t("sections.personal", { defaultValue: "Personal" })}
           count={grouped.personal.length}
         >
-          {grouped.personal.map((v) => (
-            <VibeCircleTile
-              key={v.id}
-              vibe={{ ...v, name: v.name || unnamed }}
-              t={t}
-            />
-          ))}
+          {grouped.personal.map(renderTile)}
         </Section>
       )}
 
@@ -198,13 +232,7 @@ export default function VibeCircleGrid({ vibes = [], t }) {
           title={t("sections.other", { defaultValue: "Others" })}
           count={grouped.other.length}
         >
-          {grouped.other.map((v) => (
-            <VibeCircleTile
-              key={v.id}
-              vibe={{ ...v, name: v.name || unnamed }}
-              t={t}
-            />
-          ))}
+          {grouped.other.map(renderTile)}
         </Section>
       )}
 

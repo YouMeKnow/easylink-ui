@@ -2,32 +2,45 @@ import React from "react";
 
 export default function NetworkTabs({
   active,
+  followersLabel,
+  followingLabel,
+  requestsLabel,
+  showRequests,
   onFollowers,
   onFollowing,
-  followersLabel = "Followers",
-  followingLabel = "Following",
+  onRequests,
+  loading,
 }) {
   return (
-    <div className="network-tabs" role="tablist" aria-label="Network tabs">
+    <div className={`network-tabs ${showRequests ? "network-tabs--3" : "network-tabs--2"}`}>
       <button
         type="button"
-        role="tab"
-        aria-selected={active === "followers"}
         className={`network-tabs__tab ${active === "followers" ? "is-active" : ""}`}
         onClick={onFollowers}
+        disabled={loading}
       >
         {followersLabel}
       </button>
 
       <button
         type="button"
-        role="tab"
-        aria-selected={active === "following"}
         className={`network-tabs__tab ${active === "following" ? "is-active" : ""}`}
         onClick={onFollowing}
+        disabled={loading}
       >
         {followingLabel}
       </button>
+
+      {showRequests && (
+        <button
+          type="button"
+          className={`network-tabs__tab ${active === "requests" ? "is-active" : ""}`}
+          onClick={onRequests}
+          disabled={loading}
+        >
+          {requestsLabel}
+        </button>
+      )}
     </div>
   );
 }

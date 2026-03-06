@@ -40,6 +40,9 @@ import CatalogItemPage from "@/features/vibes/catalog/pages/CatalogItemPage";
 import NetworkPage from "@/features/vibes/network/NetworkPage";
 import FollowersList from "@/features/vibes/network/FollowersList";
 import FollowingList from "@/features/vibes/network/FollowingList";
+import RequestsList from "@/features/vibes/network/RequestsList";
+
+import VibeSettingsPage from "@/features/vibes/VibeSettingsPage";
 
 export default function AppRoutes({ questions, setQuestions }) {
   return (
@@ -89,6 +92,7 @@ export default function AppRoutes({ questions, setQuestions }) {
       <Route path="/view/:id/network" element={<NetworkPage />}>
         <Route path="followers" element={<FollowersList />} />
         <Route path="following" element={<FollowingList />} />
+        <Route path="requests" element={<RequestsList />} />
       </Route>
       
       <Route
@@ -103,6 +107,8 @@ export default function AppRoutes({ questions, setQuestions }) {
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/ads" element={<Ads />} />
+      
+      <Route path="/vibes/:id/settings" element={<VibeSettingsPage />} />
     </Routes>
   );
 }

@@ -156,6 +156,13 @@ export default function VibePage() {
                   {t("edit")}
                 </button>
               )}
+              <Link
+                to={`/vibes/${id}/settings`}
+                className="btn-light-outline btn-compact vibe-settings-link"
+              >
+                <SettingsIcon />
+                <span>{t("settings", { defaultValue: "Settings" })}</span>
+              </Link>
             </div>
 
             {/* mobile */}
@@ -232,6 +239,15 @@ export default function VibePage() {
                   </svg>
                 </button>
               )}
+
+              <Link
+                to={`/vibes/${id}/settings`}
+                className="btn-light-outline btn-compact btn-icon vibe-settings-link"
+                aria-label={t("settings", { defaultValue: "Settings" })}
+                title={t("settings", { defaultValue: "Settings" })}
+              >
+                <SettingsIcon />
+              </Link>
             </div>
           </div>
         </header>
@@ -282,5 +298,71 @@ export default function VibePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function SettingsIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="settings-icon" aria-hidden="true">
+      <path
+        d="M4 6h10"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M18 6h2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <circle
+        cx="16"
+        cy="6"
+        r="2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+
+      <path
+        d="M4 12h2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M10 12h10"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <circle
+        cx="8"
+        cy="12"
+        r="2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+
+      <path
+        d="M4 18h10"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M18 18h2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <circle
+        cx="16"
+        cy="18"
+        r="2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+    </svg>
   );
 }

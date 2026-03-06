@@ -12,5 +12,38 @@
   "settings_panel_close": "Fermer",
   "error_no_id": "Erreur : ID du vibe manquant.",
   "error_save": "Échec de l’enregistrement !",
-  "view": "Page publique"
+  "view": "Page publique",
+
+  "settings_subtitle": "Choisissez qui peut voir ce vibe",
+
+  "current_access": "Accès actuel",
+  "current_access_hint": "Voici comment votre vibe est actuellement partagé.",
+
+  "public": "Public",
+  "private_auto": "Privé · Accès instantané",
+  "private_approval": "Privé · Approbation requise",
+
+  "public_access_summary": "Tout le monde peut voir ce vibe.",
+  "private_auto_summary": "Les personnes obtiennent automatiquement l’accès après leur demande.",
+  "private_approval_summary": "Vous approuvez chaque demande avant d’accorder l’accès.",
+
+  "summary_note_public": "Idéal pour un partage simple, la visibilité et la consultation ouverte du profil.",
+  "summary_note_auto": "Utile si vous voulez un mode privé plus souple sans validation manuelle.",
+  "summary_note_approval": "Idéal pour un contrôle plus strict des personnes qui obtiennent l’accès à votre vibe.",
+
+  "access_mode": "Mode d’accès",
+  "access_mode_hint": "Choisissez le mode de visibilité qui convient le mieux à votre vibe.",
+
+  "selected": "Sélectionné",
+  "recommended": "Recommandé",
+
+  "public_description": "Toute personne ayant le lien ou le profil peut voir ce vibe.",
+  "approval_description": "Les personnes envoient des demandes, et vous décidez qui obtient l’accès.",
+  "open_description": "Les personnes peuvent demander l’accès et l’obtenir automatiquement.",
+
+  "save_hint": "Les modifications influencent les personnes qui peuvent voir ce vibe.",
+  "cancel": "Annuler",
+  "save": "Enregistrer les modifications",
+  "saving": "Enregistrement..."
+
 }
