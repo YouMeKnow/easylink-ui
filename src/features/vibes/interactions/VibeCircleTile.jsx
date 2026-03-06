@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import SmartImage from "@/shared/ui/SmartImage";
+import "./VibeCircleTile.css";
 
 export default function VibeCircleTile({ vibe, t, actions = null }) {
   const navigate = useNavigate();
