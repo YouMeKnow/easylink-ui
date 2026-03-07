@@ -44,6 +44,29 @@
   "save_hint": "Les modifications influencent les personnes qui peuvent voir ce vibe.",
   "cancel": "Annuler",
   "save": "Enregistrer les modifications",
-  "saving": "Enregistrement..."
+  "saving": "Enregistrement...",
+    "print_card": "Carte imprimable",
+  "print_card_title": "Exporter une carte propre à imprimer",
+  "print_card_subtitle": "Prévisualisez l’apparence de la carte avant de la télécharger en PDF.",
+  "loading_print_card_text": "Préparation de l’aperçu de votre carte imprimable.",
+  "not_found_print_card_text": "Nous n’avons pas pu préparer cette carte pour l’impression.",
+  "generating_pdf": "Génération du PDF...",
+  "download_pdf": "Télécharger le PDF",
+  "preview": "Aperçu",
+  "preview_description": "Voici à quoi ressemblera votre carte imprimable.",
+  "card_details": "Détails de la carte",
+  "no_card_details": "Aucun détail disponible pour l’aperçu.",
+  "tips": "Conseils",
+  "print_tip_1": "Vérifiez l’espacement et le contenu avant l’export.",
+  "print_tip_2": "Le PDF est généré au format standard 3,5 × 2 pouces.",
+  "print_tip_3": "Le site web, le téléphone et l’e-mail rendent la carte plus utile.",
+  "print_card_labels": {
+    "name": "Nom",
+    "title": "Titre",
+    "phone": "Téléphone",
+    "email": "E-mail",
+    "website": "Site web",
+    "address": "Adresse"
+  }
 
 }
