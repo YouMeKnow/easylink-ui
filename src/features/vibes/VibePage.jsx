@@ -1,9 +1,7 @@
 // src/features/vibes/VibePage.jsx
-import React, { useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
-import { Link } from "react-router-dom";
 
 import VibeFormRenderer from "@/features/vibes/components/VibeFormRenderer";
 import VibeCard from "@/features/vibes/card/components/VibeCard";
@@ -25,6 +23,8 @@ export default function VibePage() {
   const token = accessToken;
 
   const [editing, setEditing] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef(null);
 
   const {
     vibe,
@@ -43,8 +43,55 @@ export default function VibePage() {
   const isBusiness = vibe?.type === "BUSINESS";
 
   const goToInteractions = useCallback(() => {
+    setMobileMenuOpen(false);
     navigate(`/view/${id}/network`);
   }, [navigate, id]);
+
+  const goToPrint = useCallback(() => {
+    setMobileMenuOpen(false);
+    navigate(`/vibes/${id}/print`);
+  }, [navigate, id]);
+
+  const goToSettings = useCallback(() => {
+    setMobileMenuOpen(false);
+    navigate(`/vibes/${id}/settings`);
+  }, [navigate, id]);
+
+  const openEdit = useCallback(() => {
+    setMobileMenuOpen(false);
+    setEditing(true);
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    }
+
+    function handleEscape(event) {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [editing, id]);
 
   if (loading) {
     return (
@@ -69,7 +116,6 @@ export default function VibePage() {
   return (
     <div className={`route-shell ${editing ? "is-editing" : ""}`}>
       <div className="container py-4 vibe-container">
-        {/* one header system */}
         <header className="vibe-topbar">
           <div className="vibe-topbar__left">
             <BackButton
@@ -133,6 +179,29 @@ export default function VibePage() {
                 {t("interactions")}
               </button>
 
+              <button
+                type="button"
+                className="btn-light-outline btn-compact d-flex align-items-center gap-2"
+                onClick={goToPrint}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M6 9V2h12v7" />
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                  <rect x="6" y="14" width="12" height="8" rx="1" />
+                </svg>
+                {t("print_card", { defaultValue: "Print Card" })}
+              </button>
+
               {!editing && (
                 <button
                   type="button"
@@ -156,6 +225,7 @@ export default function VibePage() {
                   {t("edit")}
                 </button>
               )}
+
               <Link
                 to={`/vibes/${id}/settings`}
                 className="btn-light-outline btn-compact vibe-settings-link"
@@ -166,30 +236,7 @@ export default function VibePage() {
             </div>
 
             {/* mobile */}
-            <div className="vibe-actions vibe-actions--mobile">
-              <a
-                href={`/view/${id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-light-outline btn-compact btn-icon"
-                aria-label={t("view")}
-                title={t("view")}
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M14 3h7v7" />
-                  <path d="M10 14L21 3" />
-                  <path d="M21 14v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6" />
-                </svg>
-              </a>
-
+            <div className="vibe-actions vibe-actions--mobile" ref={mobileMenuRef}>
               <button
                 type="button"
                 className="btn-main btn-compact btn-icon"
@@ -215,39 +262,77 @@ export default function VibePage() {
                 </svg>
               </button>
 
-              {!editing && (
-                <button
-                  type="button"
-                  className="btn-white btn-compact btn-icon"
-                  onClick={() => setEditing(true)}
-                  aria-label={t("edit")}
-                  title={t("edit")}
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M3 21l3-1 12.6-12.6a2.1 2.1 0 0 0 0-3L17.6 3.4a2.1 2.1 0 0 0-3 0L2 16l1 5z" />
-                    <path d="M14 4l6 6" />
-                  </svg>
-                </button>
-              )}
-
-              <Link
-                to={`/vibes/${id}/settings`}
-                className="btn-light-outline btn-compact btn-icon vibe-settings-link"
-                aria-label={t("settings", { defaultValue: "Settings" })}
-                title={t("settings", { defaultValue: "Settings" })}
+              <button
+                type="button"
+                className="btn-light-outline btn-compact btn-icon"
+                onClick={() => setMobileMenuOpen((prev) => !prev)}
+                aria-label={t("more", { defaultValue: "More" })}
+                title={t("more", { defaultValue: "More" })}
+                aria-expanded={mobileMenuOpen}
+                aria-haspopup="menu"
               >
-                <SettingsIcon />
-              </Link>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none" />
+                  <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+                  <circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none" />
+                </svg>
+              </button>
+
+              {mobileMenuOpen && (
+                <div className="vibe-mobile-menu" role="menu">
+                  <Link
+                    to={`/view/${id}`}
+                    className="vibe-mobile-menu__item"
+                    onClick={() => setMobileMenuOpen(false)}
+                    role="menuitem"
+                  >
+                    <MenuItemIcon type="view" />
+                    <span>{t("view")}</span>
+                  </Link>
+
+                  <button
+                    type="button"
+                    className="vibe-mobile-menu__item"
+                    onClick={goToPrint}
+                    role="menuitem"
+                  >
+                    <MenuItemIcon type="print" />
+                    <span>{t("print_card", { defaultValue: "Print Card" })}</span>
+                  </button>
+
+                  {!editing && (
+                    <button
+                      type="button"
+                      className="vibe-mobile-menu__item"
+                      onClick={openEdit}
+                      role="menuitem"
+                    >
+                      <MenuItemIcon type="edit" />
+                      <span>{t("edit")}</span>
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    className="vibe-mobile-menu__item"
+                    onClick={goToSettings}
+                    role="menuitem"
+                  >
+                    <MenuItemIcon type="settings" />
+                    <span>{t("settings", { defaultValue: "Settings" })}</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
@@ -365,4 +450,65 @@ function SettingsIcon() {
       />
     </svg>
   );
+}
+
+function MenuItemIcon({ type }) {
+  if (type === "view") {
+    return (
+      <svg
+        width="18"
+        height="18"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path d="M14 3h7v7" />
+        <path d="M10 14L21 3" />
+        <path d="M21 14v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6" />
+      </svg>
+    );
+  }
+
+  if (type === "print") {
+    return (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M6 9V2h12v7" />
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+        <rect x="6" y="14" width="12" height="8" rx="1" />
+      </svg>
+    );
+  }
+
+  if (type === "edit") {
+    return (
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M3 21l3-1 12.6-12.6a2.1 2.1 0 0 0 0-3L17.6 3.4a2.1 2.1 0 0 0-3 0L2 16l1 5z" />
+        <path d="M14 4l6 6" />
+      </svg>
+    );
+  }
+
+  return <SettingsIcon />;
 }

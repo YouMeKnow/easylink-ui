@@ -225,3 +225,154 @@
   flex-shrink: 0;
 }
 
+/* ---------- Topbar safety ---------- */
+.vibe-topbar__title,
+.vibe-topbar__right,
+.vibe-actions {
+  min-width: 0;
+}
+
+/* ---------- Mobile actions ---------- */
+@media (max-width: 768px) {
+  .vibe-actions--desktop {
+    display: none;
+  }
+
+  .vibe-actions--mobile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+  }
+
+  .vibe-topbar {
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+  }
+
+  .vibe-topbar__title {
+    min-width: 0;
+    padding: 0 4px;
+    font-size: 18px;
+  }
+
+  .vibe-topbar__right {
+    justify-content: flex-end;
+  }
+
+  .vibe-actions--mobile .btn-icon {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .vibe-mobile-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 220px;
+    padding: 8px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid var(--stroke);
+    box-shadow:
+      0 16px 40px rgba(15, 23, 42, 0.14),
+      0 4px 14px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 200;
+    animation: vibeMenuIn 0.16s ease-out;
+  }
+
+  .vibe-mobile-menu__item {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background 0.18s ease,
+      transform 0.08s ease,
+      color 0.18s ease;
+  }
+
+  .vibe-mobile-menu__item:hover,
+  .vibe-mobile-menu__item:focus-visible {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text);
+    text-decoration: none;
+    outline: none;
+  }
+
+  .vibe-mobile-menu__item:active {
+    transform: scale(0.985);
+  }
+
+  .vibe-mobile-menu__item svg {
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+}
+
+/* ---------- Very small phones ---------- */
+@media (max-width: 420px) {
+  .vibe-topbar {
+    gap: 6px;
+    padding: 8px 0 10px;
+  }
+
+  .vibe-topbar__title {
+    font-size: 16px;
+  }
+
+  .vibe-actions--mobile {
+    gap: 6px;
+  }
+
+  .vibe-actions--mobile .btn-icon {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+  }
+
+  .vibe-mobile-menu {
+    min-width: 200px;
+    right: 0;
+    padding: 6px;
+    border-radius: 16px;
+  }
+
+  .vibe-mobile-menu__item {
+    min-height: 42px;
+    padding: 10px 11px;
+    font-size: 13px;
+    border-radius: 12px;
+  }
+}
+
+/* ---------- Animation ---------- */
+@keyframes vibeMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

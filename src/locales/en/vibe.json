@@ -12,5 +12,28 @@
   "settings_panel_close": "Close",
   "error_no_id": "Error: Vibe ID is missing.",
   "error_save": "Save failed!",
-  "view": "Public page"
+  "view": "Public page",
+    "print_card": "Print Card",
+  "print_card_title": "Export a clean printable card",
+  "print_card_subtitle": "Preview how the card looks before downloading it as a PDF.",
+  "loading_print_card_text": "Preparing your print card preview.",
+  "not_found_print_card_text": "We could not prepare this card for printing.",
+  "generating_pdf": "Generating PDF...",
+  "download_pdf": "Download PDF",
+  "preview": "Preview",
+  "preview_description": "This is how your printable card will look.",
+  "card_details": "Card details",
+  "no_card_details": "No details available for preview.",
+  "tips": "Tips",
+  "print_tip_1": "Check spacing and content before export.",
+  "print_tip_2": "The PDF is generated in standard 3.5 × 2 inch format.",
+  "print_tip_3": "Website, phone and email make the card more useful.",
+  "print_card_labels": {
+    "name": "Name",
+    "title": "Title",
+    "phone": "Phone",
+    "email": "Email",
+    "website": "Website",
+    "address": "Address"
+  }
 }

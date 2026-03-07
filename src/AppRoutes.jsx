@@ -44,6 +44,8 @@ import RequestsList from "@/features/vibes/network/RequestsList";
 
 import VibeSettingsPage from "@/features/vibes/VibeSettingsPage";
 
+import VibePrintPage from "@/features/vibes/print/VibePrintPage";
+
 export default function AppRoutes({ questions, setQuestions }) {
   return (
     <Routes>
@@ -109,6 +111,8 @@ export default function AppRoutes({ questions, setQuestions }) {
       <Route path="/ads" element={<Ads />} />
       
       <Route path="/vibes/:id/settings" element={<VibeSettingsPage />} />
+
+      <Route path="/vibes/:id/print" element={<VibePrintPage />} />
     </Routes>
   );
 }
