@@ -50,64 +50,101 @@ export function AuthProvider({ children }) {
     }
   }
 
-  function scheduleExpiryLogout(token) {
-    const exp = decodeExp(token);
-    if (!exp) return;
-    const msLeft = exp * 1000 - Date.now();
-    clearTimer();
-    timer.current = setTimeout(() => {
-      logout("expired");
-    }, Math.max(0, msLeft));
+  async function refreshAccessToken() {
+    try {
+      const refresh =
+        typeof window !== "undefined" ? localStorage.getItem("refresh") : null;
+
+      if (!refresh) return null;
+
+      const res = await fetch("/api/v3/auth/refresh", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        cache: "no-store",
+        body: JSON.stringify({ refreshToken: refresh }),
+      });
+
+      if (!res.ok) {
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("jwt");
+        return null;
+      }
+
+      const data = await res.json().catch(() => ({}));
+      const newJwt = data?.accessToken || data?.token || null;
+
+      if (!newJwt) {
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("jwt");
+        return null;
+      }
+
+      localStorage.setItem("jwt", newJwt);
+      setAccessToken(newJwt);
+      sidecar.getAccess = () => newJwt;
+      restartNotificationsStream();
+
+      return newJwt;
+    } catch {
+      return null;
+    }
   }
 
-  // ✅ bootstrap: load jwt or refresh it if only refresh exists
+  function scheduleExpiryRefresh(token) {
+    const exp = decodeExp(token);
+    if (!exp) return;
+
+    const msLeft = exp * 1000 - Date.now();
+
+    // пробуем обновить access token за 1 минуту до истечения
+    // если времени меньше минуты — пробуем почти сразу
+    const refreshInMs = Math.max(5000, msLeft - 60_000);
+
+    clearTimer();
+
+    timer.current = setTimeout(async () => {
+      const newJwt = await refreshAccessToken();
+
+      if (newJwt) {
+        scheduleExpiryRefresh(newJwt);
+        return;
+      }
+
+      await logout("expired");
+    }, refreshInMs);
+  }
+
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
       try {
         const u = localStorage.getItem("user");
-        if (u) setUser(JSON.parse(u));
+        if (u) {
+          try {
+            setUser(JSON.parse(u));
+          } catch {
+            localStorage.removeItem("user");
+          }
+        }
 
         const jwt = localStorage.getItem("jwt");
         if (jwt) {
           if (cancelled) return;
+
           setAccessToken(jwt);
           sidecar.getAccess = () => jwt;
-          scheduleExpiryLogout(jwt);
+          scheduleExpiryRefresh(jwt);
           restartNotificationsStream();
           return;
         }
 
-        const refresh = localStorage.getItem("refresh");
-        if (refresh) {
-          const res = await fetch("/api/v3/auth/refresh", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            cache: "no-store",
-            body: JSON.stringify({ refreshToken: refresh }),
-          });
-
-          if (res.ok) {
-            const data = await res.json().catch(() => ({}));
-            const newJwt = data?.accessToken || data?.token || null;
-
-            if (newJwt) {
-              localStorage.setItem("jwt", newJwt);
-              if (cancelled) return;
-
-              setAccessToken(newJwt);
-              sidecar.getAccess = () => newJwt;
-              scheduleExpiryLogout(newJwt);
-              restartNotificationsStream();
-              return;
-            }
-          }
-
-          // refresh invalid => clean up
-          localStorage.removeItem("refresh");
-          localStorage.removeItem("jwt");
+        const newJwt = await refreshAccessToken();
+        if (newJwt) {
+          if (cancelled) return;
+          scheduleExpiryRefresh(newJwt);
+          return;
         }
       } catch {
         // ignore
@@ -121,33 +158,53 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  function login(userData, token, opts) {
+  function login(userData, token, opts = {}) {
+    const refreshToken = opts?.refreshToken || null;
+
     if (token) {
-      try { localStorage.setItem("jwt", token); } catch {}
+      try {
+        localStorage.setItem("jwt", token);
+      } catch {}
       sidecar.getAccess = () => token;
     } else {
-      try { localStorage.removeItem("jwt"); } catch {}
+      try {
+        localStorage.removeItem("jwt");
+      } catch {}
       sidecar.getAccess = () => null;
     }
 
+    if (refreshToken) {
+      try {
+        localStorage.setItem("refresh", refreshToken);
+      } catch {}
+    }
+
     setUser(userData);
-    try { localStorage.setItem("user", JSON.stringify(userData)); } catch {}
+    try {
+      localStorage.setItem("user", JSON.stringify(userData));
+    } catch {}
 
     setAccessToken(token || null);
     setCookieBased(!!opts?.cookieBased);
 
     clearTimer();
-    if (token) scheduleExpiryLogout(token);
+    if (token) scheduleExpiryRefresh(token);
 
     if (token) restartNotificationsStream();
     else stopNotificationsStream();
+
+    notifiedExpired.current = false;
   }
 
   async function logout(reason = "manual") {
     stopNotificationsStream();
 
     const refresh = (() => {
-      try { return localStorage.getItem("refresh"); } catch { return null; }
+      try {
+        return localStorage.getItem("refresh");
+      } catch {
+        return null;
+      }
     })();
 
     try {
