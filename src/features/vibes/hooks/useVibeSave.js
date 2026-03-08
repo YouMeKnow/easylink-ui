@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { updateVibe, getVibe } from "@/api/vibeApi";
+import { updateVibe, getOwnerVibe } from "@/api/vibeApi";
 import { useTranslation } from "react-i18next";
 
 export default function useVibeSave({ vibe, setVibe, setEditing }) {
@@ -29,7 +29,7 @@ export default function useVibeSave({ vibe, setVibe, setEditing }) {
           subscribeMode: updated.subscribeMode,
         });
 
-        const fresh = await getVibe(currentId);
+        const fresh = await getOwnerVibe(currentId);
         setVibe(fresh);
         setEditing(false);
       } catch (e) {

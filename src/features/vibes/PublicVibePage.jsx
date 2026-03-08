@@ -17,7 +17,6 @@ import { Instagram, Youtube, MessageCircle, Globe, Lock } from "lucide-react";
 import "@/features/vibes/styles/PublicVibePage.css";
 
 function FakeContactsRow({ style = {} }) {
-  // просто “силуэты” контактов под блюром (без клика)
   const iconStyle = { opacity: 0.85 };
   return (
     <div
@@ -44,14 +43,13 @@ function FakeContactsRow({ style = {} }) {
 function PrivateVibeCard({ t, vibeId, vibe, name, description, visible, publicCode }) {
   return (
     <div style={{ position: "relative" }}>
-      {/* base card: показываем name/photo/description */}
       <VibeCard
         id={vibeId}
         name={name}
         description={description}
         photo={vibe?.photo}
-        contacts={[]}       // важно: не отдаём реальные поля
-        extraBlocks={[]}    // важно: не отдаём реальные поля
+        contacts={[]}       
+        extraBlocks={[]}    
         type={vibe?.type || "OTHER"}
         visible={visible}
         publicCode={publicCode}
@@ -60,14 +58,13 @@ function PrivateVibeCard({ t, vibeId, vibe, name, description, visible, publicCo
         shareEnabled={false}
       />
 
-      {/* ====== НИЖНИЙ "PRIVACY" СЛОЙ ТОЛЬКО ДЛЯ КОНТАКТОВ ====== */}
       <div
         style={{
           position: "absolute",
           left: 14,
           right: 14,
           bottom: 14,
-          height: 190,                 // можно подогнать под твой VibeCard
+          height: 190,              
           borderRadius: 18,
           overflow: "hidden",
           pointerEvents: "none",
@@ -176,7 +173,7 @@ export default function PublicVibePage() {
     subscriberCount,
     followingCount,
     reload,
-  } = useVibeLoader(id, token);
+  } = useVibeLoader(id, token, "public");
 
   if (loading) {
     return (

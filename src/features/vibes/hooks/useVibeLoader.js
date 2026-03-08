@@ -1,13 +1,12 @@
-// src/features/vibes/hooks/useVibeLoader.js
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { getVibe } from "@/api/vibeApi";
+import { getOwnerVibe, getPublicVibe } from "@/api/vibeApi";
 import parseFields from "@/data/parseFields";
 
 const VIBE_CACHE = new Map();
 const TTL_MS = 2 * 60 * 1000;
 
-function makeKey(id, token) {
-  return `${id}|${token ? "auth" : "public"}`;
+function makeKey(id, token, mode) {
+  return `${mode}|${id}|${token ? "auth" : "public"}`;
 }
 
 function getCached(key) {
@@ -23,10 +22,6 @@ function getCached(key) {
 function setCached(key, data) {
   VIBE_CACHE.set(key, { data, ts: Date.now() });
 }
-
-/* -----------------------------
-   ExtraBlocks normalization
------------------------------- */
 
 const DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
 const dayAlias = {
@@ -88,10 +83,8 @@ function normalizeExtraBlocks(rawBlocks = []) {
     const typeRaw = String(b?.type || b?.kind || "").trim();
     const type = typeRaw.toLowerCase();
     const label = b?.label || "Field";
-
     const raw = parseMaybeJSON(b?.value);
 
-    // HOURS
     if (type === "hours") {
       const hours =
         toHoursObject(raw) ||
@@ -109,7 +102,6 @@ function normalizeExtraBlocks(rawBlocks = []) {
       };
     }
 
-    // DATE/BIRTHDAY
     if (type === "birthday" || type === "date") {
       return {
         id: b?.id ?? `extra-${i}`,
@@ -121,7 +113,6 @@ function normalizeExtraBlocks(rawBlocks = []) {
       };
     }
 
-    // DEFAULT TEXT
     return {
       id: b?.id ?? `extra-${i}`,
       type: typeRaw || "custom",
@@ -136,11 +127,27 @@ function normalizeExtraBlocks(rawBlocks = []) {
   });
 }
 
-export default function useVibeLoader(id, token) {
+async function fetchVibeByMode(id, token, mode, signal) {
+  if (mode === "owner") {
+    return getOwnerVibe(id, {
+      signal,
+      auth: "force",
+      token,
+    });
+  }
+
+  return getPublicVibe(id, {
+    signal,
+    auth: token ? "force" : "off",
+    token,
+  });
+}
+
+export default function useVibeLoader(id, token, mode = "public") {
   const cacheKey = useMemo(() => {
     if (!id) return null;
-    return makeKey(id, token);
-  }, [id, token]);
+    return makeKey(id, token, mode);
+  }, [id, token, mode]);
 
   const cached = cacheKey ? getCached(cacheKey) : null;
 
@@ -156,11 +163,10 @@ export default function useVibeLoader(id, token) {
   const [visible, setVisible] = useState(Boolean(cached?.visible));
   const [publicCode, setPublicCode] = useState(cached?.publicCode || "");
 
-  // viewer-aware
   const [subscriberCount, setSubscriberCount] = useState(
     typeof cached?.subscriberCount === "number" ? cached.subscriberCount : 0
   );
-  
+
   const [followingCount, setFollowingCount] = useState(
     typeof cached?.followingCount === "number" ? cached.followingCount : 0
   );
@@ -173,7 +179,7 @@ export default function useVibeLoader(id, token) {
     if (!id) return;
     setRefreshing(true);
     try {
-      const data = await getVibe(id, { auth: token ? "force" : "off", token });
+      const data = await fetchVibeByMode(id, token, mode);
       if (cacheKey) setCached(cacheKey, data);
       setVibe(data);
     } catch {
@@ -181,14 +187,13 @@ export default function useVibeLoader(id, token) {
     } finally {
       setRefreshing(false);
     }
-  }, [id, token, cacheKey]);
+  }, [id, token, mode, cacheKey]);
 
   useEffect(() => {
     if (!id) {
       setVibe(null);
       setLoading(false);
       setRefreshing(false);
-
       setName("");
       setDescription("");
       setContacts([]);
@@ -214,11 +219,7 @@ export default function useVibeLoader(id, token) {
 
     (async () => {
       try {
-        const data = await getVibe(id, {
-          signal: ac.signal,
-          auth: token ? "force" : "off",
-          token,
-        });
+        const data = await fetchVibeByMode(id, token, mode, ac.signal);
         if (ac.signal.aborted) return;
 
         if (cacheKey) setCached(cacheKey, data);
@@ -235,7 +236,7 @@ export default function useVibeLoader(id, token) {
     })();
 
     return () => ac.abort();
-  }, [id, cacheKey, token]);
+  }, [id, cacheKey, token, mode]);
 
   useEffect(() => {
     if (!vibe) return;
@@ -244,7 +245,6 @@ export default function useVibeLoader(id, token) {
     setDescription(vibe.description || "");
     setVisible(Boolean(vibe.visible));
     setPublicCode(vibe.publicCode || "");
-    
 
     const parsed = parseFields(vibe.fieldsDTO || []);
     setContacts(parsed?.contacts || []);
@@ -272,7 +272,6 @@ export default function useVibeLoader(id, token) {
     loading,
     refreshing,
     reload,
-    
     followingCount,
     name,
     description,
@@ -280,7 +279,6 @@ export default function useVibeLoader(id, token) {
     extraBlocks,
     visible,
     publicCode,
-
     subscriberCount,
     subscriberVibes,
   };

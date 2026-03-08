@@ -1,4 +1,3 @@
-// src/api/vibeApi.js
 import { apiFetch } from "@/api/apiFetch";
 
 export async function getUserVibes(init = {}) {
@@ -7,12 +6,21 @@ export async function getUserVibes(init = {}) {
   return res.json();
 }
 
-export async function getVibe(id, init = {}) {
+export async function getOwnerVibe(id, init = {}) {
   const res = await apiFetch(`/api/v3/vibes/${encodeURIComponent(id)}`, {
     method: "GET",
     ...init,
   });
-  if (!res.ok) throw new Error("Failed to load vibe");
+  if (!res.ok) throw new Error("Failed to load owner vibe");
+  return res.json();
+}
+
+export async function getPublicVibe(id, init = {}) {
+  const res = await apiFetch(`/api/v3/vibes/public/${encodeURIComponent(id)}`, {
+    method: "GET",
+    ...init,
+  });
+  if (!res.ok) throw new Error("Failed to load public vibe");
   return res.json();
 }
 

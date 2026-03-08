@@ -6,7 +6,7 @@ import OfferCard from "@/features/vibes/offers/components/OfferCard/OfferCard";
 import useMyFollowingEdges from "./hooks/useMyFollowingEdges";
 import useOffersForFollowingEdges from "./hooks/useOffersForFollowingEdges";
 import { useAuth } from "@/context/AuthContext";
-import { getVibe } from "@/api/vibeApi";
+import { getPublicVibe } from "@/api/vibeApi";
 import SmartImage from "@/shared/ui/SmartImage";
 
 import "./styles/ProfileSubscribedOffers.css";
@@ -141,7 +141,7 @@ export default function ProfileSubscribedOffers() {
       try {
         await mapLimit(missing, 6, async (id) => {
           try {
-            const v = await getVibe(id, { auth: "force", token });
+            const v = await getPublicVibe(id, { auth: "force", token });
             if (cancelled || !v?.id) return;
 
             setVibeById((prev) => {
