@@ -32,6 +32,16 @@ export default function VibePrintPage() {
     });
   }, [vibe, name, contacts]);
 
+  const cardsForPage = useMemo(() => {
+    if (!cardModel) return [];
+
+    return Array.from({ length: 10 }, () => ({
+      ...cardModel,
+      compact: true,
+      logoUrl: "/clearviewblue.png",
+    }));
+  }, [cardModel]);
+
   const infoItems = useMemo(() => {
     if (!cardModel) return [];
 
@@ -90,19 +100,19 @@ export default function VibePrintPage() {
 
       const dataUrl = await toPng(exportRef.current, {
         cacheBust: true,
-        pixelRatio: 6,
+        pixelRatio: 3,
         backgroundColor: "#ffffff",
         fontEmbedCSS: "",
       });
 
       const pdf = new jsPDF({
-        orientation: "landscape",
+        orientation: "portrait",
         unit: "in",
-        format: [3.5, 2],
+        format: "a4",
       });
 
-      pdf.addImage(dataUrl, "PNG", 0, 0, 3.5, 2);
-      pdf.save(`${cardModel.name || "business-card"}.pdf`);
+      pdf.addImage(dataUrl, "PNG", 0, 0, 8.27, 11.69);
+      pdf.save(`${cardModel.name || "business-cards"}-a4.pdf`);
     } catch (error) {
       console.error("Failed to generate business card PDF:", error);
       alert(`Failed to generate PDF: ${error?.message || error}`);
@@ -219,7 +229,13 @@ export default function VibePrintPage() {
               <div className="vp-preview-glow" />
 
               <div className="vp-preview-scale">
-                <BusinessCardPreview card={cardModel} />
+                <BusinessCardPreview
+                  card={{
+                    ...cardModel,
+                    compact: true,
+                    logoUrl: "/clearviewblue.png",
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -233,7 +249,10 @@ export default function VibePrintPage() {
               <div className="vp-meta">
                 {infoItems.length > 0 ? (
                   infoItems.map((item) => (
-                    <div className="vp-meta-row" key={`${item.label}-${item.value}`}>
+                    <div
+                      className="vp-meta-row"
+                      key={`${item.label}-${item.value}`}
+                    >
                       <span className="vp-meta-label">{item.label}</span>
                       <span className="vp-meta-value">{item.value}</span>
                     </div>
@@ -261,12 +280,14 @@ export default function VibePrintPage() {
                 </li>
                 <li>
                   {t("print_tip_2", {
-                    defaultValue: "The PDF is generated in standard 3.5 × 2 inch format.",
+                    defaultValue:
+                      "The PDF is generated as an A4 sheet with multiple cards.",
                   })}
                 </li>
                 <li>
                   {t("print_tip_3", {
-                    defaultValue: "Website, phone and email make the card more useful.",
+                    defaultValue:
+                      "Website, phone and email make the card more useful.",
                   })}
                 </li>
               </ul>
@@ -278,21 +299,36 @@ export default function VibePrintPage() {
       <div className="vp-export-hidden">
         <div
           ref={exportRef}
-          className="vp-export-capture"
+          className="vp-export-sheet"
           style={{
-            width: "3.5in",
-            height: "2in",
+            width: "8.27in",
+            height: "11.69in",
             background: "#ffffff",
             fontFamily: "Arial, sans-serif",
+            boxSizing: "border-box",
+            padding: "0.345in",
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 3.5in)",
+            gridAutoRows: "2in",
+            gap: "0.2in",
+            justifyContent: "center",
+            alignContent: "start",
           }}
         >
-          <BusinessCardPreview
-            card={{
-              ...cardModel,
-              compact: true,
-              logoUrl: "/clearviewblue.png",
-            }}
-          />
+          {cardsForPage.map((card, index) => (
+            <div
+              key={index}
+              style={{
+                width: "3.5in",
+                height: "2in",
+                overflow: "hidden",
+                background: "#ffffff",
+                boxSizing: "border-box",
+              }}
+            >
+              <BusinessCardPreview card={card} />
+            </div>
+          ))}
         </div>
       </div>
     </div>
