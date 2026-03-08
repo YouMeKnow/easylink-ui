@@ -76,5 +76,10 @@
       "details_label": "Détails",
       "details_value": "Présentations, Q&R, collations et démos Vibe en direct."
     }
+  },
+  "search": {
+    "kicker": "RECHERCHE VIBE",
+    "title": "Ouvrir un Vibe par code",
+    "description": "Entrez un code de vibe pour ouvrir instantanément n’importe quel vibe — personnel, professionnel ou événement."
   }
 }

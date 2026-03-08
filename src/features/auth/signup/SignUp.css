@@ -1,0 +1,19 @@
+/* SignUp.css */
+
+.signup-page {
+  background: transparent;
+  min-height: calc(100vh - 80px);
+  padding: 32px 16px;
+}
+
+.signup-topbar {
+  max-width: 1040px;
+  margin: 0 auto 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.signup-body {
+  max-width: 1040px;
+  margin: 0 auto;
+}

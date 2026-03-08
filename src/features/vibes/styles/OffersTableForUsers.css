@@ -1,0 +1,216 @@
+.offers-users {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.offers-users__header {
+  margin-bottom: 14px;
+}
+
+.offers-users__subtitle {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.offers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* row */
+.offer-row {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+
+  padding: 14px 14px 14px 0;
+  border-radius: 16px;
+
+  background: color-mix(in oklab, #ffffff 92%, #f4f6ff);
+  border: 1px solid color-mix(in oklab, #cbd5e1 55%, transparent);
+  box-shadow: 0 6px 18px rgba(2, 8, 23, 0.06);
+
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+
+.offer-row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(2, 8, 23, 0.10);
+  border-color: color-mix(in oklab, #94a3b8 65%, transparent);
+}
+
+.offer-row:focus-visible {
+  outline: 3px solid color-mix(in oklab, #3b82f6 45%, transparent);
+  outline-offset: 2px;
+}
+
+.offer-row__bar {
+  width: 6px;
+  border-radius: 999px;
+  margin-left: 12px;
+  background: #94a3b8;
+}
+
+.offer-row__bar.tone-success { background: #22c55e; }
+.offer-row__bar.tone-info { background: #3b82f6; }
+.offer-row__bar.tone-muted { background: #94a3b8; }
+.offer-row__bar.tone-neutral { background: #a1a1aa; }
+
+.offer-row__main {
+  flex: 1;
+  min-width: 0;
+  padding-right: 6px;
+}
+
+.offer-row__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.offer-row__title {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.offer-row__badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.offer-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.offer-badge.tone-success {
+  background: color-mix(in oklab, #22c55e 18%, #ffffff);
+  color: #166534;
+  border-color: color-mix(in oklab, #22c55e 35%, transparent);
+}
+
+.offer-badge.tone-info {
+  background: color-mix(in oklab, #3b82f6 16%, #ffffff);
+  color: #1d4ed8;
+  border-color: color-mix(in oklab, #3b82f6 32%, transparent);
+}
+
+.offer-badge.tone-muted {
+  background: color-mix(in oklab, #94a3b8 18%, #ffffff);
+  color: #475569;
+  border-color: color-mix(in oklab, #94a3b8 35%, transparent);
+}
+
+.offer-badge.tone-neutral {
+  background: color-mix(in oklab, #64748b 14%, #ffffff);
+  color: #334155;
+  border-color: color-mix(in oklab, #64748b 30%, transparent);
+}
+
+.offer-row__desc {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.offer-row__meta {
+  margin-top: 10px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.offer-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.offer-meta__label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.offer-meta__value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.offer-row__chev {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  font-weight: 900;
+  color: #94a3b8;
+}
+
+.offer-row:hover .offer-row__chev {
+  color: #64748b;
+}
+
+/* empty */
+.offers-empty {
+  margin-top: 18px;
+  padding: 26px 18px;
+  border-radius: 18px;
+  text-align: center;
+  background: color-mix(in oklab, #ffffff 92%, #f8fafc);
+  border: 1px solid color-mix(in oklab, #cbd5e1 55%, transparent);
+}
+
+.offers-empty__icon {
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+.offers-empty__title {
+  font-weight: 900;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.offers-empty__text {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* footer */
+.offers-users__footer {
+  margin-top: 18px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(148, 163, 184, 0.35);
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .offer-row {
+    padding-right: 10px;
+  }
+  .offer-row__title {
+    font-size: 15px;
+  }
+}

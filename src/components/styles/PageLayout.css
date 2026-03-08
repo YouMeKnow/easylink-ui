@@ -1,0 +1,33 @@
+.page-layout__title {
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.page-layout__title {
+  text-shadow: 0 1px 0 rgba(0,0,0,0.08);
+}
+
+.page-layout__header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px; /* left | title | right */
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.page-layout__title {
+  text-align: center;
+  margin: 0;
+}
+
+.page-layout__slot {
+  display: flex;
+  align-items: center;
+}
+
+.page-layout__slot--left {
+  justify-content: flex-start;
+}
+
+.page-layout__slot--right {
+  justify-content: flex-end;
+}

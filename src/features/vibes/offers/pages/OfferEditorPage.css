@@ -1,0 +1,36 @@
+/* OfferEditorPage – token friendly overrides */
+.offer-editor {
+  color: var(--text);
+}
+
+/* bootstrap "text-muted" becomes token-muted */
+.offer-editor .text-muted {
+  color: var(--text-weak) !important;
+}
+
+/* header title */
+.offer-editor h3 {
+  color: var(--text);
+}
+
+/* badges: keep readable on dark */
+.offer-editor .badge {
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+  background: color-mix(in oklab, var(--surface) 80%, transparent) !important;
+  color: var(--text) !important;
+  font-weight: 800;
+}
+
+/* warning badge (Unsaved changes) */
+.offer-editor .badge.text-bg-warning {
+  background: color-mix(in oklab, rgb(var(--accent-from)) 22%, var(--surface)) !important;
+  border-color: color-mix(in oklab, rgb(var(--accent-from)) 40%, var(--stroke));
+  color: var(--text) !important;
+}
+
+/* danger badge (Invalid time range) */
+.offer-editor .badge.text-bg-danger {
+  background: color-mix(in oklab, #ef4444 18%, var(--surface)) !important;
+  border-color: color-mix(in oklab, #ef4444 40%, var(--stroke));
+  color: var(--text) !important;
+}

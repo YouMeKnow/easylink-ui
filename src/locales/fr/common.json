@@ -4,5 +4,12 @@
   "save": "Enregistrer",
   "close": "Fermer",
   "back": "Retour",
-  "loading": "Chargement..."
+  "loading": "Chargement...",
+  "done": "Terminé",
+  "pick_type_for_contact": "Choisissez le type de contact",
+  "toggle_contacts": "Ajouter / supprimer des contacts",
+  "save_changes": "Enregistrer les modifications",
+  "create": "Créer",
+  "saving": "Enregistrement...",
+  "creating": "Création..."
 }

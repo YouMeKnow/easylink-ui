@@ -11,10 +11,11 @@ import PanelOther from "./components/PanelOther";
 
 import useTiltOnHover from "./hooks/useTiltOnHover";
 import "../styles/Home.css";
+
 import BusinessVibeDemo from "@/features/vibes/forms/business/BusinessVibeDemo";
 import PersonalVibeDemo from "@/features/vibes/forms/personal/PersonalVibeDemo";
 import EventVibeDemo from "@/features/vibes/forms/events/EventVibeDemo";
-
+import VibeSearch from "@/components/common/VibeSearch";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -23,10 +24,11 @@ const fadeUp = {
 const scaleTap = { whileTap: { scale: 0.985 } };
 
 export default function Home() {
-  const { isAuthenticated } = useAuth?.() || { isAuthenticated: false };
+  const { isAuthenticated = false } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation?.("home") || { t: (k, d) => d ?? k };
+  const { t } = useTranslation("home");
   const reduce = useReducedMotion();
+  const shouldReduce = useReducedMotion();
 
   const [tab, setTab] = useState("business");
   const TabPanel = useMemo(() => {
@@ -36,12 +38,11 @@ export default function Home() {
   }, [tab]);
 
   const [showDemo, setShowDemo] = useState(false);
-  const shouldReduce = useReducedMotion();
   const cardMouse = useTiltOnHover({ maxDeg: 2, liftPx: 2 });
-  
+
   // --- helpers ---
-  const tabToType = (t) =>
-    t === "personal" ? "PERSONAL" : t === "event" ? "EVENT" : "BUSINESS";
+  const tabToType = (tt) =>
+    tt === "personal" ? "PERSONAL" : tt === "event" ? "EVENT" : "BUSINESS";
 
   // --- get started button ---
   const handleGetStarted = useCallback(() => {
@@ -73,57 +74,123 @@ export default function Home() {
     const { body } = document;
     const prev = body.style.overflow;
     body.style.overflow = "hidden";
-    return () => { body.style.overflow = prev; };
+    return () => {
+      body.style.overflow = prev;
+    };
   }, [showDemo]);
 
   // ESC closes drawer
   useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") setShowDemo(false); };
+    const onKey = (e) => {
+      if (e.key === "Escape") setShowDemo(false);
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   return (
     <main className="home" role="main">
+      {/* HERO (instagram-like: left copy, right device preview) */}
       <motion.section
-        className="hero"
+        className="hero hero--ig"
         initial="hidden"
         animate="visible"
         variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
         aria-labelledby="hero-title"
-        tabIndex={0}
-        onKeyDown={(e) => { if (e.key === "Enter") handleGetStarted(); }}
       >
-        <motion.h1 id="hero-title" className="hero__title" variants={fadeUp}>
-          <span className="hero__title-gradient">
-            {t("headline_prefix", "Your digital identity,")}
-            <br className="hide-sm" /> {t("headline_suffix", "beautifully simple")}
-          </span>
-        </motion.h1>
+        <div className="hero-inner">
+          <div className="hero-ig">
+            {/* LEFT */}
+            <div className="hero-ig__left">
+              <motion.h1 id="hero-title" className="hero-ig__title" variants={fadeUp}>
+                {t("headline_prefix", "Your digital identity,")}
+                <br className="hide-sm" />
+                <span className="hero__title-gradient">
+                  {t("headline_suffix", "beautifully simple")}
+                </span>
+              </motion.h1>
+              <motion.p className="hero-ig__sub" variants={fadeUp}>
+                {t(
+                  "subheadline",
+                  "Create a Vibe — a shareable profile with passwordless login and built-in analytics."
+                )}
+              </motion.p>
 
-        <motion.p className="hero__subtitle" variants={fadeUp}>
-          {t("subheadline", "Create a Vibe — a fast, shareable profile with passwordless login and built-in analytics.")}
-        </motion.p>
+              <motion.div className="hero-ig__actions" variants={fadeUp}>
+                <button
+                  type="button"
+                  className="btn-cta btn-cta--pill btn-cta--lg"
+                  onClick={handleGetStarted}
+                >
+                  {t("get_started", "Get started")} →
+                </button>
 
-        <motion.button
-          className="btn-cta btn-cta--xl"
-          onClick={handleGetStarted}
-          whileHover={!reduce ? { y: -1 } : undefined}
-          whileTap={!reduce ? { scale: 0.985 } : undefined}
-          aria-label={t("get_started", "Get started")}
-          title={t("get_started", "Get started")}
-        >
-          {t("get_started", "Get started")}
-        </motion.button>
+                <button
+                  type="button"
+                  className="btn-link-ghost btn-link-ghost--pill"
+                  onClick={() => navigate("/about")}
+                >
+                  {t("learn_more", "How it works")}
+                </button>
+              </motion.div>
+            </div>
+
+            {/* RIGHT */}
+            <motion.div className="hero-ig__right" variants={fadeUp} aria-hidden="true">
+              <div className="hero-media">
+                <img
+                  src="/home_page/example3.png"
+                  alt=""
+                  className="hero-media__img"
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </div>
       </motion.section>
+
+      {/* Search */}
+      <section className="search-stage">
+        <div className="search-stage__shell">
+          <div className="search-stage__inner">
+            {/* LEFT */}
+            <div className="search-stage__left">
+              <h2 className="search-stage__title">
+                {t("search.title")}
+              </h2>
+
+              <p className="search-stage__desc">
+                {t("search.description")}
+              </p>
+
+              <VibeSearch autoFocus={false} />
+            </div>
+
+            {/* RIGHT */}
+            <div className="search-stage__right" aria-hidden="true">
+              <img
+                className="search-stage__img"
+                src="/home_page/search/hero.png"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Visual divider between sections */}
+      <div className="home__divider" aria-hidden="true" />
 
       {/* Tabs section */}
       <motion.section
-        className="container-xxl px-3 px-md-4"
-        variants={fadeUp}
+        className="container-xxl px-3 px-md-4 home__explore"
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
+        animate="visible"
+        variants={fadeUp}
       >
         <div className="glass p-3 p-md-4">
           <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3">
@@ -157,7 +224,7 @@ export default function Home() {
           <div className="cta-row">
             <motion.button
               {...scaleTap}
-                onClick={handleCreateThisVibe}
+              onClick={handleCreateThisVibe}
               className="btn-cta btn-cta--pill btn-cta--lg"
               whileHover={!shouldReduce ? { y: -1 } : undefined}
             >
@@ -179,7 +246,6 @@ export default function Home() {
       <AnimatePresence>
         {tab === "business" && showDemo && (
           <>
-            {/* Backdrop */}
             <motion.div
               key="demo-backdrop"
               className="demo-backdrop"
@@ -191,7 +257,6 @@ export default function Home() {
               aria-hidden
             />
 
-            {/* Panel */}
             <motion.aside
               key="demo-panel"
               className="demo-panel"
@@ -211,9 +276,13 @@ export default function Home() {
                   aria-label="Close"
                   autoFocus
                 >
-                  {/* simple close icon */}
                   <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    <path
+                      d="M6 6l12 12M18 6L6 18"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -224,11 +293,11 @@ export default function Home() {
           </>
         )}
       </AnimatePresence>
+
       {/* Drawer demo for Personal */}
       <AnimatePresence>
         {tab === "personal" && showDemo && (
           <>
-            {/* Backdrop */}
             <motion.div
               key="demo-backdrop-personal"
               className="demo-backdrop"
@@ -240,7 +309,6 @@ export default function Home() {
               aria-hidden
             />
 
-            {/* Panel */}
             <motion.aside
               key="demo-panel-personal"
               className="demo-panel"
@@ -260,12 +328,7 @@ export default function Home() {
                   aria-label="Close"
                   autoFocus
                 >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
                     <path
                       d="M6 6l12 12M18 6L6 18"
                       stroke="currentColor"
@@ -282,11 +345,11 @@ export default function Home() {
           </>
         )}
       </AnimatePresence>
-      {/* Drawer demo for Event */}
+
+      {/* Drawer demo for Other */}
       <AnimatePresence>
         {tab === "other" && showDemo && (
           <>
-            {/* Backdrop */}
             <motion.div
               key="demo-backdrop-event"
               className="demo-backdrop"
@@ -298,7 +361,6 @@ export default function Home() {
               aria-hidden
             />
 
-            {/* Panel */}
             <motion.aside
               key="demo-panel-event"
               className="demo-panel"
@@ -308,7 +370,7 @@ export default function Home() {
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               role="dialog"
               aria-modal="true"
-              aria-label="Event Vibe live demo"
+              aria-label="Other Vibe live demo"
             >
               <div className="demo-panel__header">
                 <h3 className="m-0">Other Vibe — Live demo</h3>
@@ -319,7 +381,12 @@ export default function Home() {
                   autoFocus
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    <path
+                      d="M6 6l12 12M18 6L6 18"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </button>
               </div>

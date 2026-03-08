@@ -4,14 +4,15 @@
 // =======================
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import ProfileCards from "./components/ProfileCards";
 import getProfileCards from "./utils/profileCardsConfig";
-import useHasVibes from "../../components/common/hooks/useHasVibes";
-import VibeSearch from "../../components/common/VibeSearch";
+import useHasVibes from "@/components/common/hooks/useHasVibes";
+import VibeSearch from "@/components/common/VibeSearch";
+import ProfileSubscribedOffers from "./ProfileSubscribedOffers"; 
 
-import "./styles/Profile.css"; // NEW
+import "./styles/Profile.css"; 
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -43,14 +44,20 @@ export default function Profile() {
         </section>
 
         {/* Search */}
-        <section className="profile__search glass animate-fadeIn" role="search">
+        <section className="profile__search animate-fadeIn" role="search">
           <VibeSearch />
-        </section>
+        </section>    
 
         {/* Cards */}
         <section className="profile__cards animate-stagger">
           <ProfileCards cards={profileCards} />
         </section>
+
+        {/* Offers from subscriptions */}
+        <section className="profile__offers animate-slideUp" aria-label={t("offers_from_subscriptions", { defaultValue: "Offers from subscriptions" })}>
+          <ProfileSubscribedOffers />
+        </section>
+
       </div>
     </main>
   );

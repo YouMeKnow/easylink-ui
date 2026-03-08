@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+  import React, { useState, useRef, useEffect } from "react";
 import avatarPlaceholder from "../../../assets/avatarPlaceholder.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/Sidebar.css";

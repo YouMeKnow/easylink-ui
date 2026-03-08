@@ -98,10 +98,19 @@ export function useStartAuthForm({
       toast.success(t("auth.success"), { position: "top-right" });
       setAuthResult(t("auth.success"));
       login({ email, timezone }, accessToken, { cookieBased });
-      const target = redirectTo ? (subscribe === "true" ? `${redirectTo}?subscribe=true` : redirectTo) : "/profile";
-      window.__navlog?.("navigate →", target);
-      // console.trace("navigate trace");
-      navigate(target);
+      let target = redirectTo || "/profile";
+
+      if (subscribe === "true") {
+        try {
+          const u = new URL(target, window.location.origin);
+          u.searchParams.set("subscribe", "true");
+          target = u.pathname + u.search + u.hash;
+        } catch {
+          target = target.includes("?") ? `${target}&subscribe=true` : `${target}?subscribe=true`;
+        }
+      }
+
+      navigate(target, { replace: true });
     } catch (err) {
       console.error("[checkAnswers] status=%s, message=%s", err?.status, err?.message, err);
       if (err?.status === 423) {

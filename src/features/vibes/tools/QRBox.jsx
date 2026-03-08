@@ -1,22 +1,30 @@
 import React from "react";
 import { QRCodeCanvas } from "qrcode.react";
+import "./QRBox.css";
 
-export default function QRBox({ id, t }) {
+export default function QRBox({ id, shareUrl, t, size = 100 }) {
   const origin =
     typeof window !== "undefined" && window.location?.origin
       ? window.location.origin
       : "";
 
-  if (id) {
+  const value = shareUrl || (id ? `${origin}/view/${id}` : "");
+
+  if (value) {
     return (
       <>
-        <QRCodeCanvas
-          value={`${origin}/vibes/${id}`}
-          size={60}
-          includeMargin={false}
-          aria-label={t("qr_aria")}
-        />
-        <div style={{ fontSize: 12, color: "#aaa" }}>{t("share_qr")}</div>
+<QRCodeCanvas
+  value={value}
+  size={size}
+  bgColor="#ffffff"
+  fgColor="#000000"
+  includeMargin={true}
+  className="vibe-qr-canvas"
+  aria-label={t("qr_aria", { defaultValue: "QR code for sharing" })}
+/>
+        <div style={{ fontSize: 12, color: "#aaa" }}>
+          {t("share_qr", { defaultValue: "Share QR code" })}
+        </div>
       </>
     );
   }
@@ -25,8 +33,8 @@ export default function QRBox({ id, t }) {
     <div
       className="qr-preview"
       style={{
-        width: 60,
-        height: 60,
+        width: size,
+        height: size,
         background: "#fafafa",
         border: "1.5px dashed #ddd",
         borderRadius: 9,
@@ -36,7 +44,7 @@ export default function QRBox({ id, t }) {
         fontSize: 18,
         color: "#aaa",
       }}
-      title={t("qr_hint")}
+      title={t("qr_hint", { defaultValue: "Generate a shareable QR" })}
     >
       QR
     </div>

@@ -12,49 +12,55 @@ export default function StepEmail({ form }) {
   };
 
   return (
-    <div className="card p-5 shadow-sm animate-fadein">
-      <div className="mb-2 small text-muted">{t("step1_info")}</div>
+    <div className="signup-step animate-fadein">
+      <div className="signup-step-lead">{t("step1_info")}</div>
 
-      <label className="form-label" htmlFor="signup-email">
-        {t("step1_label")}
-      </label>
+      <div className="signup-field">
+        <label className="signup-label" htmlFor="signup-email">
+          {t("step1_label")}
+        </label>
 
-      <div className="input-group mb-2">
-        <input
-          id="signup-email"
-          type="email"
-          className={`form-control ${invalid ? "is-invalid" : ""}`}
-          value={form.email}
-          onChange={form.handleEmailChange}
-          onBlur={() => form.setEmailTouched(true)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") goNext();
-          }}
-          placeholder={t("step1_placeholder", { defaultValue: "you@example.com" })}
-          aria-invalid={invalid || undefined}
-          aria-describedby={invalid ? "signup-email-error" : undefined}
-        />
+        <div className={`signup-input ${invalid ? "is-invalid" : ""}`}>
+          <input
+            id="signup-email"
+            type="email"
+            value={form.email}
+            onChange={form.handleEmailChange}
+            onBlur={() => form.setEmailTouched(true)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") goNext();
+            }}
+            placeholder={t("step1_placeholder", { defaultValue: "you@example.com" })}
+            aria-invalid={invalid || undefined}
+            aria-describedby={invalid ? "signup-email-error" : undefined}
+            className="signup-input-el"
+          />
+
+          {invalid && (
+            <span className="signup-input-icon" aria-hidden="true">
+              {/* без bootstrap icons, чтобы не зависеть от них */}
+              !
+            </span>
+          )}
+        </div>
+
         {invalid && (
-          <span className="input-group-text bg-white border-danger">
-            <i className="bi bi-exclamation-circle text-danger" aria-hidden="true"></i>
-          </span>
+          <div id="signup-email-error" className="signup-error">
+            {t("step1_invalid")}
+          </div>
         )}
       </div>
 
-      {invalid && (
-        <div id="signup-email-error" className="invalid-feedback d-block">
-          {t("step1_invalid")}
-        </div>
-      )}
-
-      <button
-        type="button"
-        className="btn btn-primary mt-3"
-        onClick={goNext}
-        disabled={!form.email.trim()}
-      >
-        {t("step1_next")}
-      </button>
+      <div className="signup-actions">
+        <button
+          type="button"
+          className="signup-btn signup-btn-primary"
+          onClick={goNext}
+          disabled={!form.email.trim()}
+        >
+          {t("step1_next")}
+        </button>
+      </div>
     </div>
   );
 }

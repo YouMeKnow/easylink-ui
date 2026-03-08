@@ -1,0 +1,119 @@
+/* ===== LAYOUT (single source of truth) ===== */
+.public-vibe-layout {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px;
+
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  align-items: start;
+}
+
+/* left column (card + back) */
+.public-vibe-layout__main {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* card centered */
+  min-width: 0;
+}
+
+/* back button stays left within main column */
+.public-back {
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 14px;
+
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* card wrapper (same width as back row) */
+.public-vibe-layout__card {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* right column */
+.public-vibe-layout__side {
+  width: 100%;
+  min-width: 0;
+}
+
+/* tablet/mobile */
+@media (max-width: 992px) {
+  .public-vibe-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .public-vibe-layout__side {
+    order: 2;
+  }
+}
+
+/* loading */
+.public-loading {
+  display: grid;
+  place-items: center;
+  min-height: 40vh;
+}
+
+/* ===== back button (same chevron style) ===== */
+.public-back .back-btn {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--stroke) 85%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 120ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.public-back .back-btn::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid color-mix(in srgb, var(--text) 88%, transparent);
+  border-bottom: 2px solid color-mix(in srgb, var(--text) 88%, transparent);
+  transform: rotate(45deg);
+  margin-left: 2px;
+}
+
+.public-back .back-btn:hover {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border-color: color-mix(in srgb, var(--stroke) 100%, transparent);
+  transform: translateY(-1px);
+}
+
+.public-back-floating {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 16px 0 16px;
+}
+
+.public-back-floating .back-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--stroke) 85%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 120ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.public-back-floating .back-btn::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid color-mix(in srgb, var(--text) 88%, transparent);
+  border-bottom: 2px solid color-mix(in srgb, var(--text) 88%, transparent);
+  transform: rotate(45deg);
+  margin-left: 2px;
+}

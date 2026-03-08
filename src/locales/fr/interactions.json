@@ -10,7 +10,9 @@
   "following_empty": "Vous n’êtes encore abonné à personne.",
   "followers_empty": "Personne ne vous suit pour l’instant.",
   "sections": {
-    "offers": "Offres",
+    "business": "Business",
+    "personal": "Personnel",
+    "other": "Autres",
     "following": "Abonnements"
   },
   "tabs": {
@@ -23,5 +25,33 @@
   "table": {
     "vibe": "Vibe",
     "offer": "Offre"
+  },
+  "subtitle": "Choisissez ce que vous voulez voir.",
+  "circle": {
+    "title": "Mon cercle",
+    "description": "Entreprises et profils que vous suivez.",
+    "button": "Voir le cercle"
+  },
+  "offers": {
+    "title": "Mes offres",
+    "description": "Promotions actives de votre cercle.",
+    "button": "Voir les offres"
+  },
+  "myCircle": "Mon cercle",
+  "search_placeholder": "Rechercher par nom…",
+  "count": "{{count}} vibes",
+  "count_filtered": "{{shown}} / {{total}}",
+  "no_results": "Aucun résultat.",
+  "network": {
+    "title": "Réseau",
+    "tabs": {
+      "followers": "Abonnés",
+      "following": "Abonnements"
+    },
+    "back": "Retour"
+  },
+  "empty": {
+    "circle": "Aucun vibe pour l’instant.",
+    "circle_hint": ""
   }
 }

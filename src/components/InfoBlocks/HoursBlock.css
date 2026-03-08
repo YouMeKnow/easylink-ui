@@ -1,0 +1,240 @@
+/* ================================
+   HoursScope (clean)
+   ================================ */
+
+.hours-scope{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--ct-text);
+
+  /* panel by default (can be disabled in extra-chip--hours) */
+  padding: 12px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+/* top area */
+.hours-scope__top{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hours-scope__scopes{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* scope buttons */
+.hours-scope__scopeBtn{
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--ct-chip-border);
+  background: color-mix(in srgb, var(--ct-chip-bg) 80%, transparent);
+  color: var(--ct-text);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.hours-scope__scopeBtn--ghost{
+  background: transparent;
+}
+
+.hours-scope__scopeBtn.is-active{
+  border-color: color-mix(in srgb, rgba(var(--accent-to), .55) 55%, var(--ct-chip-border));
+  background: color-mix(in srgb, rgba(var(--accent-to), .18) 55%, var(--ct-chip-bg));
+  box-shadow: 0 0 0 3px color-mix(in srgb, rgba(var(--accent-to), .22) 55%, transparent);
+}
+
+/* range */
+.hours-scope__range{
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+}
+
+@media (max-width: 520px){
+  .hours-scope__range{ grid-template-columns: 1fr 1fr; }
+  .hours-scope__apply{ grid-column: 1 / -1; }
+}
+
+.hours-scope__field{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hours-scope__label{
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ct-text-muted);
+}
+
+.hours-scope__time{
+  height: 36px;
+  font-size: 14px;
+  background: var(--ct-chip-bg) !important;
+  color: var(--ct-text) !important;
+  border: 1px solid var(--ct-chip-border) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+/* apply */
+.hours-scope__apply{
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ct-chip-border);
+  background: color-mix(in srgb, var(--ct-chip-bg) 40%, rgba(var(--accent-to), .14));
+  color: var(--ct-text);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.hours-scope__apply:disabled{
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* list */
+.hours-scope__list{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* row */
+.hours-scope__row{
+  width: 100%;
+  border: 1px solid var(--ct-chip-border);
+  background: transparent;             
+  border-radius: 14px;
+  padding: 10px 10px;
+
+  display: grid;
+  grid-template-columns: 120px 1fr 26px;
+  gap: 10px;
+  align-items: center;
+
+  text-align: left;
+  cursor: pointer;
+
+  transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.hours-scope__row:hover{
+  background: color-mix(in srgb, var(--ct-chip-bg) 55%, transparent);
+}
+
+@media (max-width: 420px){
+  .hours-scope__row{
+    grid-template-columns: 96px 1fr 24px;
+    padding: 9px 9px;
+  }
+}
+
+.hours-scope__row.is-scope{
+  border-color: color-mix(in srgb, rgba(var(--accent-to), .65) 55%, var(--ct-chip-border));
+  background: color-mix(in srgb, rgba(var(--accent-to), .14) 55%, var(--ct-chip-bg));
+  box-shadow: 0 0 0 3px color-mix(in srgb, rgba(var(--accent-to), .16) 55%, transparent);
+}
+
+/* day label */
+.hours-scope__day{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--ct-text);
+  white-space: nowrap;
+}
+
+.hours-scope__dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(var(--accent-to), .55);
+  opacity: .45;
+}
+
+.hours-scope__row.is-scope .hours-scope__dot{
+  opacity: 1;
+  background: rgba(var(--accent-to), .85);
+}
+
+/* value */
+.hours-scope__value{
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ct-text);
+  font-variant-numeric: tabular-nums;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hours-scope__value.is-empty{
+  color: var(--ct-text-muted);
+}
+
+/* clear X */
+.hours-scope__x{
+  width: 26px;
+  height: 26px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--ct-chip-border);
+  background: transparent;
+  color: var(--ct-text-muted);
+
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.hours-scope__x:hover{ filter: brightness(0.97); }
+:root[data-theme="dark"] .hours-scope__x:hover{ filter: brightness(1.06); }
+
+.hours-scope__hint{
+  font-size: 12px;
+  color: var(--ct-text-muted);
+}
+
+/* ================================
+   IMPORTANT: flatten inside ExtraBlocksList "card"
+   removes the "card in card" feeling
+   ================================ */
+.extra-chip--hours .hours-scope{
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.hours-scope{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--ct-text);
+
+  /* FLAT */
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
