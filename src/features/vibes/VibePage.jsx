@@ -36,7 +36,7 @@ export default function VibePage() {
     extraBlocks,
     visible,
     publicCode,
-  } = useVibeLoader(id, token);
+  } = useVibeLoader(id, token, "owner");
 
   const handleSave = useVibeSave({ token, vibe, setVibe, setEditing });
 
