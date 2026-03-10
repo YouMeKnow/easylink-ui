@@ -371,8 +371,112 @@
     opacity: 0;
     transform: translateY(-6px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+.vibe-actions--mobile {
+  position: relative;
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.vibe-more-trigger {
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+  border: 1px solid var(--stroke);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+.vibe-more-trigger:hover {
+  background: color-mix(in oklab, var(--surface) 72%, var(--bg1));
+  border-color: color-mix(in srgb, var(--text) 18%, var(--stroke));
+  color: var(--text);
+}
+
+.vibe-more-trigger:active {
+  transform: translateY(1px);
+}
+
+.vibe-more-trigger[aria-expanded="true"] {
+  background: color-mix(in oklab, var(--surface) 68%, var(--bg1));
+  border-color: color-mix(in srgb, rgb(var(--accent-to)) 28%, var(--stroke));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, rgb(var(--accent-to)) 14%, transparent),
+    var(--shadow-sm);
+}
+
+.vibe-mobile-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 220px;
+  padding: 8px;
+  border-radius: 16px;
+  z-index: 30;
+
+  background: color-mix(in oklab, var(--surface) 92%, var(--bg0));
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-md);
+
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+.vibe-mobile-menu__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  text-decoration: none;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.08s ease;
+}
+
+.vibe-mobile-menu__item:hover {
+  background: color-mix(in oklab, var(--surface) 55%, var(--bg1));
+  color: var(--text);
+}
+
+.vibe-mobile-menu__item:active {
+  transform: translateY(1px);
+}
+
+.vibe-mobile-menu__item svg {
+  flex: 0 0 auto;
+  color: var(--text-weak);
+  transition: color 0.18s ease;
+}
+
+.vibe-mobile-menu__item:hover svg {
+  color: var(--text);
+}
+
+@media (max-width: 991px) {
+  .vibe-actions--desktop {
+    display: none;
+  }
+
+  .vibe-actions--mobile {
+    display: flex;
   }
 }

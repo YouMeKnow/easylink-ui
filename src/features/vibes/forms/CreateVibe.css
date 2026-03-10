@@ -5,19 +5,18 @@
   margin: 0 auto;
 
   color: var(--text);
-  background: transparent; 
+  background: transparent;
 }
 
-/* sticky header: NO background, NO shadow, ONLY divider */
+/* header */
 .cv-header {
   position: sticky;
-  top: 0;
+  top: 12px;
   z-index: 30;
 
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
 
   padding: 10px 0 12px;
 
@@ -42,6 +41,17 @@
   pointer-events: none;
 }
 
+.cv-header__left {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+}
+
+.cv-header__right {
+  display: none;
+}
+
 .cv-header__title {
   margin: 0;
   font-weight: 600;
@@ -50,18 +60,17 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
 }
-
-.cv-header__left,
-.cv-header__right {
-  display: flex;
-  align-items: center;
-}
-
 
 .cv-type {
   margin-top: 14px;
   margin-bottom: 14px;
+
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .cv-form__inner {
@@ -70,25 +79,8 @@
   margin: 0 auto;
 }
 
-@media (max-width: 600px) {
-  .cv-header {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    gap: 6px;
-  }
-  .cv-header__left { justify-content: flex-start; }
-  .cv-header__title { margin-top: 4px; }
-}
-
-.cv-type{
-  max-width: 420px;   
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-}
-
 /* ================================
-   mobile type selector (segments)
+   type selector
 ================================ */
 .cv-segments {
   width: 100%;
@@ -142,6 +134,7 @@
   outline: 2px solid color-mix(in srgb, var(--accent, #6ea8fe) 55%, transparent);
   outline-offset: 2px;
 }
+
 /* desktop segments refinement */
 @media (min-width: 769px) {
   .cv-type {
@@ -170,7 +163,7 @@
 
   .cv-segment__label {
     font-weight: 800;
-    line-height: 1.1;
+    line-height: 1;
   }
 
   .cv-segment__hint {
@@ -187,9 +180,28 @@
     opacity: 0.9;
   }
 }
-/* hide hints on mobile */
+
+/* mobile */
 @media (max-width: 768px) {
   .cv-segment__hint {
     display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .cv-header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .cv-header__title {
+    font-size: 16px;
+    max-width: calc(100% - 120px);
+  }
+}
+
+@media (max-width: 600px) {
+  .cv-header__left {
+    top: -1px;
   }
 }

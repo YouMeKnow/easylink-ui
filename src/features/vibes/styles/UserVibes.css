@@ -59,8 +59,8 @@ main {
 
   will-change: transform, box-shadow;
   transition:
-    transform 0.18s cubic-bezier(.48,.07,.75,.95),
-    box-shadow 0.20s cubic-bezier(.48,.07,.75,.95),
+    transform 0.18s cubic-bezier(.48, .07, .75, .95),
+    box-shadow 0.20s cubic-bezier(.48, .07, .75, .95),
     border-color 0.18s ease;
 }
 
@@ -78,13 +78,14 @@ main {
 }
 
 /* content above glass */
-.myvibe-card > * {
+.myvibe-card>* {
   position: relative;
   z-index: 1;
 }
 
 /* hover/focus (NO rotate, optional tiny scale) */
 @media (hover: hover) and (pointer: fine) {
+
   .myvibe-card:hover,
   .myvibe-card:focus {
     transform: translateY(-8px) scale(1.01);

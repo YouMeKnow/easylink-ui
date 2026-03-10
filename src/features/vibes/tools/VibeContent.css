@@ -1,47 +1,47 @@
 .vibe-content__type {
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: .02em;
-    text-transform: uppercase;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .02em;
+  text-transform: uppercase;
 }
 
 .vibe-content__type {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .vibe-content__desc-text {
-    margin: 0;
-    padding-left: 12px;
+  margin: 0;
+  padding-left: 12px;
 
-    border-left: 3px solid rgba(99, 102, 241, .45);
+  border-left: 3px solid rgba(99, 102, 241, .45);
 
-    color: rgba(15, 23, 42, .78);
-    font-size: 14px;
-    line-height: 1.55;
-    letter-spacing: .01em;
+  color: rgba(15, 23, 42, .78);
+  font-size: 14px;
+  line-height: 1.55;
+  letter-spacing: .01em;
 }
 
 .vibe-content__desc-text.is-empty {
-    color: rgba(15, 23, 42, .35);
-    font-style: italic;
+  color: rgba(15, 23, 42, .35);
+  font-style: italic;
 }
 
 .vibe-content__qr {
-    margin-top: 16px;
+  margin-top: 16px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 /* === Editable fields (name + description) === */
 .vibe-content__name-input,
 .vibe-content__desc-input {
-  background: var(--ct-chip-bg, rgba(255,255,255,0.06)) !important;
-  color: var(--ct-text, rgba(255,255,255,0.92)) !important;
+  background: var(--ct-chip-bg, rgba(255, 255, 255, 0.06)) !important;
+  color: var(--ct-text, rgba(255, 255, 255, 0.92)) !important;
 
-  border: 1px solid var(--ct-border, rgba(255,255,255,0.14)) !important;
+  border: 1px solid var(--ct-border, rgba(255, 255, 255, 0.14)) !important;
   border-radius: 14px;
   padding: 10px 12px;
 
@@ -52,7 +52,7 @@
 /* placeholder */
 .vibe-content__name-input::placeholder,
 .vibe-content__desc-input::placeholder {
-  color: var(--ct-muted, rgba(255,255,255,0.45)) !important;
+  color: var(--ct-muted, rgba(255, 255, 255, 0.45)) !important;
   opacity: 1;
 }
 
@@ -73,14 +73,14 @@
 /* optional: keep it nice on light theme too (if you use data-theme) */
 [data-theme="light"] .vibe-content__name-input,
 [data-theme="light"] .vibe-content__desc-input {
-  background: rgba(0,0,0,0.04) !important;
-  color: rgba(15,23,42,0.95) !important;
-  border-color: rgba(15,23,42,0.12) !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: rgba(15, 23, 42, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
 }
 
 [data-theme="light"] .vibe-content__name-input::placeholder,
 [data-theme="light"] .vibe-content__desc-input::placeholder {
-  color: rgba(15,23,42,0.45) !important;
+  color: rgba(15, 23, 42, 0.45) !important;
 }
 
 [data-theme="light"] .vibe-content__name-input:focus,
@@ -90,49 +90,55 @@
 }
 
 /* общий отступ между секциями */
-.vibe-content__main{
+.vibe-content__main {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
 /* секция */
-.vibe-content__section{
+.vibe-content__section {
   margin-top: 2px;
   padding-top: 14px;
 }
 
 /* чтобы первая секция не имела линию сверху */
-.vibe-content__section:first-of-type{
+.vibe-content__section:first-of-type {
   padding-top: 0;
 }
 
 /* header секции */
-.vibe-content__section-head{
+.vibe-content__section-head {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(0,0,0,.08);
+  border-bottom: 1px solid rgba(0, 0, 0, .08);
 }
 
 /* заголовок */
-.vibe-content__section-title{
+.vibe-content__section-title {
   margin: 0;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(0,0,0,.55);
+  color: rgba(0, 0, 0, .55);
 }
 
 /* dark */
-:root[data-theme="dark"] .vibe-content__section-head{
-  border-bottom-color: rgba(255,255,255,.10);
-}
-:root[data-theme="dark"] .vibe-content__section-title{
-  color: rgba(255,255,255,.60);
+:root[data-theme="dark"] .vibe-content__section-head {
+  border-bottom-color: rgba(255, 255, 255, .10);
 }
 
+:root[data-theme="dark"] .vibe-content__section-title {
+  color: rgba(255, 255, 255, .60);
+}
 
+@media (max-width: 992px) {
+  .public-vibe-layout__card {
+    min-height: auto !important;
+    align-self: start !important;
+  }
+}
