@@ -59,7 +59,8 @@
 .public-subscribe__metaHint {
   margin-top: 2px;
   font-size: 0.85rem;
-  color: var(--text-weak); /* ✅ dark safe */
+  color: var(--text-weak);
+  /* ✅ dark safe */
   opacity: 0.92;
 }
 
@@ -176,7 +177,7 @@
 }
 
 /* ===== (Followers / Following) ===== */
-.public-subscribe__links{
+.public-subscribe__links {
   margin-top: 6px;
 
   display: flex;
@@ -189,7 +190,7 @@
 }
 
 /* recommended: use <button> for stats */
-.public-subscribe__stat{
+.public-subscribe__stat {
   appearance: none;
   border: 0;
   background: transparent;
@@ -206,7 +207,7 @@
 }
 
 /* lighter, not “black bold” */
-.public-subscribe__statNum{
+.public-subscribe__statNum {
   font-size: 0.98rem;
   font-weight: 650;
   letter-spacing: 0.1px;
@@ -214,7 +215,7 @@
   color: color-mix(in oklab, var(--text) 80%, transparent);
 }
 
-.public-subscribe__statLabel{
+.public-subscribe__statLabel {
   font-size: 0.84rem;
   font-weight: 500;
   line-height: 1.1;
@@ -222,22 +223,22 @@
 }
 
 /* hover = subtle fade only (no bg, no lift) */
-.public-subscribe__stat:hover{
+.public-subscribe__stat:hover {
   opacity: 0.72;
 }
 
-.public-subscribe__stat:active{
+.public-subscribe__stat:active {
   opacity: 0.6;
 }
 
 /* focus = clean ring */
-.public-subscribe__stat:focus-visible{
+.public-subscribe__stat:focus-visible {
   outline: 3px solid color-mix(in oklab, rgba(var(--accent-to), 1) 30%, transparent);
   outline-offset: 3px;
   border-radius: 10px;
 }
 
-.public-subscribe__links{
+.public-subscribe__links {
   margin-bottom: 14px;
   padding-bottom: 12px;
   border-bottom: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);

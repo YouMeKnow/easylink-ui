@@ -264,7 +264,7 @@ export default function VibePage() {
 
               <button
                 type="button"
-                className="btn-light-outline btn-compact btn-icon"
+                className="btn-light-outline btn-compact btn-icon vibe-more-trigger"
                 onClick={() => setMobileMenuOpen((prev) => !prev)}
                 aria-label={t("more", { defaultValue: "More" })}
                 title={t("more", { defaultValue: "More" })}

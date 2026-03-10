@@ -41,8 +41,8 @@ export default function CreateVibe() {
   const initialType = ALLOWED_TYPES.includes(queryType)
     ? queryType
     : ALLOWED_TYPES.includes(stateType)
-    ? stateType
-    : "BUSINESS";
+      ? stateType
+      : "BUSINESS";
 
   const [type, setType] = React.useState(initialType);
 
@@ -68,7 +68,7 @@ export default function CreateVibe() {
         <div className="cv-header__left">
           <BackButton
             to="/profile"
-            label={isMobile ? t("back_short") : t("back")}
+            label={t(isMobile ? "back_short" : "back")}
             className="cv-back-btn"
           />
         </div>
@@ -115,3 +115,4 @@ export default function CreateVibe() {
     </main>
   );
 }
+
