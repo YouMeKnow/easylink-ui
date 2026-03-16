@@ -205,3 +205,14 @@
     top: -1px;
   }
 }
+
+.business-form-lock-hint {
+  margin: 10px 0 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text);
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+  border: 1px solid var(--stroke);
+}

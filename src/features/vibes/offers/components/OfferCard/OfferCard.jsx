@@ -40,7 +40,7 @@ export default function OfferCard({
     if (isUpcoming) return { label: "Scheduled", tone: "info" };
     return { label: "Active", tone: "success" };
   }, [offer.active, isExpired, isUpcoming]);
-
+  
   const discountText =
     offer.discountType === "PERCENTAGE"
       ? `${offer.currentDiscount}%`
