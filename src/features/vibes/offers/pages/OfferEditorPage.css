@@ -1,19 +1,20 @@
-/* OfferEditorPage – token friendly overrides */
+/* OfferEditorPage.css */
+
 .offer-editor {
   color: var(--text);
 }
 
-/* bootstrap "text-muted" becomes token-muted */
+/* bootstrap text-muted -> theme token */
 .offer-editor .text-muted {
   color: var(--text-weak) !important;
 }
 
-/* header title */
+/* titles */
 .offer-editor h3 {
   color: var(--text);
 }
 
-/* badges: keep readable on dark */
+/* badges */
 .offer-editor .badge {
   border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
   background: color-mix(in oklab, var(--surface) 80%, transparent) !important;
@@ -21,71 +22,217 @@
   font-weight: 800;
 }
 
-/* warning badge (Unsaved changes) */
+/* warning badge */
 .offer-editor .badge.text-bg-warning {
-  background: color-mix(in oklab, rgb(var(--accent-from)) 22%, var(--surface)) !important;
-  border-color: color-mix(in oklab, rgb(var(--accent-from)) 40%, var(--stroke));
+  background: color-mix(
+    in oklab,
+    rgb(var(--accent-from)) 22%,
+    var(--surface)
+  ) !important;
+  border-color: color-mix(
+    in oklab,
+    rgb(var(--accent-from)) 40%,
+    var(--stroke)
+  );
   color: var(--text) !important;
 }
 
-/* danger badge (Invalid time range) */
+/* danger badge */
 .offer-editor .badge.text-bg-danger {
   background: color-mix(in oklab, #ef4444 18%, var(--surface)) !important;
   border-color: color-mix(in oklab, #ef4444 40%, var(--stroke));
   color: var(--text) !important;
 }
 
+/* page */
 .offer-editor-simple {
   padding-top: 12px;
 }
 
+/* top action row */
 .offer-editor-simple__top {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 14px;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.offer-editor-simple__titleWrap {
-  min-width: 0;
-}
+/* buttons */
+.offer-editor-simple__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
-.offer-editor-simple__title {
-  font-size: clamp(24px, 3vw, 32px);
-  font-weight: 800;
-  line-height: 1.1;
-}
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
 
-.offer-editor-simple__subtitle {
-  color: var(--text-muted, #6b7280);
   font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
 }
 
+.offer-editor-simple__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* left button */
+.offer-editor-simple__btn--ghost {
+  color: var(--text);
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+  border-color: color-mix(in oklab, var(--stroke) 85%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.offer-editor-simple__btn--ghost:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, var(--surface) 96%, transparent);
+  box-shadow: var(--shadow-md);
+}
+
+/* right button */
+.offer-editor-simple__btn--primary {
+  min-width: 120px;
+  padding-inline: 16px;
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    rgb(var(--accent-from)),
+    rgb(var(--accent-to))
+  );
+  box-shadow: var(--shadow-sm);
+}
+
+.offer-editor-simple__btn--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.offer-editor-simple__btn:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-md),
+    0 0 0 2px color-mix(in oklab, var(--stroke) 85%, transparent);
+}
+
+/* card */
 .offer-editor-simple__card {
   border-radius: 20px;
 }
 
+/* validation error */
 .offer-editor-simple__error {
+  margin-top: 12px;
   padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid rgba(220, 38, 38, 0.16);
   background: rgba(220, 38, 38, 0.06);
   color: #b42318;
   font-size: 0.95rem;
+  line-height: 1.45;
 }
 
+/* loading */
+.offer-view__loading {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.offer-view__loading-text {
+  color: var(--text-weak);
+  font-size: 0.95rem;
+}
+
+/* mobile */
 @media (max-width: 768px) {
+  .offer-editor-simple {
+    padding-top: 8px;
+  }
+
   .offer-editor-simple__top {
-    grid-template-columns: 1fr;
+    flex-direction: column-reverse;
     align-items: stretch;
+    gap: 10px;
+    margin-bottom: 16px;
   }
 
-  .offer-editor-simple__titleWrap {
-    order: -1;
-  }
-
-  .offer-editor-simple .cv-btn {
+  .offer-editor-simple__btn {
     width: 100%;
-    justify-content: center;
   }
+
+  .offer-editor-simple__btn--primary {
+    min-width: 0;
+  }
+
+  .offer-editor-simple__card {
+    border-radius: 16px;
+  }
+
+  .offer-editor-simple__error {
+    font-size: 0.92rem;
+  }
+}
+
+.offer-editor-simple__btn:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--shadow-sm),
+    0 0 0 2px color-mix(in oklab, rgb(var(--accent-from)) 45%, transparent);
+}
+
+.offer-editor-simple__btn--primary,
+.offer-editor-simple__btn--primary::before,
+.offer-editor-simple__btn--primary::after {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+.offer-editor-simple__btn--primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  min-height: 42px;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+
+  background: linear-gradient(
+    135deg,
+    rgb(var(--accent-from)),
+    rgb(var(--accent-to))
+  ) !important;
+}
+
+.offer-editor-simple__btn--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md) !important;
+}
+
+.offer-editor-simple__btn--primary:focus,
+.offer-editor-simple__btn--primary:focus-visible,
+.offer-editor-simple__btn--primary:active {
+  outline: none !important;
+  border: none !important;
+  background-image: none !important;
 }
