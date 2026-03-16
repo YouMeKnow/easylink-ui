@@ -17,10 +17,13 @@ export default function OffersTab({
       <div className="offers-tab__toolbar">
         <div className="offers-tab__toolbarLeft">
           <p className="offers-tab__subtitle">
-            {t("Manage promotions, limited-time deals, and special offers for your audience.", {
-              defaultValue:
-                "Manage promotions, limited-time deals, and special offers for your audience.",
-            })}
+            {t(
+              "Manage promotions, limited-time deals, and special offers for your audience.",
+              {
+                defaultValue:
+                  "Manage promotions, limited-time deals, and special offers for your audience.",
+              }
+            )}
           </p>
         </div>
 
@@ -39,6 +42,7 @@ export default function OffersTab({
               strokeWidth="2.3"
               strokeLinecap="round"
               strokeLinejoin="round"
+              aria-hidden="true"
             >
               <path d="M12 5v14M5 12h14" />
             </svg>
@@ -68,30 +72,15 @@ export default function OffersTab({
         </div>
       ) : (
         <div className="offers-tab__empty">
-          <div className="offers-tab__emptyIconWrap">
-            <div className="offers-tab__emptyIcon">%</div>
-          </div>
-
           <h4 className="offers-tab__emptyTitle">
             {t("No offers yet", { defaultValue: "No offers yet" })}
           </h4>
 
           <p className="offers-tab__emptyText">
-            {t("Create your first offer to highlight something valuable and give people a reason to engage.", {
-              defaultValue:
-                "Create your first offer to highlight something valuable and give people a reason to engage.",
+            {t("Offers will appear here.", {
+              defaultValue: "Offers will appear here.",
             })}
           </p>
-
-          <button
-            type="button"
-            className="btn btn-primary offers-tab__emptyBtn"
-            onClick={onAddOffer}
-          >
-            {t("Create first offer", {
-              defaultValue: "Create first offer",
-            })}
-          </button>
         </div>
       )}
     </div>

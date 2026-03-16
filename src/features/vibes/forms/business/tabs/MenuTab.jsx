@@ -62,7 +62,6 @@ export default function MenuTab({
     // owner: edit if provided, else fallback open
     if (canManage && typeof onEditItem === "function") return onEditItem(it);
     if (!canManage && typeof onOpenItem === "function") return onOpenItem(it);
-    // если ничего не дали — не делаем ничего
   };
 
   const toggleOne = (id) => {
@@ -208,8 +207,6 @@ export default function MenuTab({
 
             const onCardClick = () => {
               if (isDisabled) return;
-
-              // если мы уже в режиме выбора — клик по карточке toggles selection
               if (selectionMode) return toggleOne(it.id);
 
               return openCard(it);
