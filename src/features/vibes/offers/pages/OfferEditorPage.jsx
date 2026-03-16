@@ -11,6 +11,36 @@ import {
 } from "@/features/vibes/offers";
 import PageLayout from "@/components/common/PageLayout";
 
+function toLocalInputValue(dateLike) {
+  if (!dateLike) return "";
+  const d = new Date(dateLike);
+  if (Number.isNaN(d.getTime())) return "";
+
+  const pad = (n) => String(n).padStart(2, "0");
+
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
+    d.getHours()
+  )}:${pad(d.getMinutes())}`;
+}
+
+function nowLocalInputValue() {
+  return toLocalInputValue(new Date());
+}
+
+function addHoursLocalInputValue(hours) {
+  const d = new Date();
+  d.setHours(d.getHours() + hours);
+  return toLocalInputValue(d);
+}
+
+function toServerLocalDateTime(localValue) {
+  if (!localValue) return null;
+
+  // datetime-local уже даёт "YYYY-MM-DDTHH:mm"
+  // для LocalDateTime этого достаточно
+  return localValue;
+}
+
 export default function OfferEditorPage() {
   const location = useLocation();
   const subscriberVibeId = location.state?.vibeId;
@@ -23,8 +53,9 @@ export default function OfferEditorPage() {
   const navigate = useNavigate();
 
   const { createOffer, loading: creating } = useCreateOffer(token);
-  const { offer, loading: fetching } = useGetOffer(id, token); 
-  const { updateOffer, loading: updating } = useUpdateOffer(token); 
+  const { offer, loading: fetching } = useGetOffer(id, token);
+  const { updateOffer, loading: updating } = useUpdateOffer(token);
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -34,8 +65,8 @@ export default function OfferEditorPage() {
     decreaseStep: 0,
     decreaseIntervalMinutes: 0,
     active: true,
-    startTime: new Date().toISOString(),
-    endTime: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // + 1 hour
+    startTime: nowLocalInputValue(),
+    endTime: addHoursLocalInputValue(1),
   });
 
   const [changedFields, setChangedFields] = useState({});
@@ -51,8 +82,8 @@ export default function OfferEditorPage() {
         decreaseStep: offer.decreaseStep ?? 0,
         decreaseIntervalMinutes: offer.decreaseIntervalMinutes ?? 0,
         active: offer.active ?? true,
-        startTime: offer.startTime || new Date().toISOString(),
-        endTime: offer.endTime || new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+        startTime: offer.startTime ? toLocalInputValue(offer.startTime) : nowLocalInputValue(),
+        endTime: offer.endTime ? toLocalInputValue(offer.endTime) : addHoursLocalInputValue(1),
       });
       setChangedFields({});
     }
@@ -65,12 +96,13 @@ export default function OfferEditorPage() {
 
   const startTs = useMemo(() => new Date(form.startTime).getTime(), [form.startTime]);
   const endTs = useMemo(() => new Date(form.endTime).getTime(), [form.endTime]);
+
   const timeInvalid = useMemo(
     () => Number.isFinite(startTs) && Number.isFinite(endTs) && endTs <= startTs,
     [startTs, endTs]
   );
 
-  const disabled = Boolean(creating || updating);
+  const disabled = creating || updating;
 
   const onChange = (patch) => {
     setForm((prev) => ({ ...prev, ...patch }));
@@ -89,9 +121,28 @@ export default function OfferEditorPage() {
         navigate(-1);
         return;
       }
-      success = await updateOffer(id, changedFields, token);
+
+      const payload = {
+        ...changedFields,
+      };
+
+      if ("startTime" in payload) {
+        payload.startTime = toServerLocalDateTime(payload.startTime);
+      }
+
+      if ("endTime" in payload) {
+        payload.endTime = toServerLocalDateTime(payload.endTime);
+      }
+
+      success = await updateOffer(id, payload, token);
     } else {
-      success = await createOffer(form, subscriberVibeId);
+      const payload = {
+        ...form,
+        startTime: toServerLocalDateTime(form.startTime),
+        endTime: toServerLocalDateTime(form.endTime),
+      };
+      console.log("PAYLOAD CREATE OFFER", payload);
+      success = await createOffer(payload, subscriberVibeId);
     }
 
     if (success) {
@@ -102,70 +153,63 @@ export default function OfferEditorPage() {
     }
   };
 
-  const offerLike = form;
-
   return (
-    <PageLayout title={t("Offer Details")}>
-      <div className="container py-4 offer-editor" style={{ maxWidth: 900 }}>    
-        <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-          <div>
-            <div className="d-flex align-items-center gap-2">
-              <h3 className="mb-0">{isEditMode ? t("Edit Offer") : t("Create Offer")}</h3>
-              {hasChanges && <span className="badge text-bg-warning">{t("Unsaved changes")}</span>}
-              {timeInvalid && <span className="badge text-bg-danger">{t("Invalid time range")}</span>}
-            </div>
-            <div className="text-muted small mt-1">
-              {t("You are editing the real offer card. This is exactly how users will see it.")}
-            </div>
+    <PageLayout title={isEditMode ? t("Edit offer") : t("Create offer")}>
+      <div className="offer-editor-simple container py-4" style={{ maxWidth: 760 }}>
+        <div className="offer-editor-simple__top mb-4">
+          <button
+            type="button"
+            className="cv-btn cv-btn--ghost"
+            onClick={onCancel}
+            disabled={disabled}
+          >
+            {t("Back")}
+          </button>
+
+          <div className="offer-editor-simple__titleWrap">
+            <h2 className="offer-editor-simple__title mb-1">
+              {isEditMode ? t("Edit offer") : t("Create offer")}
+            </h2>
+            <p className="offer-editor-simple__subtitle mb-0">
+              {t("Fill in the fields below. Preview updates automatically.")}
+            </p>
           </div>
 
-          <div className="d-flex gap-2">
-            <button className="cv-btn cv-btn--ghost" onClick={onCancel} disabled={disabled}>
-              {t("Cancel")}
-            </button>
-
-            <button
-              type="button"
-              className="cv-btn cv-btn--primary"
-              onClick={onSave}
-              disabled={disabled || timeInvalid || (isEditMode && !hasChanges)}
-              title={timeInvalid ? t("End time must be after start time") : ""}
-            >
-              {disabled ? t("Saving...") : isEditMode ? t("Save Changes") : t("Create Offer")}
-            </button>
-          </div>
+          <button
+            type="button"
+            className="cv-btn cv-btn--primary"
+            onClick={onSave}
+            disabled={disabled || timeInvalid || (isEditMode && !hasChanges)}
+          >
+            {disabled
+              ? t("Saving...")
+              : isEditMode
+                ? t("Save")
+                : t("Create offer")}
+          </button>
         </div>
 
-        {/* skeleton / loading */}
         {isEditMode && !offer && fetching ? (
           <div className="offer-view__loading">
             <div className="spinner-border text-primary" role="status" />
             <div className="offer-view__loading-text">{t("Loading...")}</div>
           </div>
         ) : (
-          <OfferViewCard
-            offer={offerLike}
-            mode="edit"
-            onChange={onChange}
-            showActions={false}
-            disabled={disabled}
-          />
+          <div className="offer-editor-simple__card">
+            <OfferViewCard
+              offer={form}
+              mode="edit"
+              onChange={onChange}
+              disabled={disabled}
+            />
+          </div>
         )}
 
-        <div className="d-flex justify-content-end gap-2 mt-3">
-          <button className="cv-btn cv-btn--ghost cv-btn--lg" onClick={onCancel} disabled={disabled}>
-            {t("Cancel")}
-          </button>
-
-          <button
-            type="button"
-            className="cv-btn cv-btn--primary cv-btn--lg"
-            onClick={onSave}
-            disabled={disabled || timeInvalid || (isEditMode && !hasChanges)}
-          >
-            {disabled ? t("Saving...") : isEditMode ? t("Save Changes") : t("Create Offer")}
-          </button>
-        </div>
+        {timeInvalid && (
+          <div className="offer-editor-simple__error mt-3">
+            {t("End time must be later than start time.")}
+          </div>
+        )}
       </div>
     </PageLayout>
   );

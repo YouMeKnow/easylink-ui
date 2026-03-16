@@ -3,6 +3,8 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import PageLayout from "../../../../components/common/PageLayout";
 import { useTranslation } from "react-i18next";
 import { useGetOffer, OfferViewCard } from "@/features/vibes/offers";
+import "./OfferDetailsPage.css";
+import { ArrowLeft } from "lucide-react";
 
 export default function OfferDetailsPage() {
   const { id } = useParams();
@@ -26,10 +28,21 @@ export default function OfferDetailsPage() {
     );
   }
 
-  const canManage = offer.canManage === true; 
+  const canManage = offer.canManage === true;
 
   return (
     <PageLayout title={t("Offer Details")}>
+      <div className="offer-details__topbar">
+        <button
+          type="button"
+          className="offer-back-btn"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft className="offer-back-btn__icon" />
+          <span>{t("Back")}</span>
+        </button>
+      </div>
+
       <OfferViewCard
         offer={offer}
         onBack={() => navigate(-1)}

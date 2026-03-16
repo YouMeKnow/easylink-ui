@@ -1,0 +1,52 @@
+.offer-details__topbar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-left: 4px;
+}
+
+.offer-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  height: 42px;
+  padding: 0 16px;
+
+  border-radius: 14px;
+  border: 1px solid var(--stroke);
+
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+  color: var(--text);
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.offer-back-btn:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, rgb(var(--accent-to)) 26%, var(--stroke));
+  box-shadow: var(--shadow-md);
+}
+
+.offer-back-btn:active {
+  transform: translateY(0);
+}
+
+.offer-back-btn__icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}

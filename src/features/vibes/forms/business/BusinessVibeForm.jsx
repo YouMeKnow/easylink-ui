@@ -67,6 +67,8 @@ export default function BusinessVibeForm({
   // ----- local UI state -----
   const [refocusIndex, setRefocusIndex] = React.useState(null);
   const [showBlockModal, setShowBlockModal] = React.useState(false);
+  
+  const [lockedTabNotice, setLockedTabNotice] = React.useState("");
 
   const {
     name,
@@ -96,11 +98,29 @@ export default function BusinessVibeForm({
 
   const setTab = React.useCallback(
     (tab) => {
+      if (!ownerActionsEnabled && (tab === "offers" || tab === "menu")) {
+        setLockedTabNotice(
+          tab === "offers"
+            ? t("Save your vibe first to add your first offer.", {
+                defaultValue: "Save your vibe first to add your first offer.",
+              })
+            : t("Save your vibe first to add menu items.", {
+                defaultValue: "Save your vibe first to add menu items.",
+              })
+        );
+        return;
+      }
+
+      setLockedTabNotice("");
       setActiveTab(tab);
-      if (tab === "menu") reloadItems?.();
+
+      if (tab === "menu" && ownerActionsEnabled) {
+        reloadItems?.();
+      }
     },
-    [setActiveTab, reloadItems]
+    [setActiveTab, reloadItems, ownerActionsEnabled, t]
   );
+
 
   // refocus helper
   const refocusAt = React.useCallback((index) => {
@@ -221,6 +241,10 @@ export default function BusinessVibeForm({
                 t={t}
                 activeTab={activeTab}
                 onTabChange={setTab}
+                offersDisabled={!ownerActionsEnabled}
+                menuDisabled={!ownerActionsEnabled}
+                lockedHint={!ownerActionsEnabled ? lockedTabNotice : ""}
+
                 renderMain={() => <VibeContent {...contentProps} />}
                 renderOffers={() => (
                   <>
@@ -289,6 +313,7 @@ export default function BusinessVibeForm({
                   />
                 )}
               />
+
             }
           />
         </div>

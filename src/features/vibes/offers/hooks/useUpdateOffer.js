@@ -11,9 +11,19 @@ export default function useUpdateOffer() {
     setError(null);
 
     try {
+      const payload = {
+        ...updatedFields,
+        startTime: updatedFields.startTime
+          ? new Date(updatedFields.startTime).toISOString()
+          : updatedFields.startTime,
+        endTime: updatedFields.endTime
+          ? new Date(updatedFields.endTime).toISOString()
+          : updatedFields.endTime,
+      };
+
       const res = await apiFetch(`/api/v3/offers/${id}`, {
         method: "PATCH",
-        body: JSON.stringify(updatedFields),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -31,7 +41,6 @@ export default function useUpdateOffer() {
       setLoading(false);
     }
   }, []);
-  
 
   return { updateOffer, loading, error };
 }
