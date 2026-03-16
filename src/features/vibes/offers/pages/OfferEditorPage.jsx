@@ -141,7 +141,6 @@ export default function OfferEditorPage() {
         startTime: toServerLocalDateTime(form.startTime),
         endTime: toServerLocalDateTime(form.endTime),
       };
-      console.log("PAYLOAD CREATE OFFER", payload);
       success = await createOffer(payload, subscriberVibeId);
     }
 
@@ -159,25 +158,16 @@ export default function OfferEditorPage() {
         <div className="offer-editor-simple__top mb-4">
           <button
             type="button"
-            className="cv-btn cv-btn--ghost"
+            className="offer-editor-simple__btn offer-editor-simple__btn--ghost"
             onClick={onCancel}
             disabled={disabled}
           >
             {t("Back")}
           </button>
 
-          <div className="offer-editor-simple__titleWrap">
-            <h2 className="offer-editor-simple__title mb-1">
-              {isEditMode ? t("Edit offer") : t("Create offer")}
-            </h2>
-            <p className="offer-editor-simple__subtitle mb-0">
-              {t("Fill in the fields below. Preview updates automatically.")}
-            </p>
-          </div>
-
           <button
             type="button"
-            className="cv-btn cv-btn--primary"
+            className="offer-editor-simple__btn offer-editor-simple__btn--primary"
             onClick={onSave}
             disabled={disabled || timeInvalid || (isEditMode && !hasChanges)}
           >
