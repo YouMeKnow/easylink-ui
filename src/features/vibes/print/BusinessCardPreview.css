@@ -271,3 +271,66 @@
   height: 320px;
   border-radius: 28px;
 }
+
+.bcp-card {
+  width: min(100%, 560px);
+  aspect-ratio: 3.5 / 2;
+  height: auto;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%);
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.45fr 1px 1fr;
+  position: relative;
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.bcp-card--preview {
+  width: min(100%, 560px);
+  aspect-ratio: 3.5 / 2;
+  height: auto;
+  border-radius: 28px;
+}
+
+@media (max-width: 768px) {
+  .bcp-wrap {
+    padding: 0 12px;
+  }
+
+  .bcp-card,
+  .bcp-card--preview {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px;
+  }
+
+  .bcp-left-content {
+    padding: 14px 14px 12px 14px;
+  }
+
+  .bcp-right-content {
+    padding: 12px;
+  }
+
+  .bcp-top-accent {
+    width: 32px;
+    height: 3px;
+    margin-bottom: 8px;
+  }
+
+  .bcp-qr-box {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+  }
+
+  .bcp-logo {
+    width: 20px;
+    height: 20px;
+  }
+}

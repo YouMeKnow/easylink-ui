@@ -2,6 +2,40 @@ import React from "react";
 import { FaGlobe } from "react-icons/fa";
 import iconMap from "../../../data/contactIcons";
 import { getContactLink } from "../../../data/contactLinks";
+const CONTACT_INPUT_META = {
+  phone: {
+    placeholder: "+1 647 123 4567",
+    hint: "Enter a phone number with country code",
+  },
+  email: {
+    placeholder: "name@example.com",
+    hint: "Enter your email address",
+  },
+  website: {
+    placeholder: "https://yourwebsite.com",
+    hint: "Paste a full website link",
+  },
+  instagram: {
+    placeholder: "@username",
+    hint: "Paste your Instagram username or link",
+  },
+  telegram: {
+    placeholder: "@username",
+    hint: "Paste your Telegram username or link",
+  },
+  whatsapp: {
+    placeholder: "+1 555 123 4567",
+    hint: "Enter phone number for WhatsApp",
+  },
+  linkedin: {
+    placeholder: "linkedin.com/in/username",
+    hint: "Paste your LinkedIn profile link",
+  },
+  github: {
+    placeholder: "github.com/username",
+    hint: "Paste your GitHub profile",
+  },
+};
 
 const getButtonStyle = (type) => {
   const base = {
@@ -15,10 +49,9 @@ const getButtonStyle = (type) => {
     case "instagram":
       return {
         ...base,
-        bg: "linear-gradient(45deg, #fd5, #f54394, #fc6736)",
-        text: "#111",
-        border: "rgba(255,255,255,.35)",
-        accent: "rgba(255,255,255,.45)",
+        bg: "rgba(236, 72, 153, .14)",
+        border: "rgba(236, 72, 153, .28)",
+        accent: "rgba(236, 72, 153, .36)",
       };
 
     case "whatsapp":
@@ -147,6 +180,69 @@ function toStr(val) {
   return String(val ?? "");
 }
 
+function formatPhoneForDisplay(value) {
+  const raw = String(value || "").trim();
+  const digits = raw.replace(/\D/g, "");
+
+  if (!digits) return "";
+
+  // Canada / US
+  if (digits.length === 11 && digits.startsWith("1")) {
+    const d = digits.slice(1);
+    return `+1 (${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6, 10)}`;
+  }
+
+  if (digits.length === 10) {
+    return `+1 (${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  }
+
+  // fallback if number is incomplete or different
+  if (digits.length < 10) return raw;
+
+  return raw;
+}
+
+function formatUsername(value) {
+  const v = String(value || "").trim();
+
+  if (!v) return "";
+  return v.replace(/^@+/, ""); 
+}
+
+function getDisplayValue(type, value) {
+  const raw = toStr(value);
+
+  if (type === "phone") {
+    return formatPhoneForDisplay(raw);
+  }
+
+  if (type === "website") {
+    return formatWebsiteForDisplay(raw);
+  }
+
+  if (
+    type === "instagram" ||
+    type === "telegram" ||
+    type === "twitter" ||
+    type === "x"
+  ) {
+    return formatUsername(raw);
+  }
+
+  return raw;
+}
+
+function formatWebsiteForDisplay(value) {
+  let v = String(value || "").trim();
+
+  if (!v) return "";
+  v = v.replace(/^https?:\/\//i, "");
+  v = v.replace(/^www\./i, "");
+  v = v.split("/")[0];
+
+  return v;
+}
+
 export default function ContactButton({
   type,
   value,
@@ -163,13 +259,15 @@ export default function ContactButton({
   const icon = iconMap[type] || <FaGlobe />;
   const s = getButtonStyle(type);
 
-  const displayValue = toStr(value);
+  const displayValue = getDisplayValue(type, value);
   const isEmpty = !displayValue.trim();
-  const placeholder = "enter a value";
+  const meta = CONTACT_INPUT_META[type] || {};
+  const placeholder = meta.placeholder || "Enter contact";
+  const hint = meta.hint || "";
 
   const baseStyle = {
     minWidth: 0,
-    width: "100%",
+    width: "auto",
     height: 46,
 
     display: "flex",

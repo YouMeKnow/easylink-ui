@@ -22,13 +22,20 @@ const SOCIAL_TYPES = [
   "snapchat",
 ];
 
-const Section = React.memo(function Section({ title, items, t, renderItem }) {
+const Section = React.memo(function Section({ title, items, t, renderItem, editMode }) {
   if (!items.length) return null;
 
+  const gridClass =
+    title === "Main"
+      ? "contacts-grid contacts-grid--main"
+      : editMode
+      ? "contacts-grid contacts-grid--secondary contacts-grid--secondary-edit"
+      : "contacts-grid contacts-grid--secondary";
+      
   return (
     <div className="contacts-section">
       <div className="contacts-section__title">{t(title, title)}</div>
-      <div className="contacts-grid">{items.map(renderItem)}</div>
+      <div className={gridClass}>{items.map(renderItem)}</div>
     </div>
   );
 });
@@ -128,9 +135,9 @@ export default function ContactsSection({
 
   return (
     <>
-      <Section title="Main" items={grouped.main} t={t} renderItem={renderItem} />
-      <Section title="Social" items={grouped.social} t={t} renderItem={renderItem} />
-      <Section title="Other" items={grouped.other} t={t} renderItem={renderItem} />
+      <Section title="Main" items={grouped.main} t={t} renderItem={renderItem} editMode={editMode} />
+      <Section title="Social" items={grouped.social} t={t} renderItem={renderItem} editMode={editMode} />
+      <Section title="Other" items={grouped.other} t={t} renderItem={renderItem} editMode={editMode} />
 
       {/* ---- SINGLE ADD BUTTON AT BOTTOM ---- */}
       {editMode && (
