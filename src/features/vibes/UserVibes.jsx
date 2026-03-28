@@ -22,6 +22,7 @@ export default function UserVibes() {
 
   const handleDelete = async (vibeId) => {
     if (!window.confirm(t("delete_confirm"))) return;
+
     setLoading(true);
     try {
       await remove(vibeId);
@@ -45,6 +46,7 @@ export default function UserVibes() {
 
   const handleCopy = () => {
     if (!shareVibe) return;
+
     const link = `${window.location.origin}/view/${shareVibe.id}`;
     navigator.clipboard.writeText(link);
     setCopied(true);
@@ -52,41 +54,43 @@ export default function UserVibes() {
   };
 
   return (
-    <main
-      className="container myvibes py-5"
-      style={{
-        paddingLeft: "max(16px, env(safe-area-inset-left))",
-        paddingRight: "max(16px, env(safe-area-inset-right))",
-        paddingBottom: "max(16px, env(safe-area-inset-bottom))",
-      }}
-      aria-labelledby="myvibes-title"
-    >
-      <HeaderActions />
+    <div className="route-shell">
+      <main className="container myvibes-page" aria-labelledby="myvibes-title">
+        <HeaderActions />
 
-      <h1 id="myvibes-title" className="visually-hidden">
-        {t("title", "My Vibes")}
-      </h1>
+        <h1 id="myvibes-title" className="visually-hidden">
+          {t("title", "My Vibes")}
+        </h1>
 
-      {loading ? (
-        <Loader />
-      ) : vibes.length === 0 ? (
-        <div className="text-center text-muted mt-4">
-          <div>{t("no_vibes")}</div>
-          <div className="small">{t("no_vibes_hint")}</div>
-        </div>
-      ) : (
-        <section className="vibes-grid" role="list" aria-label={t("list_aria", "Your vibes")}>
-          <VibesList vibes={vibes} onDelete={handleDelete} onShare={handleShare} />
-        </section>
-      )}
+        {loading ? (
+          <Loader />
+        ) : vibes.length === 0 ? (
+          <section className="myvibes-empty text-center text-muted" aria-live="polite">
+            <div>{t("no_vibes")}</div>
+            <div className="small">{t("no_vibes_hint")}</div>
+          </section>
+        ) : (
+          <section
+            className="vibes-grid"
+            role="list"
+            aria-label={t("list_aria", "Your vibes")}
+          >
+            <VibesList
+              vibes={vibes}
+              onDelete={handleDelete}
+              onShare={handleShare}
+            />
+          </section>
+        )}
 
-      <ShareModal
-        show={!!shareVibe}
-        onClose={handleCloseShare}
-        shareUrl={shareVibe ? `${window.location.origin}/view/${shareVibe.id}` : ""}
-        copied={copied}
-        onCopy={handleCopy}
-      />
-    </main>
+        <ShareModal
+          show={!!shareVibe}
+          onClose={handleCloseShare}
+          shareUrl={shareVibe ? `${window.location.origin}/view/${shareVibe.id}` : ""}
+          copied={copied}
+          onCopy={handleCopy}
+        />
+      </main>
+    </div>
   );
 }

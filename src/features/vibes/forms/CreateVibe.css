@@ -28,18 +28,6 @@
   -webkit-backdrop-filter: none !important;
 }
 
-.cv-header::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  height: 1px;
-  background: var(--stroke);
-  opacity: 0.85;
-  pointer-events: none;
-}
 
 .cv-header__left {
   position: absolute;
@@ -215,4 +203,115 @@
   color: var(--text);
   background: color-mix(in oklab, var(--surface) 88%, transparent);
   border: 1px solid var(--stroke);
+}
+
+.cv-topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+
+  padding: 10px 16px 14px;
+}
+
+.cv-topbar__title {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.cv-topbar__spacer {
+  width: 44px;
+  height: 36px;
+}
+
+.cv-back {
+  min-width: 44px;
+  height: 36px;
+  padding: 0 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.08s ease,
+    box-shadow 0.18s ease;
+}
+
+.cv-back:hover {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+.cv-back:active {
+  transform: translateY(1px);
+}
+
+.cv-back__icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.cv-back__text {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .cv-topbar {
+    grid-template-columns: 44px 1fr 44px;
+    gap: 8px;
+    padding: 10px 12px 14px;
+  }
+
+  .cv-topbar__title {
+    font-size: 20px;
+  }
+
+  .cv-topbar__spacer {
+    width: 44px;
+    height: 36px;
+  }
+
+  .cv-back {
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
+    border-radius: 12px;
+  }
+}
+
+.cv-back-btn .btn-text-full {
+  display: inline;
+}
+
+.cv-back-btn .btn-text-short {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .cv-back-btn .btn-text-full {
+    display: none;
+  }
+
+  .cv-back-btn .btn-text-short {
+    display: inline;
+  }
 }

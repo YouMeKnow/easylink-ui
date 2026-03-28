@@ -9,15 +9,6 @@ export default function PageLayout({ title, left, right, children }) {
           <div className="page-layout__slot page-layout__slot--left">
             {left || null}
           </div>
-
-          {title ? (
-            <h2 className="page-layout__title fw-bold mb-0" style={{ letterSpacing: ".02em" }}>
-              {title}
-            </h2>
-          ) : (
-            <div />
-          )}
-
           <div className="page-layout__slot page-layout__slot--right">
             {right || null}
           </div>
