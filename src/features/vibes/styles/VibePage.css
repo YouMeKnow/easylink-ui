@@ -480,3 +480,7 @@
     display: flex;
   }
 }
+
+.vibe-topbar__right {
+  margin-left: auto;
+}

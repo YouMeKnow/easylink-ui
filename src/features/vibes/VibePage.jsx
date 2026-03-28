@@ -130,8 +130,6 @@ export default function VibePage() {
             />
           </div>
 
-          <h2 className="vibe-topbar__title fw-bold">{t("title")}</h2>
-
           <div className="vibe-topbar__right">
             {/* desktop/tablet */}
             <div className="vibe-actions vibe-actions--desktop">

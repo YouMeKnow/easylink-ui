@@ -151,3 +151,22 @@ main {
 .myvibe-card__type {
   color: rgb(var(--accent-from));
 }
+
+.myvibes-page {
+  max-width: 980px;
+  min-height: 60vh;
+  padding-top: 24px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+.myvibes-empty {
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .myvibes-page {
+    padding-top: 16px;
+  }
+}
