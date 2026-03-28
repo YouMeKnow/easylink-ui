@@ -1,5 +1,19 @@
 html, body { overflow-x: clip; }
 
+.footer {
+  background: var(--surface);
+  color: var(--text);
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-family: "Inter", sans-serif;
+  border-top: 1px solid var(--stroke);
+
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+/* links row */
 .footer__links {
   display: flex;
   justify-content: center;
@@ -8,38 +22,31 @@ html, body { overflow-x: clip; }
   white-space: normal;
   flex-wrap: wrap;
   max-width: 100%;
-  row-gap: 0.4rem; 
-  min-width: 0;    
+  row-gap: 0.4rem;
+  min-width: 0;
 }
 
 .footer__links a {
-  color: #444 !important; 
+  color: var(--text);
+  opacity: 0.78;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, opacity 0.2s ease;
   padding: 0.125rem 0.25rem;
   font-size: inherit;
 }
 
 .footer__links a:hover {
   text-decoration: underline;
-  color: #000 !important;
+  color: var(--link);
+  opacity: 1;
 }
 
+/* desktop */
 @media (min-width: 601px) {
   .footer__links {
     white-space: nowrap;
     flex-wrap: nowrap;
   }
-}
-
-.footer {
-  background-color: #f9f9f9;
-  color: #333;
-  padding: 2rem 1rem;
-  text-align: center;
-  font-size: 0.85rem;
-  font-family: "Inter", sans-serif;
-  border-top: 1px solid #ddd;
 }
 
 @media (max-width: 900px) {

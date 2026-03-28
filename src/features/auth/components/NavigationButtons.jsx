@@ -18,10 +18,10 @@ export default function NavigationButtons({
     <div
       className="
         d-flex
-        flex-column flex-sm-row              /* xs: колонка, ≥sm: в ряд */
+        flex-column flex-sm-row              
         align-items-stretch align-items-sm-center
         justify-content-sm-center
-        gap-2                                /* стабильный зазор между кнопками */
+        gap-2                                
         mt-3
       "
       style={{ width: "100%" }}
@@ -29,36 +29,24 @@ export default function NavigationButtons({
       {/* Back */}
       <button
         type="button"
-        className="
-          btn btn-outline-secondary
-          d-flex align-items-center justify-content-center gap-2
-          w-100 w-sm-auto                    /* xs: 100% ширины, ≥sm: авто */
-          px-3 py-2                          /* компактнее на мобилке */
-        "
+        className="nav-btn nav-btn-ghost"
         onClick={handleBack}
         disabled={isFirst}
       >
-        <i className="bi bi-arrow-left" aria-hidden="true" />
+        <i className="bi bi-arrow-left" />
         {t("back")}
       </button>
 
       {/* Next / Login */}
       <button
         type="button"
-        className="
-          btn btn-success
-          d-flex align-items-center justify-content-center gap-2
-          w-100 w-sm-auto                    /* xs: 100%, ≥sm: авто */
-          px-4 py-2
-        "
+        className="nav-btn nav-btn-primary"
         onClick={handleNext}
         disabled={!canNext}
-        /* на широких экранах пусть будет длиннее, на узких — адаптивно */
-        style={{ minWidth: "min(140px, 48vw)" }}
         aria-label={isLast ? t("login") : t("next")}
       >
         {isLast ? t("login") : t("next")}
-        <i className="bi bi-arrow-right" aria-hidden="true" />
+        <i className="bi bi-arrow-right" />
       </button>
     </div>
   );

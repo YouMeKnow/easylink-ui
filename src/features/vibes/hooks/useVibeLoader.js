@@ -1,92 +1,232 @@
-// src/features/vibes/hooks/useVibeLoader.js
-import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
-import { useNavigate, useLocation } from "react-router-dom";
-import { getVibe } from "@/api/vibeApi";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import { getOwnerVibe, getPublicVibe } from "@/api/vibeApi";
 import parseFields from "@/data/parseFields";
 
-const VIBE_CACHE = new Map(); // id -> { data, ts }
-
+const VIBE_CACHE = new Map();
 const TTL_MS = 2 * 60 * 1000;
 
-function getCached(id) {
-  const entry = VIBE_CACHE.get(id);
+function makeKey(id, token, mode) {
+  return `${mode}|${id}|${token ? "auth" : "public"}`;
+}
+
+function getCached(key) {
+  const entry = VIBE_CACHE.get(key);
   if (!entry) return null;
   if (Date.now() - entry.ts > TTL_MS) {
-    VIBE_CACHE.delete(id);
+    VIBE_CACHE.delete(key);
     return null;
   }
   return entry.data;
 }
 
-function setCached(id, data) {
-  VIBE_CACHE.set(id, { data, ts: Date.now() });
+function setCached(key, data) {
+  VIBE_CACHE.set(key, { data, ts: Date.now() });
 }
 
-export function prefetchVibe(id, signal) {
-  return getVibe(id, { signal })
-    .then((data) => {
-      setCached(id, data);
-      return data;
-    })
-    .catch(() => {});
+const DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+const dayAlias = {
+  mon: "monday", monday: "monday",
+  tue: "tuesday", tues: "tuesday", tuesday: "tuesday",
+  wed: "wednesday", weds: "wednesday", wednesday: "wednesday",
+  thu: "thursday", thur: "thursday", thurs: "thursday", thursday: "thursday",
+  fri: "friday", friday: "friday",
+  sat: "saturday", saturday: "saturday",
+  sun: "sunday", sunday: "sunday",
+};
+
+function isPlainObject(v) {
+  return v && typeof v === "object" && !Array.isArray(v);
 }
 
-export default function useVibeLoader(id) {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation(); 
-  const cached = id ? getCached(id) : null;
+function parseMaybeJSON(v) {
+  if (typeof v !== "string") return v;
+  try {
+    return JSON.parse(v);
+  } catch {
+    return v;
+  }
+}
+
+function toISODateValue(val) {
+  if (!val) return "";
+  if (typeof val === "string" && /^\d{4}-\d{2}-\d{2}$/.test(val)) return val;
+
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return "";
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function toHoursObject(input) {
+  const v = parseMaybeJSON(input);
+  if (!isPlainObject(v)) return null;
+
+  const out = {};
+  for (const [k, val] of Object.entries(v)) {
+    const norm = String(k).trim().toLowerCase().replace(/\.$/, "");
+    const day = dayAlias[norm];
+    if (day) out[day] = typeof val === "string" ? val : "";
+  }
+
+  const hasAny = DAYS.some((d) => Object.prototype.hasOwnProperty.call(out, d));
+  if (!hasAny) return null;
+
+  for (const d of DAYS) if (!(d in out)) out[d] = "";
+  return out;
+}
+
+function normalizeExtraBlocks(rawBlocks = []) {
+  return (rawBlocks || []).map((b, i) => {
+    const typeRaw = String(b?.type || b?.kind || "").trim();
+    const type = typeRaw.toLowerCase();
+    const label = b?.label || "Field";
+    const raw = parseMaybeJSON(b?.value);
+
+    if (type === "hours") {
+      const hours =
+        toHoursObject(raw) ||
+        DAYS.reduce((acc, d) => {
+          acc[d] = "";
+          return acc;
+        }, {});
+      return {
+        id: b?.id ?? `extra-${i}`,
+        type: "hours",
+        label,
+        value: hours,
+        placeholder: b?.placeholder,
+        fromBackend: !!b?.fromBackend,
+      };
+    }
+
+    if (type === "birthday" || type === "date") {
+      return {
+        id: b?.id ?? `extra-${i}`,
+        type: "birthday",
+        label,
+        value: toISODateValue(raw ?? ""),
+        placeholder: b?.placeholder,
+        fromBackend: !!b?.fromBackend,
+      };
+    }
+
+    return {
+      id: b?.id ?? `extra-${i}`,
+      type: typeRaw || "custom",
+      label,
+      value:
+        typeof raw === "string" || typeof raw === "number"
+          ? String(raw)
+          : "",
+      placeholder: b?.placeholder,
+      fromBackend: !!b?.fromBackend,
+    };
+  });
+}
+
+async function fetchVibeByMode(id, token, mode, signal) {
+  if (mode === "owner") {
+    return getOwnerVibe(id, {
+      signal,
+      auth: "force",
+      token,
+    });
+  }
+
+  return getPublicVibe(id, {
+    signal,
+    auth: token ? "force" : "off",
+    token,
+  });
+}
+
+export default function useVibeLoader(id, token, mode = "public") {
+  const cacheKey = useMemo(() => {
+    if (!id) return null;
+    return makeKey(id, token, mode);
+  }, [id, token, mode]);
+
+  const cached = cacheKey ? getCached(cacheKey) : null;
+
   const [vibe, setVibe] = useState(cached || null);
-  const [loading, setLoading] = useState(!cached); 
+  const [loading, setLoading] = useState(!cached);
   const [refreshing, setRefreshing] = useState(false);
 
   const [name, setName] = useState(cached?.name || "");
   const [description, setDescription] = useState(cached?.description || "");
   const [contacts, setContacts] = useState([]);
   const [extraBlocks, setExtraBlocks] = useState([]);
+
   const [visible, setVisible] = useState(Boolean(cached?.visible));
   const [publicCode, setPublicCode] = useState(cached?.publicCode || "");
 
-  const prevIdRef = useRef(id);
+  const [subscriberCount, setSubscriberCount] = useState(
+    typeof cached?.subscriberCount === "number" ? cached.subscriberCount : 0
+  );
+
+  const [followingCount, setFollowingCount] = useState(
+    typeof cached?.followingCount === "number" ? cached.followingCount : 0
+  );
+
+  const [subscriberVibes, setSubscriberVibes] = useState(
+    Array.isArray(cached?.subscriberVibes) ? cached.subscriberVibes : []
+  );
+
+  const reload = useCallback(async () => {
+    if (!id) return;
+    setRefreshing(true);
+    try {
+      const data = await fetchVibeByMode(id, token, mode);
+      if (cacheKey) setCached(cacheKey, data);
+      setVibe(data);
+    } catch {
+      setVibe(null);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [id, token, mode, cacheKey]);
 
   useEffect(() => {
-    if (!id || !isAuthenticated) {
+    if (!id) {
       setVibe(null);
       setLoading(false);
       setRefreshing(false);
+      setName("");
+      setDescription("");
+      setContacts([]);
+      setExtraBlocks([]);
+      setVisible(false);
+      setPublicCode("");
+      setFollowingCount(0);
+      setSubscriberCount(0);
+      setSubscriberVibes([]);
       return;
     }
+
     const ac = new AbortController();
-    const hasCache = Boolean(getCached(id));
+
+    const hasCache = Boolean(cacheKey && getCached(cacheKey));
     if (hasCache) {
       setLoading(false);
       setRefreshing(true);
     } else {
-      setLoading(true);   
+      setLoading(true);
       setRefreshing(false);
     }
 
-    prevIdRef.current = id;
-
     (async () => {
       try {
-        const data = await getVibe(id, { signal: ac.signal });
+        const data = await fetchVibeByMode(id, token, mode, ac.signal);
         if (ac.signal.aborted) return;
 
-        setCached(id, data);
+        if (cacheKey) setCached(cacheKey, data);
         setVibe(data);
-      } catch (err) {
+      } catch {
         if (ac.signal.aborted) return;
-        const status = err?.status ?? err?.response?.status;
-        if (status === 401 || status === 403) {
-          const nextPath = `${location.pathname}${location.search || ""}`;
-          navigate(`/signin?next=${encodeURIComponent(nextPath)}`, {
-            replace: true,
-            state: { reason: "expired" },
-          });
-          return;
-        }
+        setVibe(null);
       } finally {
         if (!ac.signal.aborted) {
           setLoading(false);
@@ -96,30 +236,50 @@ export default function useVibeLoader(id) {
     })();
 
     return () => ac.abort();
-  }, [id, isAuthenticated, navigate]);
+  }, [id, cacheKey, token, mode]);
 
-  
   useEffect(() => {
     if (!vibe) return;
+
     setName(vibe.name || "");
     setDescription(vibe.description || "");
     setVisible(Boolean(vibe.visible));
     setPublicCode(vibe.publicCode || "");
-    const { contacts, extraBlocks } = parseFields(vibe.fieldsDTO || []);
-    setContacts(contacts);
-    setExtraBlocks(extraBlocks);
+
+    const parsed = parseFields(vibe.fieldsDTO || []);
+    setContacts(parsed?.contacts || []);
+
+    const rawBlocks = (parsed?.extraBlocks || []).filter(
+      (b) => String(b?.type || "").trim().toUpperCase() !== "BACKGROUND"
+    );
+
+    setExtraBlocks(normalizeExtraBlocks(rawBlocks));
+
+    setSubscriberCount(
+      typeof vibe.subscriberCount === "number" ? vibe.subscriberCount : 0
+    );
+    setFollowingCount(
+      typeof vibe.followingCount === "number" ? vibe.followingCount : 0
+    );
+    setSubscriberVibes(
+      Array.isArray(vibe.subscriberVibes) ? vibe.subscriberVibes : []
+    );
   }, [vibe]);
 
   return {
     vibe,
     setVibe,
-    loading,     
-    refreshing,  
+    loading,
+    refreshing,
+    reload,
+    followingCount,
     name,
     description,
     contacts,
     extraBlocks,
     visible,
     publicCode,
+    subscriberCount,
+    subscriberVibes,
   };
 }

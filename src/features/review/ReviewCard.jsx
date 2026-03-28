@@ -1,7 +1,9 @@
 import React from "react";
+import "./ReviewCard.css";
+import UserAvatar from "@/shared/ui/UserAvatar";
 
 function isValidDate(d) {
-  return d instanceof Date && !isNaN(d.getTime());
+  return d instanceof Date && !Number.isNaN(d.getTime());
 }
 
 function toDate(d) {
@@ -9,25 +11,21 @@ function toDate(d) {
 
   if (d instanceof Date) return isValidDate(d) ? d : null;
 
- 
   if (typeof d === "number" || (typeof d === "string" && /^\d+$/.test(d))) {
     const t = new Date(Number(d));
     return isValidDate(t) ? t : null;
   }
 
   if (typeof d === "string") {
-   
     if (/^\d{4}-\d{2}-\d{2}$/.test(d)) {
       const [y, m, day] = d.split("-").map(Number);
       const t = new Date(Date.UTC(y, m - 1, day));
       return isValidDate(t) ? t : null;
     }
-    
     if (/^\d{4}-\d{2}-\d{2}T/.test(d)) {
       const t = new Date(d);
       return isValidDate(t) ? t : null;
     }
-    
     return null;
   }
 
@@ -35,20 +33,8 @@ function toDate(d) {
 }
 
 function formatDateEnSmart(d) {
-  if (typeof d === "string") {
-    const parsed = toDate(d);
-    if (parsed) {
-      return new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }).format(parsed);
-    }
-    return d;
-  }
-
   const dt = toDate(d);
-  if (!dt) return "";
+  if (!dt) return typeof d === "string" ? d : "";
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
@@ -56,48 +42,48 @@ function formatDateEnSmart(d) {
   }).format(dt);
 }
 
-const ReviewCard = ({
+export default function ReviewCard({
   avatarUrl = "https://via.placeholder.com/64",
   text,
   rating = 5,
   author,
   location,
   date,
-}) => {
-  const stars = [];
-  for (let i = 1; i <= 5; i++) {
-    stars.push(
-      <span key={i} className={i <= rating ? "text-warning" : "text-muted"}>
-        &#9733;
-      </span>
-    );
-  }
-
+}) {
   const formattedDate = formatDateEnSmart(date);
+  const initial = (author || "?").trim().slice(0, 1).toUpperCase();
 
   return (
-    <div
-      className="card mb-3 border-0"
-      style={{
-        maxWidth: "540px",
-        backgroundColor: "#f8f9fa", 
-      }}
-    >
-      <div className="row g-0 align-items-center">
-        <div className="col-md-10">
-          <div className="card-body">
-            <p className="card-text fst-italic">«{text}»</p>
-            <div className="mb-2">{stars}</div>
-            <h6 className="card-subtitle mb-0">{author}</h6>
-            <h6 className="card-subtitle mb-0">
-              <small className="text-muted">{formattedDate}</small>
-            </h6>
-            <small className="text-muted">{location}</small>
+    <div className="reviewCard glass">
+      <div className="reviewCard__row">
+        <UserAvatar size={46} />
+        <div className="reviewCard__body">
+          <p className="reviewCard__text">«{text}»</p>
+
+          <div className="reviewCard__meta">
+            <div className="reviewCard__stars" aria-label={`Rating: ${rating}/5`}>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <span
+                  key={i}
+                  className={`reviewCard__star ${i <= rating ? "isActive" : ""}`}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+
+            <div className="reviewCard__who">
+              <span className="reviewCard__author">{author}</span>
+              {location ? <span className="reviewCard__dot">•</span> : null}
+              {location ? <span className="reviewCard__loc">{location}</span> : null}
+            </div>
+
+            {formattedDate ? (
+              <div className="reviewCard__date">{formattedDate}</div>
+            ) : null}
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default ReviewCard;
+}

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { ImagePlus, X, ChevronLeft, Upload, Sparkles } from "lucide-react";
 import { useFileUpload } from "../catalog/useFileUpload";
+import "./CatalogCard.css";
 
 export default function CatalogCard({
   data = {},
@@ -14,26 +16,39 @@ export default function CatalogCard({
   );
   const [image, setImage] = useState(data.image || data.imageUrl || "");
   const [file, setFile] = useState(null);
+  const [saving, setSaving] = useState(false);
+
   const { uploadFile } = useFileUpload();
+  const inputRef = useRef(null);
 
   const readOnly = mode === "view";
+  const hasTitle = title.trim().length > 0;
+  const canSave = !readOnly && hasTitle && !saving;
+
+  const API_BASE =
+    import.meta.env.VITE_API_URL?.replace(/\/$/, "") || window.location.origin;
 
   const resolveServerUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http://") || path.startsWith("https://")) return path;
-    if (path.startsWith("/uploads/")) return path;
-    return `/uploads/${path}`;
+
+    const s = String(path).trim();
+
+    if (/^https?:\/\//i.test(s)) return s;
+    if (s.startsWith("/uploads/")) return `${API_BASE}${s}`;
+    if (s.startsWith("uploads/")) return `${API_BASE}/${s}`;
+    if (s.startsWith("/")) return `${API_BASE}${s}`;
+
+    return `${API_BASE}/uploads/${s}`;
   };
 
-  // what comes from the server/props
   const [serverSrc, setServerSrc] = useState(
     resolveServerUrl(data.imageUrl || data.image || "")
   );
+
   useEffect(() => {
     setServerSrc(resolveServerUrl(data.imageUrl || data.image || ""));
   }, [data.imageUrl, data.image]);
 
-  // preview for a newly selected file
   const [previewSrc, setPreviewSrc] = useState("");
   useEffect(() => {
     if (!file) {
@@ -45,8 +60,8 @@ export default function CatalogCard({
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
-  // keep other fields in sync with props
   useEffect(() => setTitle(data.title || ""), [data.title]);
+
   useEffect(() => {
     setDescription(data.description || "");
     setPrice(
@@ -55,144 +70,223 @@ export default function CatalogCard({
     setImage(data.image || data.imageUrl || "");
   }, [data.description, data.price, data.image, data.imageUrl]);
 
-  const inputRef = useRef(null);
-
-  const handleSave = async () => {
-    let imageUrl = image;
-    if (file) {
-      try {
-        imageUrl = await uploadFile(file); // returns "/uploads/xxx.jpg"
-      } catch (err) {
-        alert("Upload failed: " + err.message);
-        return;
-      }
-    }
-    onSave?.({
-      title: title?.trim(),
-      description: description?.trim(),
-      price: price === "" ? null : Number(price),
-      image: imageUrl,
-    });
-  };
-
   const handleFileChange = (e) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
-    setFile(selectedFile); // preview will update via useEffect above
+    setFile(selectedFile);
   };
 
-  const imgSrc = previewSrc || serverSrc; // prefer freshly chosen file
+  const handleRemoveImage = (e) => {
+    e.stopPropagation();
+    setFile(null);
+    setImage("");
+    setServerSrc("");
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  const handleSave = async () => {
+    if (!canSave) return;
+
+    let imageUrl = image;
+
+    try {
+      setSaving(true);
+
+      if (file) {
+        imageUrl = await uploadFile(file);
+      }
+
+      await onSave?.({
+        title: title.trim(),
+        description: description.trim(),
+        price: price === "" ? null : Number(price),
+        image: imageUrl || null,
+      });
+    } catch (err) {
+      alert(err.message || "Failed to save item");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const imgSrc = previewSrc || serverSrc;
 
   return (
-    <div
-      className="card p-0 overflow-hidden"
-      style={{ width: "100%", maxWidth: 500, margin: "0 auto" }}
-    >
-      <div
-        className="w-100 bg-light border-bottom"
-        style={{
-          aspectRatio: "1 / 1",
-          overflow: "hidden",
-          position: "relative",
-          cursor: readOnly ? "default" : "pointer",
-        }}
-        onClick={() => {
-          if (!readOnly) inputRef.current?.click();
-        }}
-      >
-        {imgSrc ? (
-          <img
-            src={imgSrc}
-            alt={title || "Image"}
-            className="w-100 h-100"
-            style={{ objectFit: "cover" }}
-            onError={(e) => {
-              e.currentTarget.style.display = "none";
-            }}
-          />
-        ) : (
-          <div className="d-flex justify-content-center align-items-center h-100 text-muted">
-            No image
-          </div>
-        )}
-
-        {!readOnly && (
-          <input
-            ref={inputRef}
-            id="imageInput"
-            type="file"
-            accept="image/*"
-            capture="environment"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-        )}
-      </div>
-
-      <div className="p-4">
-        {/* fields */}
-        <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            readOnly={readOnly}
-          />
-        </div>
-
-        <div className="mb-3">
-          <textarea
-            className="form-control"
-            rows={3}
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            readOnly={readOnly}
-          />
-        </div>
-
-        <div className="d-flex justify-content-between align-items-center gap-2">
-          <div style={{ width: 150 }}>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              readOnly={readOnly}
-            />
+    <div className="catalogCard">
+      <div className="catalogCard__shell">
+        <div className="catalogCard__header">
+          <div>
+            <div className="catalogCard__eyebrow">
+              {mode === "edit" ? "Edit item" : readOnly ? "Item preview" : "New menu item"}
+            </div>
+            <h3 className="catalogCard__title">
+              {mode === "edit" ? "Refine your item" : "Create something people want to open"}
+            </h3>
+            <p className="catalogCard__subtitle">
+              Keep it simple: add a strong photo, a clear title, and a clean price.
+            </p>
           </div>
 
-          {!readOnly ? (
-            <div className="d-flex gap-2">
+          <button
+            type="button"
+            className="catalogIconBtn"
+            onClick={onCancel}
+            aria-label={readOnly ? "Back" : "Close"}
+            title={readOnly ? "Back" : "Close"}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="catalogCard__content">
+          <div className="catalogCard__preview">
+            <button
+              type="button"
+              className={`catalogUpload ${imgSrc ? "hasImage" : ""}`}
+              onClick={() => {
+                if (!readOnly) inputRef.current?.click();
+              }}
+              disabled={readOnly}
+            >
+              {imgSrc ? (
+                <>
+                  <img
+                    src={imgSrc}
+                    alt={title || "Preview"}
+                    className="catalogUpload__img"
+                  />
+
+                  {!readOnly && (
+                    <div className="catalogUpload__overlay">
+                      <div className="catalogUpload__overlayInner">
+                        <Upload size={18} />
+                        <span>Change photo</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {!readOnly && (
+                    <button
+                      type="button"
+                      className="catalogUpload__remove"
+                      onClick={handleRemoveImage}
+                      aria-label="Remove image"
+                      title="Remove image"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </>
+              ) : (
+                <div className="catalogUpload__empty">
+                  <div className="catalogUpload__iconWrap">
+                    <ImagePlus size={26} />
+                  </div>
+                  <div className="catalogUpload__emptyTitle">
+                    {readOnly ? "No image" : "Add a photo"}
+                  </div>
+                  <div className="catalogUpload__emptyText">
+                    {readOnly
+                      ? "This item has no image yet."
+                      : "Tap to upload a clean, attractive image for this item."}
+                  </div>
+                </div>
+              )}
+            </button>
+
+            {!readOnly && (
+              <input
+                ref={inputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                className="catalogUpload__input"
+                onChange={handleFileChange}
+              />
+            )}
+
+          </div>
+
+          <div className="catalogCard__form">
+            <div className="catalogField">
+              <label className="catalogLabel">Title</label>
+              <input
+                type="text"
+                className="catalogInput"
+                placeholder="e.g. Truffle Pasta"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                readOnly={readOnly}
+                maxLength={80}
+              />
+              {!readOnly && !hasTitle && (
+                <div className="catalogHint catalogHint--error">
+                  Title is required.
+                </div>
+              )}
+            </div>
+
+            <div className="catalogField">
+              <label className="catalogLabel">Description</label>
+              <textarea
+                className="catalogTextarea"
+                rows={5}
+                placeholder="Add a short, clear description that makes the item feel worth opening."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                readOnly={readOnly}
+                maxLength={280}
+              />
+              <div className="catalogHint">
+                Keep it short and natural.
+              </div>
+            </div>
+
+            <div className="catalogField">
+              <label className="catalogLabel">Price</label>
+              <div className="catalogPriceWrap">
+                <span className="catalogPriceWrap__prefix">$</span>
+                <input
+                  type="number"
+                  className="catalogInput catalogInput--price"
+                  placeholder="18.00"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  readOnly={readOnly}
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+            </div>
+
+            <div className="catalogActions">
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="catalogBtn catalogBtn--ghost"
                 onClick={onCancel}
               >
-                Cancel
+                {readOnly ? (
+                  <>
+                    <ChevronLeft size={16} />
+                    Back
+                  </>
+                ) : (
+                  "Cancel"
+                )}
               </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleSave}
-              >
-                Save
-              </button>
+
+              {!readOnly && (
+                <button
+                  type="button"
+                  className="catalogBtn catalogBtn--primary"
+                  onClick={handleSave}
+                  disabled={!canSave}
+                >
+                  {saving ? "Saving..." : mode === "edit" ? "Save changes" : "Create item"}
+                </button>
+              )}
             </div>
-          ) : (
-            <div className="d-flex gap-2">
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={onCancel}
-              >
-                Back
-              </button>
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

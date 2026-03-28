@@ -1,112 +1,171 @@
 import React from "react";
 import ContactButton from "./ContactButton";
 import { valueToString } from "./valueToString";
+import "./ContactsSection.css";
+import ConfirmModal from "@/features/vibes/components/modals/ConfirmModal";
+import { FiX, FiPlus } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
+
+const MAIN_TYPES = ["phone", "email", "website"];
+const SOCIAL_TYPES = [
+  "instagram",
+  "whatsapp",
+  "telegram",
+  "linkedin",
+  "twitter",
+  "x",
+  "facebook",
+  "discord",
+  "github",
+  "youtube",
+  "tiktok",
+  "snapchat",
+];
+
+const Section = React.memo(function Section({ title, items, t, renderItem, editMode }) {
+  if (!items.length) return null;
+
+  const gridClass =
+    title === "Main"
+      ? "contacts-grid contacts-grid--main"
+      : editMode
+      ? "contacts-grid contacts-grid--secondary contacts-grid--secondary-edit"
+      : "contacts-grid contacts-grid--secondary";
+      
+  return (
+    <div className="contacts-section">
+      <div className="contacts-section__title">{t(title, title)}</div>
+      <div className={gridClass}>{items.map(renderItem)}</div>
+    </div>
+  );
+});
 
 export default function ContactsSection({
-  t,
-  contacts,
+  contacts = [],
   editMode,
   onOpenContactPicker,
   onRemoveContact,
   onChangeContactValue,
-  resumeEditAt
 }) {
+  const { t } = useTranslation(["contacts", "common"]);
+
   const [editingIdx, setEditingIdx] = React.useState(-1);
-  const [tempValue, setTempValue]   = React.useState("");
-  const lastNonceRef = React.useRef(null);
+  const [tempByIdx, setTempByIdx] = React.useState({});
+  const [confirmIdx, setConfirmIdx] = React.useState(null);
 
-  // auto-focus edit when resumeEditAt приходит
-  React.useEffect(() => {
-    if (!editMode || !resumeEditAt || resumeEditAt.index == null) return;
-    const { index, nonce } = resumeEditAt;
-    if (nonce && nonce === lastNonceRef.current) return;
-    lastNonceRef.current = nonce || null;
+  // ---- GROUP CONTACTS (memo, no object spread) ----
+  const grouped = React.useMemo(() => {
+    const g = { main: [], social: [], other: [] };
 
-    const raw = contacts?.[index]?.value;
+    (contacts || []).forEach((c, i) => {
+      const item = { c, index: i };
+
+      if (MAIN_TYPES.includes(c?.type)) g.main.push(item);
+      else if (SOCIAL_TYPES.includes(c?.type)) g.social.push(item);
+      else g.other.push(item);
+    });
+
+    return g;
+  }, [contacts]);
+
+  const startEdit = React.useCallback((index, value) => {
     setEditingIdx(index);
-    setTempValue(valueToString(raw));
-  }, [resumeEditAt, editMode, contacts]);
+    setTempByIdx((p) => ({
+      ...p,
+      [index]: valueToString(value),
+    }));
+  }, []);
 
-  const prevLenRef = React.useRef(contacts?.length || 0);
-  React.useEffect(() => {
-    const curr = contacts?.length || 0;
-    const prev = prevLenRef.current;
-    if (editMode && curr > prev) {
-      const i = curr - 1;
-      setEditingIdx(i);
-      const raw = contacts[i]?.value;
-      setTempValue(typeof raw === "string" ? raw : (raw?.value ?? ""));
-    }
-    prevLenRef.current = curr;
-  }, [contacts, editMode]);
+  const changeEdit = React.useCallback((index, v) => {
+    setTempByIdx((p) => ({ ...p, [index]: v }));
+  }, []);
+
+  const commitEdit = React.useCallback(() => {
+    if (editingIdx < 0) return;
+    const v = tempByIdx[editingIdx] ?? "";
+    onChangeContactValue?.(editingIdx, v);
+    setEditingIdx(-1);
+  }, [editingIdx, tempByIdx, onChangeContactValue]);
+
+  const cancelEdit = React.useCallback(() => setEditingIdx(-1), []);
+
+  // ---- RENDER ONE CHIP ----
+  const renderItem = React.useCallback(
+    ({ c, index }) => {
+      const isEditing = !!editMode && editingIdx === index;
+
+      return (
+        <div key={c.id ?? `${c.type}-${index}`} className="contact-chip">
+          <ContactButton
+            type={c.type}
+            value={c.value}
+            editMode={editMode}
+            isEditing={isEditing}
+            editValue={isEditing ? (tempByIdx[index] ?? "") : ""}
+            onStartEdit={() => startEdit(index, c.value)}
+            onEditChange={(v) => changeEdit(index, v)}
+            onCommitEdit={commitEdit}
+            onCancelEdit={cancelEdit}
+            onChangeType={() => onOpenContactPicker?.(index)}
+          />
+
+          {editMode && (
+            <button
+              type="button"
+              onClick={() => setConfirmIdx(index)}
+              className="contact-remove"
+            >
+              <FiX size={14} />
+            </button>
+          )}
+        </div>
+      );
+    },
+    [
+      editMode,
+      editingIdx,
+      tempByIdx,
+      startEdit,
+      changeEdit,
+      commitEdit,
+      cancelEdit,
+      onOpenContactPicker,
+    ]
+  );
 
   return (
-    <div className="d-flex flex-column align-items-center w-100" style={{ gap: 8 }}>
-      <div className="d-flex flex-wrap gap-2 justify-content-center w-100">
-        {contacts && contacts.length > 0 ? (
-          contacts.map((c, i) => (
-            <div key={(c.id ?? `${c.type}-${i}`)} style={{ position: "relative", minHeight: 44 }}>
-              <ContactButton
-                type={c.type}
-                value={c.value}
-                editMode={editMode}
-                isEditing={editMode && editingIdx === i}
-                editValue={editMode && editingIdx === i ? tempValue : ""}
-                inputKey={editingIdx === i && resumeEditAt ? resumeEditAt.nonce : undefined}
-                onStartEdit={() => {
-                  setEditingIdx(i);
-                  setTempValue(valueToString(c?.value));
-                }}
-                onEditChange={(v) => setTempValue(v)}
-                onCommitEdit={(e) => {
-                  if (e?.preventDefault) e.preventDefault();
-                  onChangeContactValue?.(i, tempValue);
-                  setEditingIdx(-1);
-                }}
-                onCancelEdit={() => setEditingIdx(-1)}
-                onChangeType={() => onOpenContactPicker?.(i)}
-              />
+    <>
+      <Section title="Main" items={grouped.main} t={t} renderItem={renderItem} editMode={editMode} />
+      <Section title="Social" items={grouped.social} t={t} renderItem={renderItem} editMode={editMode} />
+      <Section title="Other" items={grouped.other} t={t} renderItem={renderItem} editMode={editMode} />
 
-              {editMode && (
-                <button
-                  type="button"
-                  title="Remove"
-                  onClick={() => onRemoveContact?.(i)}
-                  className="btn btn-light btn-sm"
-                  style={{
-                    position: "absolute",
-                    top: -8,
-                    right: -8,
-                    width: 24,
-                    height: 24,
-                    borderRadius: 12,
-                    lineHeight: 0,
-                    padding: 0,
-                    boxShadow: "0 1px 3px rgba(0,0,0,.15)",
-                  }}
-                >
-                  ×
-                </button>
-              )}
-            </div>
-          ))
-        ) : (
-          <span className="text-muted" style={{ fontSize: 15 }}>
-            {t("no_contacts")}
-          </span>
-        )}
-      </div>
-
+      {/* ---- SINGLE ADD BUTTON AT BOTTOM ---- */}
       {editMode && (
-        <button
-          type="button"
-          onClick={() => onOpenContactPicker?.(null)}
-          className="btn btn-outline-primary btn-sm"
-          style={{ marginTop: 6 }}
-        >
-          + {t("add_contact", "Add contact")}
-        </button>
+        <div className="contacts-add-wrapper">
+          <button
+            type="button"
+            onClick={() => onOpenContactPicker?.(null)}
+            className="contact-add-tile"
+          >
+            <FiPlus size={14} />
+            <span>{t("add", "Add contact")}</span>
+          </button>
+        </div>
       )}
-    </div>
+
+      <ConfirmModal
+        open={confirmIdx != null}
+        title="Remove contact"
+        message="Are you sure you want to remove this contact?"
+        cancelText="Cancel"
+        confirmText="Remove"
+        danger
+        onClose={() => setConfirmIdx(null)}
+        onConfirm={() => {
+          onRemoveContact?.(confirmIdx);
+          setConfirmIdx(null);
+        }}
+      />
+    </>
   );
 }

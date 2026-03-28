@@ -8,7 +8,7 @@
   "step1_placeholder": "you@example.com",
   "step1_next": "Next",
   "step2_info": "How many memory locks do you want to add? More = safer!",
-  "step2_label": "Choose number of memory locks:",
+  "step2_label": "Choose number of memory locks",
   "step3_info": "Think up a question that only you know the answer to. This will be used for passwordless login!",
   "step3_question": "Question",
   "step3_custom": "Write your own",
@@ -32,5 +32,28 @@
   "toast_fail": "Registration failed",
   "unknown_error": "Something went wrong. Please try again.",
   "verification_already_sent": "Verification already sent. Please check your email.",
-  "account_already_exists": "This account already exists. Try logging in."
+  "account_already_exists": "This account already exists. Try logging in.",
+  "finish_title": "Review & create your account",
+  "finish_info": "These questions will help you sign in securely without passwords. You can change them later.",
+  "password_signup": {
+    "title": "Create an account",
+    "subtitle": "Sign up with a password. You can enable Memory Locks later.",
+    "email_label": "Email",
+    "email_placeholder": "ymk@example.com",
+    "password_label": "Password",
+    "password_placeholder": "At least 8 characters",
+    "password_hint": "Use 8+ characters.",
+    "cta": "Create account",
+    "cta_loading": "Creating...",
+    "footer_have_account": "Already have an account?",
+    "footer_login": "Login",
+    "hero_alt": "Signup",
+    "toast": {
+      "verify_email": "Check your email to verify your account!",
+      "signup_failed": "Signup failed"
+    },
+    "errors": {
+      "signup_failed_status": "Signup failed: {{status}}"
+    }
+  }
 }

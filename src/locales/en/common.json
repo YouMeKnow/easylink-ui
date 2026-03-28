@@ -4,5 +4,12 @@
   "save": "Save",
   "close": "Close",
   "back": "Back",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "done": "Done",
+  "pick_type_for_contact": "Pick type for this contact",
+  "toggle_contacts": "Add / remove contacts",
+  "save_changes": "Save changes",
+  "create": "Create",
+  "saving": "Saving...",
+  "creating": "Creating..."
 }

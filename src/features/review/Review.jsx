@@ -2,6 +2,34 @@ import React from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import ReviewCard from "./ReviewCard";
+import "./Review.css";
+
+function decodeJwtPayload(token) {
+  try {
+    const p = token.split(".")[1];
+    const json = atob(p.replace(/-/g, "+").replace(/_/g, "/"));
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+function displayName(user, token, t) {
+  const u = user?.username?.trim();
+  if (u) return u;
+
+  const em = user?.email?.trim();
+  if (em) return em;
+
+  const payload = token ? decodeJwtPayload(token) : null;
+  const fromToken =
+    payload?.username ||
+    payload?.preferred_username ||
+    payload?.email ||
+    payload?.sub;
+
+  return (fromToken && String(fromToken).trim()) || t("anonymous");
+}
 
 function Review() {
   const [text, setText] = React.useState("");
@@ -17,7 +45,6 @@ function Review() {
   const { t, i18n } = useTranslation("review");
 
   const token = localStorage.getItem("jwt");
-
   const API_URL = "/api/v3/reviews";
   const [errorMessage, setErrorMessage] = React.useState("");
 
@@ -64,7 +91,7 @@ function Review() {
     if (!message) return;
 
     const newReview = {
-      username: user?.username || t("anonymous"),
+      username: displayName(user, token, t),
       content: message,
       createdAt: new Date().toISOString(),
       rating,
@@ -74,6 +101,7 @@ function Review() {
 
     try {
       setPosting(true);
+      setErrorMessage("");
       const res = await fetch(API_URL, {
         method: "POST",
         headers: {
@@ -82,16 +110,27 @@ function Review() {
         },
         body: JSON.stringify(newReview),
       });
+
       if (!res.ok) {
-        const errorMessage = await res.text();
-        throw new Error(errorMessage || `HTTP ${res.status}`);
+        let msg = `HTTP ${res.status}`;
+
+        try {
+          const data = await res.json();        
+          msg = data?.message || data?.error || msg;
+        } catch {
+          msg = await res.text();               
+        }
+
+        throw new Error(msg);
       }
 
       await res.json();
       await loadReviews();
+
       setSubmitted(true);
       setText("");
       setRating(5);
+
       setTimeout(() => setSubmitted(false), 3000);
       scrollToBottom(true);
     } catch (err) {
@@ -105,22 +144,20 @@ function Review() {
   const isSubmitDisabled = posting || !text.trim();
 
   return (
-    <div className="container d-flex justify-content-center py-5">
-      <div className="w-100" style={{ maxWidth: 800 }}>
-        <h2 className="text-center mb-4">{t("title")}</h2>
+    <div className="reviewPage container py-5">
+      <div className="reviewWrap">
+        <h2 className="reviewTitle">{t("title")}</h2>
 
-        <div style={{ maxHeight: 400, overflowY: "auto" }}>
+        <div className="reviewList glass">
           {loadingReviews ? (
-            <div className="text-muted text-center py-3">{t("loading")}</div>
+            <div className="reviewHint">{t("loading")}</div>
           ) : reviews.length === 0 ? (
-            <div className="text-muted text-center py-3">{t("empty")}</div>
+            <div className="reviewHint">{t("empty")}</div>
           ) : (
             reviews.map((review, index) => (
               <div key={index}>
                 <ReviewCard
-                  avatarUrl={
-                    review.avatarUrl || "https://via.placeholder.com/64"
-                  }
+                  avatarUrl={review.avatarUrl || "https://via.placeholder.com/64"}
                   text={review.content}
                   rating={review.rating || 5}
                   author={review.username || t("anonymous")}
@@ -131,58 +168,49 @@ function Review() {
                   }
                   location={review.location || ""}
                 />
-                <div
-                  ref={index === reviews.length - 1 ? reviewsEndRef : null}
-                />
+                <div ref={index === reviews.length - 1 ? reviewsEndRef : null} />
               </div>
             ))
           )}
         </div>
 
-        <h4 className="mb-3">{t("leave")}</h4>
-        <form onSubmit={handleSubmit}>
+        <h4 className="reviewSubtitle">{t("leave")}</h4>
+
+        <form onSubmit={handleSubmit} className="reviewForm">
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder={t("placeholder")}
-            className="form-control mb-3 shadow-sm"
-            style={{ height: 120, resize: "none" }}
+            className="reviewTextarea"
             disabled={posting}
           />
 
-          <div className="mb-3" role="group" aria-label={t("rating_label")}>
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
-                onClick={() => setRating(star)}
-                className={`btn btn-link p-0 me-1 ${
-                  star <= rating ? "text-warning" : "text-muted"
-                }`}
-                style={{
-                  fontSize: "1.75rem",
-                  textDecoration: "none",
-                  lineHeight: 1,
-                }}
-                aria-label={t("rating_star", { count: star })}
-                aria-pressed={star <= rating}
-              >
-                ★
-              </button>
-            ))}
+          <div className="reviewRating" role="group" aria-label={t("rating_label")}>
+            {[1, 2, 3, 4, 5].map((star) => {
+              const active = star <= rating;
+              return (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setRating(star)}
+                  className={`reviewStar ${active ? "isActive" : ""}`}
+                  aria-label={t("rating_star", { count: star })}
+                  aria-pressed={active}
+                  disabled={posting}
+                >
+                  ★
+                </button>
+              );
+            })}
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-success px-4"
-            disabled={isSubmitDisabled}
-          >
+          <button type="submit" className="reviewSubmitBtn" disabled={isSubmitDisabled}>
             {posting ? t("submitting") : t("submit")}
           </button>
         </form>
 
-        {submitted && <p className="mt-3 text-success">{t("thank_you")}</p>}
-        {errorMessage && <p className="mt-3 text-danger">{errorMessage}</p>}
+        {submitted && <p className="reviewOk">{t("thank_you")}</p>}
+        {errorMessage && <p className="reviewErr">{errorMessage}</p>}
       </div>
     </div>
   );

@@ -34,14 +34,15 @@ export default function CreateVibe() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const isMobile = useIsMobile();
+  const CARD_WIDTH = 520;
 
   const queryType = (searchParams.get("type") || "").toUpperCase();
   const stateType = (location.state?.prefillType || "").toUpperCase();
   const initialType = ALLOWED_TYPES.includes(queryType)
     ? queryType
     : ALLOWED_TYPES.includes(stateType)
-    ? stateType
-    : "BUSINESS";
+      ? stateType
+      : "BUSINESS";
 
   const [type, setType] = React.useState(initialType);
 
@@ -67,7 +68,7 @@ export default function CreateVibe() {
         <div className="cv-header__left">
           <BackButton
             to="/profile"
-            label={isMobile ? t("back_short") : t("back")}
+            label={t(isMobile ? "back_short" : "back")}
             className="cv-back-btn"
           />
         </div>
@@ -77,58 +78,41 @@ export default function CreateVibe() {
 
       {/* type selector */}
       <section className="cv-type">
-        {isMobile ? (
-          <div className="cv-segments" role="tablist" aria-label={t("type_label")}>
-            {typeOptions.map((opt) => {
-              const active = type === opt.value;
-              return (
-                <button
-                  key={opt.value}
-                  role="tab"
-                  aria-selected={active}
-                  className={`cv-segment ${active ? "is-active" : ""}`}
-                  onClick={() => {
-                    setType(opt.value);
-                    const url = new URL(window.location.href);
-                    url.searchParams.set("type", opt.value);
-                    window.history.replaceState({}, "", url.toString());
-                  }}
-                >
-                  {opt.label}
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="cv-select-wrap">
-            <label className="form-label" htmlFor="vibe-type">
-              {t("type_label")}
-            </label>
-            <select
-              id="vibe-type"
-              className="form-select"
-              value={type}
-              onChange={(e) => {
-                const next = e.target.value;
-                setType(next);
-                const url = new URL(window.location.href);
-                url.searchParams.set("type", next);
-                window.history.replaceState({}, "", url.toString());
-              }}
-              aria-label={t("type_label")}
-            >
-              {typeOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div className="cv-segments cv-segments--desktop" role="tablist" aria-label={t("type_label")}>
+          {typeOptions.map((opt) => {
+            const active = type === opt.value;
+            return (
+              <button
+                type="button"
+                key={opt.value}
+                role="tab"
+                aria-selected={active}
+                className={`cv-segment ${active ? "is-active" : ""}`}
+                onClick={() => {
+                  setType(opt.value);
+                  const url = new URL(window.location.href);
+                  url.searchParams.set("type", opt.value);
+                  window.history.replaceState({}, "", url.toString());
+                }}
+              >
+                <span className="cv-segment__label">{opt.label}</span>
+
+                <span className="cv-segment__hint">
+                  {opt.value === "BUSINESS" ? t("types_hint.business") : ""}
+                  {opt.value === "PERSONAL" ? t("types_hint.personal") : ""}
+                  {opt.value === "EVENT" ? t("types_hint.event") : ""}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </section>
       <section className="cv-form">
-        <Form mode="create" />
+        <div className="cv-form__inner">
+          <Form mode="create" maxCardWidth={CARD_WIDTH} />
+        </div>
       </section>
     </main>
   );
 }
+

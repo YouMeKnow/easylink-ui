@@ -1,13 +1,16 @@
-/* ------------------------- privacy.css ------------------------- */
-/* Move this into src/pages/legal/privacy.css and ensure it's imported above. */
-:root {
---legal-fg: #1f2937; /* slate-800 */
---legal-muted: #6b7280; /* gray-500 */
---legal-border: #e5e7eb; /* gray-200 */
---legal-bg: #ffffff;
---legal-surface: #fafafa;
---legal-highlight: #fff7ed; /* amber-50 */
---legal-highlight-border: #fed7aa; /* amber-200 */
+/* privacy.css */
+
+/* bind legal tokens to app theme tokens */
+:root{
+  --legal-fg: var(--text);
+  --legal-muted: var(--text-weak);
+  --legal-border: var(--stroke);
+  --legal-bg: transparent; /* важно: не белый */
+  --legal-surface: color-mix(in oklab, var(--surface) 78%, transparent);
+
+  /* highlight: аккуратно и в light/dark */
+  --legal-highlight: color-mix(in oklab, rgba(var(--accent-to), .18) 55%, transparent);
+  --legal-highlight-border: color-mix(in oklab, rgba(var(--accent-to), .28) 65%, transparent);
 }
 
 html { scroll-behavior: smooth; }
@@ -19,13 +22,32 @@ position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow:
 .skip-link:focus { position: static; width: auto; height: auto; padding: .5rem .75rem; background: var(--legal-highlight); }
 
 
-.legal-container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem; line-height: 1.65; color: var(--legal-fg); background: var(--legal-bg); }
+.legal-container{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+  line-height: 1.65;
+  color: var(--legal-fg);
+  background: var(--legal-bg);
+}
 .legal-h1 { margin-bottom: .25rem; }
 .legal-meta { color: var(--legal-muted); margin-bottom: 1rem; }
 .legal-intro { margin-bottom: 1rem; }
 
 
-.legal-toc { position: sticky; top: .5rem; background: var(--legal-surface); border: 1px solid var(--legal-border); border-radius: 12px; padding: .75rem 1rem; margin: 1rem 0 1.5rem; }
+.legal-toc{
+  position: sticky;
+  top: .5rem;
+
+  background: var(--legal-surface);
+  border: 1px solid var(--legal-border);
+  border-radius: 12px;
+  padding: .75rem 1rem;
+  margin: 1rem 0 1.5rem;
+
+  backdrop-filter: blur(var(--blur, 10px));
+  -webkit-backdrop-filter: blur(var(--blur, 10px));
+}
 .legal-toc ul { margin: .5rem 0 0; padding-left: 1.25rem; }
 .legal-toc a { text-decoration: none; }
 .toc-title { display: block; font-weight: 600; margin-bottom: .25rem; }
@@ -67,5 +89,9 @@ cursor: pointer;
   border-bottom: 1px solid var(--legal-border);
   vertical-align: top;
 }
-.legal-table th { text-align: left; font-weight: 600; background: var(--legal-bg); }
+.legal-table th{
+  text-align: left;
+  font-weight: 600;
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+}
 .legal-table tr:last-child td { border-bottom: none; }
