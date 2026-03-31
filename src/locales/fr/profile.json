@@ -21,5 +21,7 @@
     "settings": "Paramètres",
     "logout": "Se déconnecter"
   },
-  "user_name": "Nom d’utilisateur"
+  "user_name": "Nom d’utilisateur",
+  "title": "Profil",
+  "vibes_subtitle": "Vos vibes, tous en un seul endroit."
 }

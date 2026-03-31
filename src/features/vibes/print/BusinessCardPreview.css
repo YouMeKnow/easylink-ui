@@ -1,0 +1,336 @@
+.bcp-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bcp-card {
+  width: 3.5in;
+  height: 2in;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%);
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.45fr 1px 1fr;
+  position: relative;
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.bcp-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.13), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(6, 182, 212, 0.10), transparent 30%);
+  pointer-events: none;
+}
+
+.bcp-wrap--compact .bcp-card,
+.bcp-card--compact {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.bcp-left,
+.bcp-right {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.bcp-left-content {
+  height: 100%;
+  padding: 0.18in 0.18in 0.16in 0.18in;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bcp-top-accent {
+  width: 44px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb 0%, #06b6d4 100%);
+  margin-bottom: 0.08in;
+}
+
+.bcp-name-block {
+  min-width: 0;
+}
+
+.bcp-name {
+  font-size: 0.2in;
+  line-height: 1.3;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bcp-title {
+  margin-top: 0.03in;
+  font-size: 0.1in;
+  line-height: 1.5;
+  font-weight: 500;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bcp-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.045in;
+  margin-top: 0.08in;
+}
+
+.bcp-row {
+  display: grid;
+  grid-template-columns: 0.15in 1fr;
+  align-items: center;
+  gap: 0.05in;
+  min-width: 0;
+}
+
+.bcp-row-icon {
+  width: 0.15in;
+  height: 0.15in;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.bcp-row-value {
+  font-size: 0.088in;
+  line-height: 1.25;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bcp-divider {
+  width: 1px;
+  height: calc(100% - 0.3in);
+  align-self: center;
+  background: linear-gradient(
+    180deg,
+    rgba(37, 99, 235, 0.02) 0%,
+    rgba(37, 99, 235, 0.16) 20%,
+    rgba(37, 99, 235, 0.16) 80%,
+    rgba(37, 99, 235, 0.02) 100%
+  );
+  position: relative;
+  z-index: 1;
+}
+
+.bcp-right-content {
+  height: 100%;
+  padding: 0.16in 0.16in 0.15in 0.16in;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bcp-brand-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.07in;
+  min-width: 0;
+}
+
+.bcp-logo {
+  width: 0.28in;
+  height: 0.28in;
+  object-fit: contain;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.bcp-brand-texts {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bcp-brand-label {
+  font-size: 0.06in;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.bcp-brand {
+  margin-top: 0.02in;
+  font-size: 0.115in;
+  line-height: 1.05;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bcp-qr-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.04in;
+}
+
+.bcp-qr-box {
+  width: 0.9in;
+  height: 0.9in;
+  border-radius: 14px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.08),
+    inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.bcp-qr-caption {
+  font-size: 0.065in;
+  line-height: 1.1;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.bcp-wrap--compact .bcp-name,
+.bcp-card--compact .bcp-name {
+  font-size: 0.19in;
+}
+
+.bcp-wrap--compact .bcp-title,
+.bcp-card--compact .bcp-title {
+  font-size: 0.095in;
+}
+
+.bcp-wrap--compact .bcp-row-value,
+.bcp-card--compact .bcp-row-value {
+  font-size: 0.084in;
+}
+
+.bcp-wrap--compact .bcp-brand,
+.bcp-card--compact .bcp-brand {
+  font-size: 0.105in;
+}
+
+.bcp-wrap--compact .bcp-qr-box,
+.bcp-card--compact .bcp-qr-box {
+  width: 0.82in;
+  height: 0.82in;
+}
+
+.bcp-wrap--compact .bcp-logo,
+.bcp-card--compact .bcp-logo {
+  width: 0.24in;
+  height: 0.24in;
+}
+
+.bcp-card {
+  width: 3.5in;
+  height: 2in;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%);
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.45fr 1px 1fr;
+  position: relative;
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.bcp-card--preview {
+  width: 560px;
+  height: 320px;
+  border-radius: 28px;
+}
+
+.bcp-card {
+  width: min(100%, 560px);
+  aspect-ratio: 3.5 / 2;
+  height: auto;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%);
+  color: #0f172a;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.45fr 1px 1fr;
+  position: relative;
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.bcp-card--preview {
+  width: min(100%, 560px);
+  aspect-ratio: 3.5 / 2;
+  height: auto;
+  border-radius: 28px;
+}
+
+@media (max-width: 768px) {
+  .bcp-wrap {
+    padding: 0 12px;
+  }
+
+  .bcp-card,
+  .bcp-card--preview {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px;
+  }
+
+  .bcp-left-content {
+    padding: 14px 14px 12px 14px;
+  }
+
+  .bcp-right-content {
+    padding: 12px;
+  }
+
+  .bcp-top-accent {
+    width: 32px;
+    height: 3px;
+    margin-bottom: 8px;
+  }
+
+  .bcp-qr-box {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+  }
+
+  .bcp-logo {
+    width: 20px;
+    height: 20px;
+  }
+}

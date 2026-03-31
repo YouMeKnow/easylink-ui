@@ -1,0 +1,269 @@
+/* ContactsSection.css */
+
+/* ===============================
+   SECTIONS
+=================================*/
+.contacts-section {
+  margin-bottom: 22px;
+}
+
+.contacts-section__title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ct-text-muted);
+  margin-bottom: 10px;
+}
+
+/* ===============================
+   CONTACTS LAYOUT
+=================================*/
+
+/* базово */
+.contacts-grid {
+  width: 100%;
+  gap: 10px;
+}
+
+/* MAIN — чипы по длине контента */
+.contacts-grid--main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.contacts-grid--main .contact-chip {
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 !important;
+  border-radius: 16px;
+  will-change: transform;
+  transition: transform 0.15s ease;
+}
+
+.contacts-grid--main .contact-chip .contact-btn {
+  width: auto !important;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* SOCIAL / OTHER — по 2 в ряд */
+.contacts-grid--secondary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.contacts-grid--secondary .contact-chip {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  margin: 0 !important;
+  border-radius: 16px;
+  will-change: transform;
+  transition: transform 0.15s ease;
+}
+
+.contacts-grid--secondary .contact-chip .contact-btn {
+  width: 100% !important;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* общее поведение текста */
+.contact-chip:hover {
+  transform: translateY(-1px);
+}
+
+.contact-chip.is-editing {
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, rgba(var(--accent-to), 0.18) 55%, transparent);
+}
+
+.contact-chip [data-ct-text="1"] {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ===============================
+   REMOVE (X)
+=================================*/
+.contact-remove {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+
+  width: 26px;
+  height: 26px;
+  border-radius: 12px;
+  padding: 0;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  color: rgba(220, 53, 69, 0.95);
+
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.contact-remove:hover {
+  transform: scale(1.05);
+  filter: brightness(0.98);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+}
+
+.contact-remove:active {
+  transform: scale(0.97);
+}
+
+.contact-remove:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, rgba(var(--accent-to), 0.22) 55%, transparent),
+    0 14px 30px rgba(0, 0, 0, 0.16);
+}
+
+:root[data-theme="dark"] .contact-remove {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .contact-remove:hover {
+  filter: brightness(1.06);
+}
+
+/* ===============================
+   ADD BUTTON
+=================================*/
+.contacts-add-wrapper {
+  margin-top: 18px;
+  width: 100%;
+}
+
+.contact-add-tile {
+  width: 100%;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border-radius: 14px;
+  border: 1.5px dashed
+    color-mix(in srgb, rgba(var(--accent-to), 0.45) 60%, var(--ct-chip-border));
+  background: color-mix(
+    in srgb,
+    rgba(var(--accent-to), 0.1) 55%,
+    var(--ct-chip-bg)
+  );
+  color: rgba(var(--accent-to), 0.95);
+
+  font-size: 14px;
+  font-weight: 800;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.contact-add-tile:hover {
+  transform: translateY(-1px);
+  background: color-mix(
+    in srgb,
+    rgba(var(--accent-to), 0.14) 55%,
+    var(--ct-chip-bg)
+  );
+  border-color: color-mix(
+    in srgb,
+    rgba(var(--accent-to), 0.65) 55%,
+    var(--ct-chip-border)
+  );
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+}
+
+:root[data-theme="dark"] .contact-add-tile:hover {
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.3);
+}
+
+.contact-add-tile:active {
+  transform: scale(0.99);
+}
+
+/* ===============================
+   EMPTY STATE
+=================================*/
+.contacts-empty {
+  width: 100%;
+  max-width: 520px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--stroke) 70%, transparent);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  text-align: center;
+}
+
+.contacts-empty__title {
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--ct-text);
+  opacity: 0.9;
+}
+
+.contacts-empty__hint {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--ct-text-muted);
+}
+
+.contacts-empty__cta {
+  margin-top: 10px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+
+  border: 1px solid var(--ct-chip-border);
+  background: var(--ct-chip-bg);
+  color: var(--ct-text);
+
+  font-weight: 800;
+  font-size: 13px;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.contacts-empty__cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.98);
+}
+
+:root[data-theme="dark"] .contacts-empty__cta:hover {
+  filter: brightness(1.06);
+}
+
+.contacts-grid--secondary .contact-chip.is-editing {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 100%;
+}
+
+.contacts-grid--secondary-edit {
+  grid-template-columns: 1fr !important;
+}

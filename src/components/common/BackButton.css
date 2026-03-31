@@ -1,0 +1,47 @@
+.backbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 999px;
+
+  background: color-mix(in oklab, var(--surface) 82%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 75%, transparent);
+  box-shadow: var(--shadow-sm);
+
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+
+  transition: transform .14s, box-shadow .18s, background .18s, border-color .18s;
+}
+
+.backbtn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: color-mix(in oklab, rgba(var(--accent-to), .35) 55%, transparent);
+}
+
+.backbtn:active { transform: translateY(0); }
+
+.backbtn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(var(--accent-to), 0.26),
+    var(--shadow-md);
+}
+
+.backbtn__icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  opacity: .85;
+}
+
+.backbtn__text {
+  font-weight: 650;
+  font-size: 14px;
+  letter-spacing: .01em;
+}

@@ -134,11 +134,7 @@ export function useEventVibeForm({
 
         alert("Vibe created!"); 
 
-        if (newId) {
-          navigate(`/vibes/${newId}`);
-        } else {
-          navigate("/my-vibes");
-        }
+        navigate("/profile");
       }
     } catch (err) {
       alert(err.message || "Error saving Vibe");

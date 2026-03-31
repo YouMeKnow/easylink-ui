@@ -1,0 +1,78 @@
+.request-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 14px;
+}
+
+.request-btn {
+  flex: 1;
+  height: 42px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.request-btn:hover {
+  transform: translateY(-1px);
+}
+
+.request-btn:active {
+  transform: translateY(0);
+}
+
+.request-btn--reject {
+  background: #fff;
+  color: #5f6673;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+.request-btn--reject:hover {
+  background: #f8f9fb;
+  color: #2b2f38;
+}
+
+.request-btn--approve {
+  color: #fff;
+  border: none;
+  background: linear-gradient(135deg, #4f7cff 0%, #2f6bff 100%);
+  box-shadow: 0 10px 24px rgba(47, 107, 255, 0.28);
+}
+
+.request-btn--approve:hover {
+  box-shadow: 0 14px 28px rgba(47, 107, 255, 0.34);
+}
+
+.request-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(47, 107, 255, 0.18),
+    0 10px 24px rgba(47, 107, 255, 0.22);
+}
+
+@media (max-width: 576px) {
+  .request-actions {
+    gap: 8px;
+  }
+
+  .request-btn {
+    height: 40px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+}
+
+.requests-hint {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-weak);
+  opacity: 0.9;
+}

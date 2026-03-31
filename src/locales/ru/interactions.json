@@ -10,7 +10,9 @@
   "following_empty": "Вы ещё ни на кого не подписаны.",
   "followers_empty": "На вас пока никто не подписан.",
   "sections": {
-    "offers": "Предложения",
+    "business": "Бизнес",
+    "personal": "Личное",
+    "other": "Другое",
     "following": "Подписки"
   },
   "tabs": {
@@ -23,5 +25,33 @@
   "table": {
     "vibe": "Вайб",
     "offer": "Предложение"
+  },
+  "subtitle": "Выберите, что хотите просмотреть.",
+  "circle": {
+    "title": "Мой круг",
+    "description": "Бизнесы и профили, на которые вы подписаны.",
+    "button": "Просмотреть круг"
+  },
+  "offers": {
+    "title": "Мои предложения",
+    "description": "Активные акции из вашего круга.",
+    "button": "Просмотреть предложения"
+  },
+  "myCircle": "Мой круг",
+  "search_placeholder": "Поиск по имени...",
+  "count": "{{count}} вайбов",
+  "count_filtered": "{{shown}} / {{total}}",
+  "no_results": "Ничего не найдено.",
+  "network": {
+    "title": "Сеть",
+    "tabs": {
+      "followers": "Подписчики",
+      "following": "Подписки"
+    },
+    "back": "Назад"
+  },
+  "empty": {
+    "circle": "Пока пусто.",
+    "circle_hint": ""
   }
 }

@@ -47,7 +47,7 @@ export default function UserMap({ onVibeSelect }) {
           .addTo(mapRef.current);
       });
     }
-    // Cleanup
+
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();

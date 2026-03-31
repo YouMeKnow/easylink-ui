@@ -1,5 +1,24 @@
 {
-  "not_specified": "non spécifié",
+  "add": "Ajouter une information",
+  "hours": "Horaires",
+  "remove_title": "Supprimer l'information",
+  "remove_msg": "Êtes-vous sûr de vouloir supprimer ce bloc ?",
+  "cancel": "Annuler",
+  "remove": "Supprimer",
+
+  "mon_fri": "Lun–Ven",
+  "all_days": "Tous les jours",
+  "weekend": "Week-end",
+  "clear_all": "Tout effacer",
+  "start": "Début",
+  "end": "Fin",
+  "apply": "Appliquer",
+  "closed": "Fermé",
+  "clear_day": "Effacer le jour",
+  "clear_scope": "Effacer les jours sélectionnés",
+  "edit_day_scope": "Cliquez pour sélectionner ce jour",
+  "hours_scope_hint": "Choisissez une plage, définissez Début/Fin puis cliquez sur Appliquer. Astuce : cliquez sur un jour pour modifier uniquement celui-ci.",
+
   "weekdays": {
     "monday": "Lundi",
     "tuesday": "Mardi",
@@ -8,5 +27,23 @@
     "friday": "Vendredi",
     "saturday": "Samedi",
     "sunday": "Dimanche"
+  },
+  "picker_title": "Choisissez un bloc d'information",
+  "close": "Fermer",
+
+  "type": {
+    "hours": "Horaires",
+    "birthday": "Date de naissance",
+    "address": "Adresse",
+    "website": "Site web",
+    "about": "À propos"
+  },
+
+  "hint": {
+    "hours": "Définissez les horaires pour chaque jour",
+    "birthday": "Ajoutez une date de naissance",
+    "address": "Ajoutez une adresse physique",
+    "website": "Ajoutez un lien vers votre site",
+    "about": "Brève description ou bio"
   }
 }

@@ -1,55 +1,149 @@
-html, body { overflow-x: clip; }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap');
 
-.footer__links {
-  display: flex;
-  justify-content: center;
-  gap: 1.2rem;
-  margin-bottom: 0.8rem;
-  white-space: normal;
-  flex-wrap: wrap;
-  max-width: 100%;
-  row-gap: 0.4rem; 
-  min-width: 0;    
+.ymk-footer {
+  --f-pink:       255, 138, 181;
+  --f-indigo:     99, 102, 241;
+  --f-text:       #0f1222;
+  --f-text-weak:  #7b82a0;
+  --f-stroke:     rgba(15, 18, 34, 0.09);
+  --f-surface:    rgba(255, 255, 255, 0.72);
+  --f-blur:       12px;
+  --f-radius:     12px;
+
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: var(--f-text);
+  border-top: 1px solid var(--f-stroke);
 }
 
-.footer__links a {
-  color: #444 !important; 
+:root[data-theme="dark"] .ymk-footer {
+  --f-text:       #e7e9f5;
+  --f-text-weak:  #7b82a0;
+  --f-stroke:     rgba(255, 255, 255, 0.10);
+  --f-surface:    rgba(18, 20, 41, 0.65);
+}
+
+/* ── utility bar ── */
+.ymk-footer__bar {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 48px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 32px;
+}
+
+/* logo */
+.ymk-footer__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   text-decoration: none;
-  transition: color 0.2s ease;
-  padding: 0.125rem 0.25rem;
-  font-size: inherit;
+  font-weight: 800;
+  letter-spacing: .01em;
+  font-size: 18px;
+  color: #1a73e8;
+  flex-shrink: 0;
+  transition: opacity .16s;
+}
+.ymk-footer__logo:hover { opacity: .7; color: #1a73e8; }
+.ymk-footer__logo img {
+  width: 26px;
+  height: 26px;
+  display: block;
+  object-fit: contain;
 }
 
-.footer__links a:hover {
-  text-decoration: underline;
-  color: #000 !important;
+/* nav */
+.ymk-footer__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex-wrap: wrap;
 }
 
-@media (min-width: 601px) {
-  .footer__links {
-    white-space: nowrap;
-    flex-wrap: nowrap;
+.ymk-footer__nav a {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--f-text-weak);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: color .16s, background .16s;
+}
+.ymk-footer__nav a:hover {
+  color: var(--f-text);
+  background: rgba(var(--f-indigo), .07);
+}
+
+/* right */
+.ymk-footer__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.ymk-footer__socials {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ymk-footer__social-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--f-text-weak);
+  text-decoration: none;
+  transition: color .16s, background .16s, transform .12s;
+}
+.ymk-footer__social-btn svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+.ymk-footer__social-btn:hover {
+  color: var(--f-text);
+  background: rgba(var(--f-indigo), .08);
+  transform: translateY(-1px);
+}
+
+.ymk-footer__divider {
+  width: 1px;
+  height: 14px;
+  background: var(--f-stroke);
+  flex-shrink: 0;
+}
+
+.ymk-footer__copy {
+  font-size: 11.5px;
+  color: var(--f-text-weak);
+  opacity: .6;
+  white-space: nowrap;
+}
+
+/* ── responsive ── */
+@media (max-width: 860px) {
+  .ymk-footer__bar {
+    grid-template-columns: 1fr;
+    padding: 20px 28px;
+    gap: 14px;
+    text-align: center;
   }
+  .ymk-footer__nav   { justify-content: center; }
+  .ymk-footer__right { justify-content: center; }
 }
 
-.footer {
-  background-color: #f9f9f9;
-  color: #333;
-  padding: 2rem 1rem;
-  text-align: center;
-  font-size: 0.85rem;
-  font-family: "Inter", sans-serif;
-  border-top: 1px solid #ddd;
-}
-
-@media (max-width: 900px) {
-  .footer { font-size: 0.8rem; }
-  .footer__links { gap: 0.9rem; }
-}
-
-@media (max-width: 600px) {
-  .footer { font-size: 0.75rem; padding: 1.6rem 0.9rem; }
-  .footer__links { gap: 0.6rem; }
-  .footer__links a { font-size: 0.8rem; }
-  .footer__address { font-size: 0.75rem; }
+@media (max-width: 480px) {
+  .ymk-footer__bar { padding: 18px 20px; }
 }
