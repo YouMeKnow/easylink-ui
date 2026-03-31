@@ -484,3 +484,30 @@
 .vibe-topbar__right {
   margin-left: auto;
 }
+
+.btn-main {
+  background: linear-gradient(135deg, #5b7cff, #6c63ff);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-main:hover {
+  background: linear-gradient(135deg, #4f6fff, #5b54ff);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+}
+
+.btn-main:active {
+  transform: translateY(1px);
+}
+
+.route-shell {
+  min-height: calc(100vh - 140px);
+}
+
+.vibe-container {
+  max-width: 980px;
+  min-height: 100%;
+}

@@ -64,15 +64,7 @@ function Header() {
               <span>YMK</span>
             </Link>
 
-            <div className="topbar__cta">
-              <AccessCTA
-                subscribed={subscribed}
-                loading={loadingSubscribe}
-                onClick={() =>
-                  isAuthenticated ? requestEarlyAccess() : navigate("/signin")
-                }
-              />
-            </div>
+
           </div>
 
           {/* CENTER */}

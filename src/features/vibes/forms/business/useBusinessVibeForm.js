@@ -170,13 +170,8 @@ export function useBusinessVibeForm({
       if (onSave) {
         onSave(created);
       }
-
-      if (newId) {
-        alert("Vibe created!");
-        navigate(`/vibes/${newId}`);
-      } else {
-        navigate("/my-vibes");
-      }
+      alert("Vibe created!");
+      navigate("/profile");
     } catch (err) {
       alert(err.message || "Error saving Vibe");
     } finally {

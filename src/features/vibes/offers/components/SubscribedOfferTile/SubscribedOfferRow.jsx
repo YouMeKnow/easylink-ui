@@ -60,7 +60,7 @@ export default function SubscribedOfferRow({ offer, onOpen }) {
             <span className="sub-offer-row__subtitle">{subtitle}</span>
           </div>
         </div>
-      </div>
+    </div>
 
       <div className="sub-offer-row__right">
         <span className="sub-offer-row__arrow">›</span>

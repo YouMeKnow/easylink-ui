@@ -4,11 +4,8 @@
    ======================= */
 
 .profile {
-  /* keep only page accents (global theme handles text/surface/shadows) */
-  --accent-from: 255, 138, 181;
-  /* #ff8ab5 */
-  --accent-to: 244, 196, 54;
-  /* #f4c436 */
+  --accent-from: 255, 138, 181; /* #ff8ab5 */
+  --accent-to: 244, 196, 54;    /* #f4c436 */
 
   position: relative;
   min-height: 100svh;
@@ -16,22 +13,21 @@
   isolation: isolate;
 }
 
-/* ===== Background (soft gradient + subtle pattern) ===== */
+/* ===== Background ===== */
 .profile .profile__bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(1200px 700px at 20% -10%, rgba(var(--accent-from), .25), transparent 55%),
-    radial-gradient(1100px 600px at 110% 20%, rgba(var(--accent-to), .22), transparent 55%),
+    radial-gradient(1200px 700px at 20% -10%, rgba(var(--accent-from), 0.25), transparent 55%),
+    radial-gradient(1100px 600px at 110% 20%, rgba(var(--accent-to), 0.22), transparent 55%),
     linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }
 
-/* DARK via your toggle (not system) */
 :root[data-theme="dark"] .profile .profile__bg {
   background:
-    radial-gradient(1000px 600px at 15% -10%, rgba(var(--accent-from), .18), transparent 55%),
-    radial-gradient(900px 560px at 110% 20%, rgba(var(--accent-to), .16), transparent 55%),
+    radial-gradient(1000px 600px at 15% -10%, rgba(var(--accent-from), 0.18), transparent 55%),
+    radial-gradient(900px 560px at 110% 20%, rgba(var(--accent-to), 0.16), transparent 55%),
     linear-gradient(180deg, #0f1222 0%, #121429 100%);
 }
 
@@ -43,25 +39,37 @@
 
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  /* 🔥 ВОТ ЭТО */
+  gap: 16px;
 }
 
-/* ===== Glass helpers ===== */
+.profile .profile__hero,
+.profile .profile__search,
+.profile .profile__cards,
+.profile .profile__offers {
+  margin: 0;
+}
+
+/* ===== Glass ===== */
 .profile .glass {
-  /* use global tokens so it matches the rest of the site */
-  background: rgba(255, 255, 255, 0.60);
-  -webkit-backdrop-filter: blur(var(--blur));
-  backdrop-filter: blur(var(--blur));
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: var(--surface);
+  border: 1px solid var(--stroke);
   box-shadow: var(--shadow-sm);
   border-radius: var(--radius);
+
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
 }
 
-:root[data-theme="dark"] .profile .glass {
-  background: rgba(18, 20, 41, 0.70);
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: var(--shadow-sm);
+/* ===== Generic focus ===== */
+.profile :where(a, button, input, [tabindex]) {
+  outline: none;
+}
+
+.profile :where(a, button, input, [tabindex]):focus-visible {
+  box-shadow:
+    0 0 0 4px rgba(var(--accent-from), 0.2),
+    0 0 0 2px rgba(var(--accent-to), 0.25);
+  border-radius: 12px;
 }
 
 /* ===== Hero ===== */
@@ -71,333 +79,6 @@
   align-items: center;
   gap: 16px;
   padding: clamp(20px, 4vw, 36px);
-  margin-block: clamp(16px, 3vw, 28px);
-}
-
-.profile .profile__heading {
-  margin: 0 0 6px 0;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  font-size: clamp(28px, 4.6vw, 42px);
-  line-height: 1.08;
-  background: linear-gradient(90deg,
-      rgba(var(--accent-from), 1) 0%,
-      rgba(var(--accent-to), 1) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.profile .profile__subheading {
-  margin: 0;
-  color: var(--text-weak);
-  font-size: clamp(14px, 2.2vw, 18px);
-}
-
-/* ===== Chip ===== */
-.profile .profile__chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, .64);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, .5);
-  box-shadow: var(--shadow-sm);
-}
-
-:root[data-theme="dark"] .profile .profile__chip {
-  background: rgba(18, 20, 41, .62);
-  border-color: rgba(255, 255, 255, .14);
-}
-
-.profile .profile__chip-dot {
-  inline-size: 8px;
-  block-size: 8px;
-  border-radius: 9999px;
-  background: radial-gradient(circle at 35% 35%, #38d39f 0%, #1bbd83 60%, #0da56f 100%);
-}
-
-.profile .profile__chip-text {
-  font-size: 14px;
-  color: var(--text);
-  opacity: .9;
-}
-
-/* ===== Search block ===== */
-.profile .profile__search {
-  padding: clamp(12px, 2.6vw, 18px);
-  margin-block: clamp(12px, 2.6vw, 22px);
-}
-
-/* Make embedded inputs feel glassy without breaking component internals */
-.profile .profile__search :where(input, .form-control) {
-  background: rgba(255, 255, 255, .78) !important;
-  border: 1px solid rgba(255, 255, 255, .60) !important;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-}
-
-:root[data-theme="dark"] .profile .profile__search :where(input, .form-control) {
-  background: rgba(18, 20, 41, .62) !important;
-  border-color: rgba(255, 255, 255, .14) !important;
-  color: var(--text) !important;
-}
-
-/* ===== Cards ===== */
-.profile .profile__cards {
-  margin-top: clamp(10px, 2vw, 18px);
-}
-
-.profile .profile__cards>* :where(.card, [data-elevate]) {
-  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  will-change: transform;
-}
-
-.profile .profile__cards>* :where(.card, [data-elevate]):hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(var(--accent-to), .28);
-}
-
-/* ===== Motion (scoped) ===== */
-@media (prefers-reduced-motion: no-preference) {
-  .profile .animate-slideUp {
-    animation: profile-slideUp .6s ease both;
-  }
-
-  .profile .animate-fadeIn {
-    animation: profile-fadeIn .5s ease both .05s;
-  }
-
-  .profile .animate-stagger>* {
-    animation: profile-fadeInUp .5s ease both;
-  }
-
-  .profile .animate-stagger>*:nth-child(1) {
-    animation-delay: .04s;
-  }
-
-  .profile .animate-stagger>*:nth-child(2) {
-    animation-delay: .08s;
-  }
-
-  .profile .animate-stagger>*:nth-child(3) {
-    animation-delay: .12s;
-  }
-
-  .profile .animate-stagger>*:nth-child(4) {
-    animation-delay: .16s;
-  }
-}
-
-@keyframes profile-slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes profile-fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes profile-fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===== Focus ring (scoped) ===== */
-.profile :where(a, button, input, [tabindex]) {
-  outline: none;
-}
-
-.profile :where(a, button, input, [tabindex]):focus-visible {
-  box-shadow: 0 0 0 4px rgba(var(--accent-from), .20), 0 0 0 2px rgba(var(--accent-to), .25);
-  border-radius: 12px;
-}
-
-.profile .searchbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  padding: 18px 18px;
-  border-radius: 18px;
-
-  background: var(--surface);
-  border: 1px solid var(--stroke);
-  box-shadow: var(--shadow-sm);
-
-  -webkit-backdrop-filter: blur(var(--blur, 10px));
-  backdrop-filter: blur(var(--blur, 10px));
-}
-
-/* ===========================
-   Mobile optimization
-   =========================== */
-
-/* 1) reduce heavy background on mobile */
-@media (max-width: 768px) {
-  .profile .profile__bg {
-    /* fixed + huge gradients can be janky on phones */
-    position: absolute;
-    inset: 0;
-  }
-}
-
-/* 2) container padding tighter */
-@media (max-width: 520px) {
-  .profile .profile__container {
-    width: 92vw;
-    padding: 16px;
-  }
-}
-
-/* 3) hero stacks nicely */
-@media (max-width: 768px) {
-  .profile .profile__hero {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 18px;
-    margin-block: 14px;
-  }
-
-  .profile .profile__chip {
-    width: 100%;
-    justify-content: center;
-
-    /* long emails should not break layout */
-    max-width: 100%;
-  }
-
-  .profile .profile__chip-text {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-/* 4) heading sizes tuned for mobile */
-@media (max-width: 480px) {
-  .profile .profile__heading {
-    font-size: 30px;
-    line-height: 1.06;
-  }
-
-  .profile .profile__subheading {
-    font-size: 14px;
-  }
-}
-
-/* 5) glass uses your global tokens (more consistent) */
-.profile .glass {
-  background: var(--surface);
-  border: 1px solid var(--stroke);
-  box-shadow: var(--shadow-sm);
-  border-radius: var(--radius);
-
-  -webkit-backdrop-filter: blur(var(--blur));
-  backdrop-filter: blur(var(--blur));
-}
-
-/* 6) on mobile: reduce motion + remove hover lift */
-@media (max-width: 768px) {
-  .profile .profile__cards>* :where(.card, [data-elevate]) {
-    transition: none;
-    will-change: auto;
-  }
-
-  .profile .profile__cards>* :where(.card, [data-elevate]):hover {
-    transform: none;
-    box-shadow: var(--shadow-sm);
-    border-color: var(--stroke);
-  }
-
-  /* also tone down backdrop blur a bit for perf */
-  .profile .glass {
-    -webkit-backdrop-filter: blur(calc(var(--blur) * 0.75));
-    backdrop-filter: blur(calc(var(--blur) * 0.75));
-  }
-}
-
-/* 7) search block: make inputs full width and comfy */
-@media (max-width: 768px) {
-  .profile .profile__search {
-    padding: 14px;
-    margin-block: 12px;
-  }
-
-  .profile .profile__search :where(input, .form-control) {
-    width: 100%;
-    font-size: 16px;
-    /* prevents iOS zoom on focus */
-  }
-}
-
-.profile .profile__cards>* {
-  display: grid;
-  gap: 12px;
-  /* вместо margin у карточек */
-}
-
-/* subtle divider after Create card */
-.profile .profile__cards .create-card {
-  margin-bottom: 12px;
-  position: relative;
-}
-
-.profile .profile__cards .create-card::after {
-  content: "";
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: -6px;
-  height: 1px;
-  background: var(--stroke);
-  opacity: .6;
-}
-
-.profile .profile__search {
-  padding: 0;
-  margin-block: 14px;
-  background: none;
-  border: none;
-  box-shadow: none;
-}
-
-.profile .profile__container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.profile .profile__hero,
-.profile .profile__search,
-.profile .profile__cards,
-.profile .profile__offers {
-  margin: 0;
 }
 
 .profile-hero {
@@ -450,21 +131,34 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-
   background: #22c55e;
-  /* green online */
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
-
   flex: 0 0 auto;
 }
 
 .profile-hero__title {
   margin: 0;
-  font-size: clamp(2rem, 3vw, 3rem);
-  line-height: 1.05;
-  font-weight: 800;
-  color: var(--text);
   max-width: 680px;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  padding-bottom: 4px;
+
+  background: linear-gradient(
+    90deg,
+    rgb(var(--accent-from)),
+    rgb(var(--accent-to)),
+    rgb(var(--accent-from))
+  );
+  background-size: 200% 100%;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  filter: drop-shadow(0 6px 24px rgba(var(--accent-to), 0.25));
+  animation: heroGradientMove 6s linear infinite;
 }
 
 .profile-hero__subtitle {
@@ -546,15 +240,13 @@
 .profile-hero__step-number {
   width: 32px;
   height: 32px;
-  border-radius: 12px;
   flex: 0 0 32px;
   display: grid;
   place-items: center;
+  border-radius: 12px;
   font-weight: 800;
   color: white;
-  background: linear-gradient(135deg,
-      rgb(var(--accent-from)),
-      rgb(var(--accent-to)));
+  background: linear-gradient(135deg, rgb(var(--accent-from)), rgb(var(--accent-to)));
   box-shadow: 0 10px 22px rgba(var(--accent-to), 0.22);
 }
 
@@ -580,6 +272,210 @@
   border: 1px solid rgba(var(--accent-to), 0.14);
 }
 
+/* ===== Vibes section ===== */
+.profile .profile__vibes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.profile .profile__vibes-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.profile .profile__vibes-copy {
+  min-width: 0;
+}
+
+.profile .profile__vibes-title {
+  margin: 0;
+  font-size: clamp(1.65rem, 2.6vw, 2.35rem);
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.profile .profile__vibes-subtitle {
+  margin: 8px 0 0;
+  color: var(--text-weak);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.profile .profile__vibes-userchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface) 82%, transparent);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile .profile__vibes-userdot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+  flex: 0 0 auto;
+}
+
+.profile .profile__vibes-usertext {
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile .profile__vibes-grid .myvibe-card,
+.profile .profile-create-vibe-card {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  min-height: 180px;
+}
+
+/* ===== Search ===== */
+.profile .profile__search {
+  padding: 0;
+  margin-block: 14px;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.profile .profile__search :where(input, .form-control) {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+:root[data-theme="dark"] .profile .profile__search :where(input, .form-control) {
+  background: rgba(18, 20, 41, 0.62) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  color: var(--text) !important;
+}
+
+.profile .searchbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 18px;
+  border-radius: 18px;
+
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+
+  -webkit-backdrop-filter: blur(var(--blur, 10px));
+  backdrop-filter: blur(var(--blur, 10px));
+}
+
+/* ===== Cards ===== */
+.profile .profile__cards {
+  margin-top: clamp(10px, 2vw, 18px);
+}
+
+.profile .profile__cards > * {
+  display: grid;
+  gap: 12px;
+}
+
+.profile .profile__cards > * :where(.card, [data-elevate]) {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  will-change: transform;
+}
+
+.profile .profile__cards > * :where(.card, [data-elevate]):hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(var(--accent-to), 0.28);
+}
+
+.profile .profile__cards .create-card {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.profile .profile__cards .create-card::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -6px;
+  height: 1px;
+  background: var(--stroke);
+  opacity: 0.6;
+}
+
+/* ===== Motion ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .profile .animate-slideUp {
+    animation: profile-slideUp 0.6s ease both;
+  }
+
+  .profile .animate-fadeIn {
+    animation: profile-fadeIn 0.5s ease both 0.05s;
+  }
+
+  .profile .animate-stagger > * {
+    animation: profile-fadeInUp 0.5s ease both;
+  }
+
+  .profile .animate-stagger > *:nth-child(1) { animation-delay: 0.04s; }
+  .profile .animate-stagger > *:nth-child(2) { animation-delay: 0.08s; }
+  .profile .animate-stagger > *:nth-child(3) { animation-delay: 0.12s; }
+  .profile .animate-stagger > *:nth-child(4) { animation-delay: 0.16s; }
+}
+
+@keyframes profile-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes profile-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes profile-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroGradientMove {
+  from {
+    background-position: -200% 50%;
+  }
+  to {
+    background-position: 0% 50%;
+  }
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 991px) {
   .profile-hero {
     padding: 20px;
@@ -593,7 +489,82 @@
   .profile-hero__title {
     font-size: clamp(1.75rem, 8vw, 2.35rem);
   }
+}
 
+@media (max-width: 768px) {
+  .profile .profile__bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .profile .profile__hero {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 18px;
+  }
+
+  .profile .profile__search {
+    margin-block: 12px;
+  }
+
+  .profile .profile__search :where(input, .form-control) {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .profile .profile__cards > * :where(.card, [data-elevate]) {
+    transition: none;
+    will-change: auto;
+  }
+
+  .profile .profile__cards > * :where(.card, [data-elevate]):hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+    border-color: var(--stroke);
+  }
+
+  .profile .glass {
+    -webkit-backdrop-filter: blur(calc(var(--blur) * 0.75));
+    backdrop-filter: blur(calc(var(--blur) * 0.75));
+  }
+
+  .profile .profile__vibes-section {
+    gap: 14px;
+  }
+
+  .profile .profile__vibes-title {
+    font-size: clamp(1.4rem, 7vw, 1.9rem);
+  }
+
+  .profile .profile__vibes-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .profile .profile__vibes-grid .myvibe-card,
+  .profile .profile-create-vibe-card {
+    min-height: 190px;
+  }
+
+  .profile .profile-create-vibe-card {
+    padding: 18px 14px;
+    border-radius: 16px;
+  }
+
+  .profile .profile-create-vibe-card__plus {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    font-size: 1.8rem;
+  }
+
+  .profile .profile-create-vibe-card__title {
+    font-size: 1rem;
+  }
+
+  .profile .profile-create-vibe-card__text {
+    font-size: 0.88rem;
+  }
 }
 
 @media (max-width: 767px) {
@@ -654,51 +625,133 @@
   }
 }
 
-.profile-hero__title {
+@media (max-width: 520px) {
+  .profile .profile__container {
+    width: 92vw;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile .profile__search :where(input, .form-control) {
+    font-size: 16px;
+  }
+}
+
+
+.profile .profile__vibes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 260px);
+  gap: 20px;
+  justify-content: start;
+  align-items: start;
+}
+
+.profile .profile__vibes-grid .myvibe-card,
+.profile .profile-create-vibe-card {
+  width: 260px;
+  max-width: 260px;
+  min-height: 180px;
   margin: 0;
-  font-size: clamp(2rem, 3vw, 3rem);
-  line-height: 1.05;
-  font-weight: 800;
-  max-width: 680px;
-
-  background: linear-gradient(135deg,
-      rgb(var(--accent-from)),
-      rgb(var(--accent-to)));
-
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  letter-spacing: -0.02em;
-
-  filter: drop-shadow(0 6px 24px rgba(var(--accent-to), 0.25));
 }
 
-.profile-hero__title {
-  background: linear-gradient(90deg,
-      rgb(var(--accent-from)),
-      rgb(var(--accent-to)),
-      rgb(var(--accent-from)));
-  background-size: 200% 100%;
-
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  animation: heroGradientMove 6s linear infinite;
+.profile .profile__vibe-item {
+  width: 260px;
+  max-width: 260px;
+  margin: 0;
 }
 
-@keyframes heroGradientMove {
-  from {
-    background-position: -200% 50%;
+.profile .profile__vibe-item .myvibe-card {
+  width: 100%;
+  max-width: 100%;
+  min-height: 180px;
+  margin: 0;
+}
+
+/* ===== Create vibe card (FIXED) ===== */
+.profile .profile-create-vibe-card {
+  width: 260px;
+  min-height: 180px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 18px;
+
+  border: 2px dashed #6366f1;
+  background: #f1f5f9;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.profile .profile-create-vibe-card:hover {
+  background: #e0e7ff;
+  border-color: #4f46e5;
+  transform: translateY(-2px);
+}
+
+.profile .profile-create-vibe-card:hover .profile-create-vibe-card__plus {
+  background: #d1d5db;
+  transform: scale(1.1);
+}
+
+/* ===== DARK THEME ===== */
+:root[data-theme="dark"] .profile .profile-create-vibe-card {
+  background: #2a2a3a;
+  border-color: #818cf8;
+}
+
+:root[data-theme="dark"] .profile .profile-create-vibe-card__plus {
+  background: #3a3a4f;
+  color: #e5e7eb;
+}
+
+:root[data-theme="dark"] .profile .profile-create-vibe-card:hover .profile-create-vibe-card__plus {
+  background: #4b4b63;
+}
+
+.profile .profile-create-vibe-card__plus {
+  width: 56px;
+  height: 56px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: rgba(99, 102, 241, 0.08);
+  color: #6366f1;
+
+  font-size: 42px;
+  font-weight: 300;
+  line-height: 1;
+
+  transition: 0.2s ease;
+}
+
+.profile .profile-create-vibe-card:hover .profile-create-vibe-card__plus {
+  background: rgba(99, 102, 241, 0.18);
+  transform: scale(1.1);
+}
+
+.profile .profile__vibes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 260px);
+  gap: 20px;
+  justify-content: start;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .profile .profile__vibes-grid {
+    justify-content: center;
+    gap: 12px;
   }
 
-  to {
-    background-position: 0% 50%;
+  .profile .profile__vibes-grid .myvibe-card,
+  .profile .profile-create-vibe-card,
+  .profile .profile__vibe-item {
+    margin: 0 auto;
   }
-}
-
-.profile-hero__title {
-  line-height: 1.15;
-  padding-bottom: 4px;
 }

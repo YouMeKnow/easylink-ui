@@ -22,7 +22,7 @@ import VibePage from "@/pages/VibePage";
 import SignUp from "@/features/auth/signup/SignUp";
 import Review from "@/features/review/Review";
 import CreateVibe from "@/features/vibes/forms/CreateVibe";
-import UserVibes from "@/features/vibes/UserVibes";
+// import UserVibes from "@/features/vibes/UserVibes";
 import PublicVibePage from "@/features/vibes/PublicVibePage";
 
 import InteractionsHome from "@/features/vibes/interactions/InteractionsHome";
@@ -72,8 +72,6 @@ export default function AppRoutes({ questions, setQuestions }) {
       <Route path="/notifications" element={<NotificationsPage />} />
 
       <Route path="/create-vibe" element={<CreateVibe />} />
-      <Route path="/my-vibes" element={<UserVibes />} />
-      <Route path="/vibes" element={<UserVibes />} />
       <Route path="/vibes/:id" element={ <AuthGuard> <VibePage /> </AuthGuard>}/>
       <Route path="/view/:id" element={<PublicVibePage />} />
 

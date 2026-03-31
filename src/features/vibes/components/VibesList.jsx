@@ -3,28 +3,20 @@ import MyVibesElementCard from "./MyVibesElementCard";
 
 export default function VibesList({ vibes, onDelete, onShare }) {
   return (
-    <div className="position-relative" style={{ minHeight: 340 }}>
-      <div
-        className="d-flex flex-wrap justify-content-center"
-        style={{
-          maxWidth: 980,
-          margin: "0 auto",
-          gap: "24px 20px",
-        }}
-      >
-        {vibes.map((vibe, idx) => (
-          <div
-            key={`${vibe.id ?? "noid"}-${idx}`}
-            style={{ flex: "0 1 260px" }}
-          >
-            <MyVibesElementCard
-              vibe={vibe}
-              onDelete={() => onDelete(vibe.id)}
-              onShare={() => onShare(vibe)}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      {vibes.map((vibe, idx) => (
+        <div
+          key={`${vibe.id ?? "noid"}-${idx}`}
+          className="profile__vibe-item"
+          role="listitem"
+        >
+          <MyVibesElementCard
+            vibe={vibe}
+            onDelete={() => onDelete(vibe.id)}
+            onShare={() => onShare(vibe)}
+          />
+        </div>
+      ))}
+    </>
   );
 }
