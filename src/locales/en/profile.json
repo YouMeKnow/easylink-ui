@@ -21,5 +21,7 @@
     "settings": "Settings",
     "logout": "Logout"
   },
-  "user_name": "User Name"
+  "user_name": "User Name",
+  "title": "Profile",
+  "vibes_subtitle": "Your vibes, all in one place."
 }

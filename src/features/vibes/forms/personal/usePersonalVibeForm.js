@@ -143,11 +143,7 @@ export function usePersonalVibeForm({
         const newId =
           created?.id || created?.vibeId || created?.vibe?.id;
         alert("Vibe created!"); 
-        if (newId) {
-          navigate(`/vibes/${newId}`);
-        } else {
-          navigate("/my-vibes");
-        }
+        navigate("/profile");
       }
     } catch (err) {
       alert(err.message || "Error saving Vibe");

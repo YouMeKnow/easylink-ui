@@ -119,7 +119,7 @@ export default function VibePage() {
         <header className="vibe-topbar">
           <div className="vibe-topbar__left">
             <BackButton
-              to="/my-vibes"
+              to="/profile"
               className="btn-secondary btn-compact"
               label={
                 <>

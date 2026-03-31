@@ -1,3 +1,5 @@
+//deprecated, replaced by ProfileVibes
+
 // src/features/vibes/UserVibes.jsx
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
