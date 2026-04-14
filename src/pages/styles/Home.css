@@ -1,1115 +1,732 @@
-/* === FONT === */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+/* ==========================================================================
+   YMK Home Page Styles - Premium SaaS Aesthetic (Stripe/Linear Inspired)
+   ========================================================================== */
 
-body,
-.home {
-  font-family: "Poppins", "Inter", sans-serif;
+/* --- Variables --- */
+:root {
+  --ymk-primary: #6366f1; /* Premium SaaS Indigo/Blue - Fixed for both themes */
+  --ymk-primary-hover: #4f46e5;
+
+  --ymk-secondary: var(--surface);
+  --ymk-secondary-hover: var(--bg1);
+
+  --ymk-text-main: var(--text);
+  --ymk-text-muted: var(--text-weak);
+
+  --ymk-bg-main: var(--bg0);
+  --ymk-bg-subtle: var(--bg1);
+
+  --ymk-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --ymk-radius-md: calc(var(--radius) * 1.2);
+  --ymk-radius-lg: calc(var(--radius) * 2.4);
+  --ymk-radius-xl: calc(var(--radius) * 3.2);
+  --ymk-radius-pill: 9999px;
+
+  --ymk-shadow-lg: 0 20px 40px -10px color-mix(in srgb, var(--text) 8%, transparent);
+  --ymk-transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --ymk-transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* =============================================================================
-   HOME BASE
-============================================================================= */
-
-.home {
-  color: var(--text);
-  background: transparent;
-  min-height: 100dvh;
+/* --- Base --- */
+.ymk-home-page {
+  font-family: var(--ymk-font-sans);
+  color: var(--ymk-text-main);
+  background-color: var(--ymk-bg-main);
+  line-height: 1.6;
   overflow-x: hidden;
-  overflow-y: visible;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* =============================================================================
-   HERO (Instagram-like layout)
-============================================================================= */
-
-.hero.hero--ig {
   position: relative;
-  overflow: hidden;
-  isolation: isolate;
-
-  /* Full-bleed */
-  width: 100vw;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-
-  padding: clamp(28px, 5vw, 56px) 0;
-  border-bottom: 1px solid color-mix(in oklab, var(--stroke) 78%, transparent);
 }
 
-.hero-inner {
-  position: relative;
-  z-index: 1;
-  width: min(1180px, 92vw);
-  margin: 0 auto;
-}
-
-/* Clean background */
-.hero.hero--ig::before {
-  content: "";
+.ymk-home-page .ymk-page-journey-bg {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
   z-index: 0;
-
-  background:
-    radial-gradient(900px 650px at 20% 0%,
-      rgba(var(--accent-to), 0.18),
-      transparent 60%),
-    radial-gradient(900px 650px at 90% 15%,
-      rgba(var(--accent-from), 0.14),
-      transparent 62%);
+  background-image:
+    radial-gradient(circle at 10% 40%, color-mix(in srgb, var(--ymk-primary) 4%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse at 90% 70%, color-mix(in srgb, var(--ymk-primary) 3%, transparent) 0%, transparent 60%);
 }
 
-.hero-ig {
-  display: grid;
-  grid-template-columns: 1.35fr 0.65fr;
-  gap: clamp(18px, 4vw, 54px);
-  align-items: center;
+.ymk-home-page .container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
 }
 
-.hero-ig__left {
-  text-align: left;
+.ymk-home-page .text-center {
+  text-align: center;
 }
 
-/* =============================================================================
-   TITLE: full animated gradient (your palette)
-   NOTE: this replaces the old "titleAccent" approach
-============================================================================= */
+.ymk-home-page .mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
 
-.hero-ig__title {
-  margin: 0;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  font-size: clamp(34px, 4.6vw, 56px);
+.ymk-home-page .max-w-2xl {
+  max-width: 672px;
+}
 
-  /* full gradient */
-  background: linear-gradient(90deg,
-      #5f9cff 0%,
-      #6a7bff 35%,
-      #8b5cf6 70%,
-      #5f9cff 100%);
-
+/* --- Typography --- */
+.ymk-home-page .text-gradient {
+  background: linear-gradient(90deg, #5f9cff 0%, #a881ff 25%, #ff6b8b 50%, #a881ff 75%, #5f9cff 100%);
   background-size: 200% 100%;
   background-position: 200% 50%;
-  background-repeat: repeat;
-  animation: gradientFlow 3.5s linear infinite;
+  animation: gradientFlow 5s linear infinite;
 
   -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  padding-bottom: 0.15em;
+  background-clip: text;
+  color: transparent;
 }
 
 @keyframes gradientFlow {
-  from {
+  0% {
     background-position: 200% 50%;
   }
 
-  to {
+  100% {
     background-position: 0% 50%;
   }
 }
 
-/* keep class in markup if you want, but neutralize it so it won't fight */
-.hero-ig__titleAccent {
-  background: none;
-  -webkit-text-fill-color: unset;
+.ymk-home-page .section-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--ymk-text-main);
+  margin-bottom: 24px;
 }
 
-.hero-ig__sub {
-  margin: 14px 0 0;
-  max-width: 56ch;
-  color: var(--text-weak);
-  font-size: 16px;
-  line-height: 1.55;
-  font-weight: 600;
+.ymk-home-page .section-description {
+  font-size: 1.25rem;
+  color: var(--ymk-text-muted);
+  line-height: 1.6;
 }
 
-.hero-ig__actions {
-  margin-top: 22px;
-  display: flex;
+.ymk-home-page .eyebrow {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ymk-primary);
+  margin-bottom: 24px;
+  padding: 6px 14px;
+  border-radius: var(--ymk-radius-pill);
+  background: color-mix(in srgb, var(--ymk-primary) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ymk-primary) 30%, transparent);
+}
+
+/* --- Interactive Utilities (Restored) --- */
+.ymk-home-page .glass-panel {
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid color-mix(in srgb, var(--text) 4%, transparent);
+  box-shadow:
+    var(--ymk-shadow-lg),
+    inset 0 1px 1px 0 color-mix(in srgb, var(--text) 3%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--text) 1%, transparent);
+  border-radius: var(--ymk-radius-lg);
+}
+
+.ymk-home-page .glass-hover {
+  transition: var(--ymk-transition-smooth);
+}
+
+.ymk-home-page .glass-hover:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 32px -8px color-mix(in srgb, var(--text) 8%, transparent),
+    inset 0 1px 1px 0 color-mix(in srgb, var(--text) 3%, transparent);
+  border-color: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+/* --- Buttons (RESTORED PREMIUM STYLING SCOPED) --- */
+.ymk-home-page .btn {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.hero-ig__meta {
-  margin-top: 16px;
-  display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--ymk-radius-pill);
+  transition: all var(--ymk-transition-fast);
+  cursor: pointer;
+  border: 1px solid transparent;
+  user-select: none;
+  padding: 14px 28px;
+  font-size: 1rem;
 }
 
-/* Small "trust" pills */
-.hero-pill {
+.ymk-home-page .btn-xl {
+  padding: 16px 36px;
+  font-size: 1.125rem;
+}
+
+.ymk-home-page .btn-icon,
+.ymk-home-page .hero-btn-arrow {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--ymk-transition-fast);
+}
+
+.ymk-home-page .btn-primary {
+  background-color: var(--ymk-primary) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+  border: none !important;
+}
+
+.ymk-home-page .btn-primary:hover {
+  background-color: var(--ymk-primary) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.2);
+  text-decoration: none !important;
+}
+
+.ymk-home-page .btn-primary:active {
+  transform: translateY(0);
+  filter: brightness(0.95);
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+}
+
+.ymk-home-page .btn-primary:hover .hero-btn-arrow {
+  transform: translateX(4px);
+}
+
+.ymk-home-page .btn-primary:link,
+.ymk-home-page .btn-primary:visited,
+.ymk-home-page .btn-primary:active {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.ymk-home-page .btn-secondary {
+  background-color: var(--ymk-bg-main) !important;
+  color: var(--ymk-text-main) !important;
+  border: 1px solid color-mix(in srgb, var(--text) 20%, transparent) !important;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--text) 5%, transparent) !important;
+}
+
+.ymk-home-page .btn-secondary:link,
+.ymk-home-page .btn-secondary:visited {
+  color: var(--ymk-text-main) !important;
+}
+
+.ymk-home-page .btn-secondary:hover {
+  background-color: var(--ymk-bg-subtle) !important;
+  border-color: color-mix(in srgb, var(--text) 30%, transparent) !important;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--text) 5%, transparent) !important;
+  transform: translateY(-2px);
+}
+
+.ymk-home-page .btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   1. Hero Section
+   ========================================================================== */
+.ymk-home-page .hero-section {
+  position: relative;
+  padding: 0px 0 40px;
+  /* Moved much closer to header */
+  overflow: hidden;
+}
+
+.ymk-home-page .hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.ymk-home-page .glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 1;
+}
+
+.ymk-home-page .glow-blob.top-left {
+  width: 140vw;
+  height: 800px;
+  left: 50%;
+  top: -400px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--ymk-primary) 12%, transparent) 0%, transparent 60%);
+}
+
+.ymk-home-page .glow-blob.bottom-right {
+  width: 800px;
+  height: 800px;
+  right: -200px;
+  bottom: -200px;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--text) 4%, transparent) 0%, transparent 60%);
+}
+
+.ymk-home-page .grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-size: 60px 60px;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--text) 1%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--text) 1%, transparent) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse at 50% 10%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 10%, black 20%, transparent 80%);
+}
+
+.ymk-home-page .hero-container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.ymk-home-page .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-
-  padding: 8px 12px;
-  border-radius: 999px;
-
-  border: 1px solid color-mix(in oklab, var(--stroke) 85%, transparent);
-  background: color-mix(in oklab, var(--surface) 78%, transparent);
-  color: var(--text);
-
-  font-size: 12px;
-  font-weight: 650;
-}
-
-/* =============================================================================
-   RIGHT SIDE: phone mock (stacked like IG)
-============================================================================= */
-
-.hero-ig__right {
-  display: grid;
-  justify-items: end;
-}
-
-.phoneStack {
-  position: relative;
-  width: min(380px, 90vw);
-  aspect-ratio: 4 / 5;
-  /* instagram-ish */
-}
-
-/* back frame (subtle depth) */
-.phoneFrame--back {
-  position: absolute;
-  inset: 0;
-  border-radius: 28px;
-  transform: translate(14px, 14px);
-  opacity: 0.55;
-  filter: blur(0px);
-
-  background: color-mix(in oklab, var(--surface) 72%, transparent);
-  border: 1px solid color-mix(in oklab, var(--stroke) 80%, transparent);
-  box-shadow: 0 20px 55px rgba(15, 18, 34, 0.14);
-}
-
-/* main frame */
-.phoneFrame {
-  position: absolute;
-  inset: 0;
-  border-radius: 28px;
-  overflow: hidden;
-
-  background: color-mix(in oklab, var(--surface) 84%, transparent);
-  border: 1px solid color-mix(in oklab, var(--stroke) 85%, transparent);
-
-  box-shadow:
-    0 28px 80px rgba(15, 18, 34, 0.22),
-    0 2px 0 rgba(255, 255, 255, 0.35) inset;
-}
-
-/* top notch-ish bar */
-.phoneTopBar {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 38%;
-  height: 10px;
-  border-radius: 999px;
-  background: color-mix(in oklab, var(--stroke) 70%, transparent);
-  opacity: 0.7;
-  z-index: 2;
-}
-
-.phoneImg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  /* if it’s like IG post */
-  transform: scale(1.02);
-  /* tiny zoom to avoid edge seams */
-}
-
-/* Dark theme tweaks */
-:root[data-theme="dark"] .phoneFrame {
-  background: color-mix(in oklab, var(--surface) 55%, transparent);
-  box-shadow:
-    0 34px 90px rgba(0, 0, 0, 0.55),
-    0 1px 0 rgba(255, 255, 255, 0.12) inset;
-}
-
-:root[data-theme="dark"] .phoneFrame--back {
-  background: color-mix(in oklab, var(--surface) 45%, transparent);
-  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.35);
-}
-
-/* =============================================================================
-   SEARCH placement (under hero like "try it")
-   FIX: remove negative margin so it doesn't "stick"
-============================================================================= */
-
-.hero__search {
-  width: min(1120px, 92vw);
-
-  /* was: margin: -18px auto 0;  <-- this caused the "липнет" */
-  margin: 24px auto 0;
-
-  position: relative;
-  z-index: 2;
-}
-
-/* =============================================================================
-   GLASS (single source of truth - same as you had)
-============================================================================= */
-
-.glass {
-  background: var(--surface);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: blur(var(--blur));
-  -webkit-backdrop-filter: blur(var(--blur));
-}
-
-:root[data-theme="light"] .glass {
-  background: rgba(255, 255, 255, 0.82);
-}
-
-:root[data-theme="dark"] .glass {
-  background: rgba(18, 20, 41, 0.70);
-  border-color: rgba(255, 255, 255, 0.14);
-}
-
-/* =============================================================================
-   EXPLORE SECTION
-============================================================================= */
-
-.home__explore {
-  padding-bottom: clamp(28px, 6vw, 90px);
-  padding-top: clamp(22px, 4vw, 34px);
-}
-
-/* force correct colors inside Explore section */
-.home__explore,
-.home__explore h2,
-.home__explore p,
-.home__explore .segmented__btn {
-  color: var(--text);
-}
-
-.home__explore .segmented__btn {
-  color: var(--text-weak);
-}
-
-.home__explore .segmented__btn.is-active {
-  color: var(--text);
-}
-
-/* =============================================================================
-   SEGMENTED TABS (keep yours, unchanged)
-============================================================================= */
-
-.segmented {
-  --radius: 9999px;
-  --pad: 6px;
-  --h: 44px;
-
-  display: inline-flex;
-  position: relative;
-  align-items: center;
-  border-radius: var(--radius);
-  padding: var(--pad);
-  user-select: none;
-  isolation: isolate;
-
-  background: rgba(15, 18, 34, 0.04);
-  box-shadow: inset 0 0 0 1px rgba(15, 18, 34, 0.06);
-}
-
-:root[data-theme="dark"] .segmented {
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.10);
-}
-
-.segmented__btn {
-  position: relative;
-  z-index: 2;
-  flex: 1 1 0;
-  height: var(--h);
-
-  border: 0;
-  background: none;
-  border-radius: calc(var(--radius) - 4px);
-
+  padding: 8px 16px;
+  background: color-mix(in srgb, var(--ymk-primary) 10%, transparent);
+  color: var(--ymk-primary);
+  border-radius: var(--ymk-radius-pill);
+  font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.2px;
-  color: var(--text-weak);
-
-  cursor: pointer;
-  transition: color 0.25s ease, transform 0.25s ease;
+  margin-bottom: 32px;
+  border: 1px solid color-mix(in srgb, var(--ymk-primary) 30%, transparent);
 }
 
-.segmented__btn.is-active {
-  color: var(--text);
-  font-weight: 700;
-  transform: scale(1.05);
+.ymk-home-page .badge-pulse {
+  width: 8px;
+  height: 8px;
+  background: var(--ymk-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--ymk-primary) 70%, transparent);
+  animation: badge-pulse 2s infinite;
 }
 
-.segmented__btn.is-active::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 20%;
-  width: 60%;
-  height: 3px;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, rgb(var(--accent-from)), rgb(var(--accent-to)));
-  opacity: 0.9;
-  transition: all 0.25s ease;
-}
-
-.segmented__thumb {
-  position: absolute;
-  z-index: 1;
-  top: var(--pad);
-  bottom: var(--pad);
-
-  border-radius: calc(var(--radius) - 4px);
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: var(--shadow-sm);
-  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-:root[data-theme="dark"] .segmented__thumb {
-  background: rgba(18, 20, 41, 0.75);
-}
-
-/* =============================================================================
-   CARDS (keep simple)
-============================================================================= */
-
-.home .vibe-card {
-  background: var(--surface);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  box-shadow: var(--shadow-sm);
-  padding: 24px;
-
-  transition:
-    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.25s ease;
-
-  cursor: pointer;
-  color: var(--text);
-}
-
-.home .vibe-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: rgba(var(--accent-to), 0.28);
-}
-
-.vibe-card h3 {
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.vibe-card p {
-  color: var(--text-weak);
-  margin: 0;
-  font-size: 15px;
-}
-
-/* =============================================================================
-   CTA ROW
-============================================================================= */
-
-.cta-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 28px;
-}
-
-/* =============================================================================
-   SECONDARY CTA (ghost) - keep yours
-============================================================================= */
-
-.btn-link-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 52px;
-  padding: 0 18px;
-
-  font-weight: 600;
-  font-size: 15px;
-
-  color: var(--link, #4f46e5);
-  background: color-mix(in srgb, var(--link, #4f46e5) 10%, transparent);
-
-  border-radius: 9999px;
-  text-decoration: none;
-  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
-}
-
-.btn-link-ghost:hover {
-  color: color-mix(in srgb, var(--link, #4f46e5) 70%, #000);
-  background: color-mix(in srgb, var(--link, #4f46e5) 16%, transparent);
-  transform: translateY(-1px);
-}
-
-.btn-link-ghost:active {
-  transform: translateY(0);
-  filter: brightness(0.95);
-}
-
-.btn-link-ghost--pill {
-  border-radius: 9999px;
-}
-
-/* =============================================================================
-   CTA BUTTONS (keep yours)
-============================================================================= */
-
-.btn-cta {
-  --h: 56px;
-  height: var(--h);
-  padding: 0 26px;
-
-  border: none;
-  border-radius: 9999px;
-
-  background: linear-gradient(90deg, rgb(var(--accent-from)), rgb(var(--accent-to)));
-  color: #fff;
-
-  font-weight: 700;
-  letter-spacing: 0.2px;
-
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 10px 28px rgba(var(--accent-to), 0.18);
-
-  transition:
-    transform 0.15s ease,
-    filter 0.15s ease,
-    box-shadow 0.2s ease;
-
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-cta::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 20%;
-  height: 100%;
-
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0));
-  transform: skewX(-20deg);
-  transition: left 0.5s ease;
-}
-
-.btn-cta:hover::after {
-  left: 125%;
-}
-
-.btn-cta:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.05);
-}
-
-.btn-cta:active {
-  transform: translateY(0);
-  filter: brightness(0.95);
-}
-
-.btn-cta:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 3px rgba(var(--accent-to), 0.30),
-    0 10px 28px rgba(var(--accent-to), 0.25);
-}
-
-.btn-cta--lg {
-  --h: 52px;
-  height: var(--h);
-  padding: 0 32px;
-  font-size: 16px;
-}
-
-.btn-cta--pill {
-  border-radius: 9999px !important;
-}
-
-/* =============================================================================
-   DEMO PANEL (keep yours - unchanged)
-============================================================================= */
-
-.demo-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(13, 18, 33, 0.48);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  z-index: 1000;
-}
-
-.demo-panel {
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100dvh;
-  width: min(520px, 92vw);
-
-  background: linear-gradient(135deg, #f6fafe 65%, #f8f4fd 100%);
-  border-left: 1px solid rgba(15, 18, 34, 0.08);
-  box-shadow: -24px 0 48px rgba(15, 18, 34, 0.18);
-
-  z-index: 1001;
-  display: flex;
-  flex-direction: column;
-}
-
-:root[data-theme="dark"] .demo-panel {
-  background: linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: -24px 0 52px rgba(0, 0, 0, 0.55);
-}
-
-.demo-panel__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 16px 18px;
-  border-bottom: 1px solid rgba(15, 18, 34, 0.08);
-}
-
-:root[data-theme="dark"] .demo-panel__header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.demo-close {
-  all: unset;
-  cursor: pointer;
-
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  color: var(--text);
-  background: rgba(0, 0, 0, 0.04);
-}
-
-.demo-close:hover {
-  background: rgba(0, 0, 0, 0.08);
-}
-
-:root[data-theme="dark"] .demo-close {
-  background: rgba(18, 20, 41, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text);
-}
-
-:root[data-theme="dark"] .demo-close:hover {
-  background: rgba(18, 20, 41, 0.78);
-}
-
-.demo-panel__body {
-  padding: 16px;
-  overflow: auto;
-}
-
-/* bottom sheet on small screens */
-@media (max-width: 640px) {
-  .demo-panel {
-    left: 0;
-    width: 100vw;
-    height: 82dvh;
-    top: auto;
-    bottom: 0;
-
-    border-left: none;
-    border-top: 1px solid rgba(15, 18, 34, 0.08);
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
-
-    box-shadow: 0 -24px 48px rgba(15, 18, 34, 0.18);
+@keyframes badge-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--ymk-primary) 70%, transparent);
   }
 
-  :root[data-theme="dark"] .demo-panel {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 -24px 56px rgba(0, 0, 0, 0.60);
+  70% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--ymk-primary) 0%, transparent);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--ymk-primary) 0%, transparent);
   }
 }
 
-/* =============================================================================
-   Responsive
-============================================================================= */
-
-@media (max-width: 900px) {
-  .hero-ig {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .hero-ig__left {
-    text-align: center;
-  }
-
-  .hero-ig__sub {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hero-ig__actions {
-    justify-content: center;
-  }
-
-  .hero-ig__right {
-    justify-items: center;
-    margin-top: 10px;
-  }
-
-  .phoneStack {
-    width: min(360px, 92vw);
-  }
-}
-
-/* Optional media helper (if you use it somewhere) */
-.hero-media {
-  display: grid;
-  justify-items: end;
-  width: 100%;
-
-}
-
-.hero-media {
-  display: grid;
-  justify-items: end;
-  width: 100%;
-}
-
-.hero-ig__right {
-  position: relative;
-}
-
-.hero-media__img {
-  display: block;
-  width: 560px;
-  max-width: none;
-  height: auto;
-
-  transform: translateX(56px);
-
-  object-fit: contain;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-/* =============================================================================
-   Feature cards look (as desired)
-============================================================================= */
-
-.home .feature {
-  background: var(--surface);
-  border: 1px solid color-mix(in oklab, var(--stroke) 92%, transparent);
-  border-radius: 18px;
-  box-shadow: var(--shadow-sm);
-
-  color: var(--text);
-
-  transition:
-    box-shadow 0.35s cubic-bezier(.22, 1, .36, 1),
-    border-color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.home .feature__title {
-  color: var(--text);
-  font-weight: 700;
-}
-
-.home .feature__text {
-  color: var(--text-weak);
-  font-weight: 500;
-}
-
-/* icon badge */
-.home .feature__icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  background: linear-gradient(135deg,
-      rgba(var(--accent-from), 0.18),
-      rgba(var(--accent-to), 0.18));
-
-  color: rgb(var(--accent-from));
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    0 10px 24px rgba(15, 18, 34, 0.10);
-
-  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
-}
-
-.home .feature__icon svg {
-  width: 22px;
-  height: 22px;
-  display: block;
-  stroke: currentColor;
-  fill: none;
-}
-
-.home .feature:hover {
-  border-color: rgba(var(--accent-to), 0.35);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
-}
-
-.home .feature:hover .feature__icon {
-  background: linear-gradient(135deg,
-      rgba(var(--accent-from), 0.26),
-      rgba(var(--accent-to), 0.26));
-  transform: scale(1.06);
-}
-
-
-.search-stage {
-  width: 100%;
-  padding: 0 16px;
-  margin: 28px auto 0;
-}
-
-.search-stage__shell {
-  max-width: 1400px;
-  margin: 0 auto;
-
-  border-radius: 48px;
-  padding: clamp(28px, 5vw, 56px);
-
-  background:
-    radial-gradient(900px 600px at 15% 20%,
-      rgba(168, 85, 247, 0.35),
-      transparent 60%),
-    radial-gradient(900px 600px at 85% 30%,
-      rgba(99, 102, 241, 0.35),
-      transparent 62%),
-    linear-gradient(135deg, #7c3aed, #5b21b6);
-
-  box-shadow: 0 40px 120px rgba(88, 28, 135, 0.45);
-
-  position: relative;
-  overflow: hidden;
-  color: #fff;
-}
-
-.search-stage__inner {
-  max-width: 1280px;
-  margin: 0 auto;
-
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: clamp(15px, 2vw, 24px);
-
-  align-items: center;
-}
-
-.search-stage__left {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.search-stage__title {
-  margin: 0;
-  font-size: clamp(34px, 4.6vw, 56px);
-  font-weight: 800;
+.ymk-home-page .hero-title {
+  font-size: 3.5rem;
+  font-weight: 900;
   line-height: 1.05;
-  letter-spacing: -0.02em;
-  max-width: 18ch;
-  color: #fff;
+  letter-spacing: -0.05em;
+  margin-bottom: 24px;
 }
 
-.search-stage__desc {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.55;
-  max-width: 46ch;
-  color: rgba(255, 255, 255, 0.82);
+.ymk-home-page .hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--ymk-text-muted);
+  margin-bottom: 40px;
+  max-width: 500px;
+  line-height: 1.7;
 }
 
-.search-stage__left .vibe-search {
-  margin-top: 18px;
-  max-width: 460px;
-}
-
-.search-stage__right {
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  padding: 0;
-  margin: 0;
-
+.ymk-home-page .hero-actions {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ymk-home-page .hero-visual {
+  display: flex;
+  justify-content: center;
+  perspective: 1000px;
+  position: relative;
+  margin-top: 60px;
+}
+
+
+/* ==========================================================================
+   2 & 3. Awesome Showcase Sections (Airy, Deep Spacing, No Lines)
+   ========================================================================== */
+.ymk-home-page .showcases-wrapper {
+  padding: 120px 0;
+  position: relative;
+}
+
+/* Add huge soft glows behind the showcases instead of background colors */
+.ymk-home-page .showcase-glow-1 {
+  position: absolute;
+  top: 10%;
+  right: -20%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, color-mix(in srgb, #8b5cf6 8%, transparent) 0%, transparent 60%);
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ymk-home-page .showcase-glow-2 {
+  position: absolute;
+  bottom: 10%;
+  left: -20%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, color-mix(in srgb, #f97316 8%, transparent) 0%, transparent 60%);
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ymk-home-page .showcase-section {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 160px;
+  /* Massive breathing room */
+}
+
+.ymk-home-page .showcase-section:last-child {
+  margin-bottom: 0;
+}
+
+.ymk-home-page .showcase-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 60px;
   align-items: center;
 }
 
-.search-stage__img {
-  display: block;
+/* Image Placeholder Styling (SaaS Quality) */
+.ymk-home-page .image-placeholder {
   width: 100%;
-  max-width: 520px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--ymk-transition-smooth), box-shadow var(--ymk-transition-smooth);
+}
+
+.ymk-home-page .image-placeholder:hover {
+  /* Let the image handle the lift */
+}
+
+.ymk-home-page .placeholder-img {
+  width: 100%;
   height: auto;
-
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  border-radius: 0;
-
+  max-height: 70vh;
   object-fit: contain;
+  border-radius: var(--ymk-radius-xl);
+  border: 1px solid color-mix(in srgb, var(--text) 6%, transparent);
+  box-shadow: 0 32px 64px -16px color-mix(in srgb, var(--text) 10%, transparent);
+  transition: transform var(--ymk-transition-smooth), box-shadow var(--ymk-transition-smooth);
+  display: block;
 }
 
-@media (max-width: 900px) {
-  .search-stage {
-    padding: 0 12px;
-    margin-top: 18px;
-  }
-
-  .search-stage__shell {
-    border-radius: 28px;
-    padding: 20px;
-  }
-
-  .search-stage__inner {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .search-stage__right {
-    order: -1;
-    justify-content: center;
-  }
-
-  .search-stage__left {
-    align-items: center;
-    text-align: center;
-  }
-
-  .search-stage__title {
-    max-width: none;
-  }
+.ymk-home-page .image-placeholder:hover .placeholder-img {
+  transform: translateY(-8px);
+  box-shadow: 0 40px 80px -16px color-mix(in srgb, var(--text) 15%, transparent);
 }
 
-@media (max-width: 420px) {
-  .search-stage__shell {
-    border-radius: 22px;
-    padding: 16px;
-  }
+.ymk-home-page .placeholder-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--text) 2%, transparent);
+  font-family: monospace;
+  color: var(--text-weak);
+  border-radius: var(--ymk-radius-xl);
+  border: 2px dashed color-mix(in srgb, var(--text) 10%, transparent);
+  padding: 20px;
+  text-align: center;
 }
 
-/* =============================================================================
-   SECTION DIVIDER (Search -> Explore)
-============================================================================= */
 
-.home__divider {
-  width: min(960px, 86vw);
-  height: 1px;
-  margin: clamp(28px, 5vw, 56px) auto;
-
-  background: color-mix(in oklab,
-      var(--stroke) 65%,
-      transparent);
+/* ==========================================================================
+   4. Features Grid (Restored Glass Panel UI)
+   ========================================================================== */
+.ymk-home-page .features-section {
+  padding: 120px 0 160px;
+  position: relative;
+  z-index: 1;
 }
 
-/* =============================================================================
-   SEARCH -> give it bottom spacing so Explore doesn't feel glued
-============================================================================= */
+.ymk-home-page .features-header {
+  margin-bottom: 80px;
+}
 
-.search-stage {
+.ymk-home-page .modern-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.ymk-home-page .feature-block {
+  padding: 40px 32px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: transform var(--ymk-transition-smooth), box-shadow var(--ymk-transition-smooth), border-color var(--ymk-transition-smooth);
+}
+
+.ymk-home-page .feature-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 0 16px;
-  margin: 28px auto 0;
-  padding-bottom: clamp(18px, 3vw, 34px);
-  /* NEW */
+  height: 100%;
+  background: radial-gradient(circle at top left, color-mix(in srgb, var(--ymk-primary) 6%, transparent) 0%, transparent 60%);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--ymk-transition-smooth);
 }
 
-/* =============================================================================
-   EXPLORE -> add top rhythm + better responsive header layout
-============================================================================= */
-
-.home__explore {
-  padding-top: clamp(18px, 3vw, 34px);
+.ymk-home-page .feature-block::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ymk-primary) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-/* on small screens: stack title + tabs and make tabs full width */
-@media (max-width: 640px) {
-  .home__explore .d-flex {
-    align-items: stretch !important;
-  }
-
-  .segmented {
-    width: 100%;
-  }
-
-  .segmented__btn {
-    font-size: 14px;
-  }
+.ymk-home-page .feature-block.glass-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px -12px color-mix(in srgb, var(--text) 12%, transparent);
+  border-color: color-mix(in srgb, var(--ymk-primary) 20%, transparent);
 }
 
-.search-stage .vibe-search,
-.search-stage .vibe-search * {
-  box-sizing: border-box;
+.ymk-home-page .feature-block:hover::before,
+.ymk-home-page .feature-block:hover::after {
+  opacity: 1;
 }
 
-/* =============================================================================
-   SEARCH STAGE — mobile spacing & comfort
-============================================================================= */
+.ymk-home-page .feature-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--ymk-primary) 10%, transparent);
+  color: var(--ymk-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  box-shadow: inset 0 1px 1px 0 color-mix(in srgb, #ffffff 15%, transparent);
+}
 
-.search-stage .vibe-search input,
-.search-stage .vibe-search textarea,
-.search-stage .vibe-search select {
+.ymk-home-page .feature-icon-wrapper svg {
+  width: 28px;
+  height: 28px;
+}
+
+.ymk-home-page .feature-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+
+/* ==========================================================================
+   5. CTA Island (Colorful Vibrant Background Restored)
+   ========================================================================== */
+.ymk-home-page .final-cta-section {
+  padding: 0 0 160px;
+  position: relative;
+  z-index: 1;
+}
+
+.ymk-home-page .cta-burst-wrapper {
+  /* Restoring the beautiful vibrant colorful background! */
+  background: linear-gradient(135deg, #ff6b8b 0%, #8b5cf6 50%, #5f9cff 100%);
+  border-radius: 48px;
+  padding: 100px 40px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  border: none;
+  box-shadow:
+    0 40px 80px -20px color-mix(in srgb, #8b5cf6 40%, transparent);
+}
+
+/* Make text inside CTA white so it contrasts beautifully with the colorful bg */
+.ymk-home-page .cta-burst-wrapper .cta-title,
+.ymk-home-page .cta-burst-wrapper .cta-description {
+  color: #ffffff;
+}
+
+/* Modify buttons specifically for CTA colorful background */
+.ymk-home-page .cta-burst-wrapper .btn-primary {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  border: none !important;
+}
+
+.ymk-home-page .cta-burst-wrapper .btn-primary:hover {
+  transform: translateY(-2px);
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #000000 !important;
+  filter: brightness(0.96);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2) !important;
+  text-decoration: none !important;
+}
+
+.ymk-home-page .cta-burst-wrapper .btn-primary:link,
+.ymk-home-page .cta-burst-wrapper .btn-primary:visited {
+  color: #000000 !important;
+}
+
+.ymk-home-page .cta-burst-wrapper .btn-secondary {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px);
+}
+
+.ymk-home-page .cta-burst-wrapper .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.ymk-home-page .cta-glow-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  min-width: 0;
+  height: 100%;
+  background-image: radial-gradient(circle at top right, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+  z-index: 0;
+  pointer-events: none;
 }
 
-@media (max-width: 520px) {
-  .search-stage {
-    margin-top: 14px;
-  }
-
-  .search-stage__shell {
-    padding: 20px 16px 22px;
-  }
-
-  .search-stage__inner {
-    gap: 20px;
-  }
-
-  .search-stage__right {
-    margin-bottom: 10px;
-  }
-
-  .search-stage__left {
-    gap: 16px;
-  }
-
-  .search-stage__title {
-    font-size: 30px;
-    line-height: 1.12;
-  }
-
-  .search-stage__desc {
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  .search-stage .vibe-search {
-    margin-top: 22px;
-  }
-
-  .search-stage .vibe-search input {
-    height: 56px;
-    font-size: 16px;
-    padding: 0 16px;
-  }
+.ymk-home-page .cta-burst-content {
+  position: relative;
+  z-index: 1;
 }
 
-/* =============================================================================
-   SPACE FROM HEADER → HERO
-============================================================================= */
-
-.hero.hero--ig {
-  padding-top: clamp(48px, 8vh, 96px);
-  /* NEW */
+.ymk-home-page .cta-title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  color: var(--ymk-text-main);
 }
 
-/* =============================================================================
-   HERO — phones: image on top + more breathing room
-============================================================================= */
+.ymk-home-page .cta-description {
+  font-size: 1.25rem;
+  color: var(--ymk-text-muted);
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-@media (max-width: 900px) {
-  .hero-ig {
-    grid-template-columns: 1fr;
-    gap: 18px;
+.ymk-home-page .cta-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* Desktop overrides */
+@media (min-width: 768px) {
+  .ymk-home-page .hero-container {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .hero-ig__right {
-    order: -1;
-    justify-items: center;
-    margin: 0 0 8px;
+  .ymk-home-page .hero-actions {
+    flex-direction: row;
   }
 
-  .hero-media__img {
-    width: min(520px, 92vw);
-    max-width: 100%;
-    transform: none;
+  .ymk-home-page .cta-actions {
+    flex-direction: row;
   }
 
-
-  .hero-ig__sub {
-    margin-top: 14px;
+  .ymk-home-page .modern-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
   }
 
-  .hero-ig__actions {
-    margin-top: 26px;
-    gap: 12px;
-    justify-content: center;
+  .ymk-home-page .showcase-container {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 80px;
+  }
+
+  /* Desktop alternating order for showcases */
+  .ymk-home-page .reverse-layout .showcase-image-wrapper {
+    order: 2;
+  }
+
+  .ymk-home-page .reverse-layout .showcase-content {
+    order: 1;
+  }
+
+  .ymk-home-page .reverse-layout .showcase-container {
+    grid-template-columns: 0.85fr 1.15fr;
   }
 }
 
-@media (max-width: 520px) {
-  .hero.hero--ig {
-    padding: 22px 0 26px;
+@media (min-width: 1024px) {
+
+  /* Keep hero tighter to the top */
+  .ymk-home-page .hero-section {
+    padding: 0px 0 60px;
   }
 
-  .hero-ig__right {
-    margin-bottom: 12px;
+  .ymk-home-page .desktop-break {
+    display: block;
   }
 
-  .hero-ig__title {
-    font-size: clamp(30px, 9vw, 40px);
-    line-height: 1.06;
+  .ymk-home-page .hero-title {
+    font-size: 5rem;
   }
 
-  .hero-ig__sub {
-    font-size: 15px;
-    line-height: 1.6;
-    margin-top: 14px;
+  .ymk-home-page .section-title {
+    font-size: 3.5rem;
   }
 
-  .hero-ig__actions {
-    margin-top: 28px;
-    gap: 10px;
-
-    flex-direction: column;
-    align-items: stretch;
+  .ymk-home-page .cta-title {
+    font-size: 4rem;
   }
 
-  .hero-ig__actions .btn-cta,
-  .hero-ig__actions .btn-link-ghost {
-    width: 100%;
-    justify-content: center;
+  .ymk-home-page .cta-burst-wrapper {
+    padding: 140px 60px;
   }
+}
 
-  .hero-media__img {
-    width: min(420px, 88vw);
-  }
+.hero-section {
+  margin-top: -20px;
 }

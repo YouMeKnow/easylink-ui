@@ -15,6 +15,7 @@ import { Share2 } from "lucide-react";
 export default function VibeCard({
   id,
   name,
+  shareUrl: externalShareUrl,
   description,
   photo,
   contacts,
@@ -47,7 +48,7 @@ export default function VibeCard({
   const canOwnerActions = ownerActionsEnabled && hasId;
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const shareUrl = hasId ? `${origin}/view/${id}` : "";
+  const shareUrl = externalShareUrl || (hasId ? `${origin}/view/${id}` : "");
 
   // visibility (owner only)
   const [vibeVisible, code, visibilityToggleUI] = useVisibilityToggle(
@@ -107,64 +108,67 @@ export default function VibeCard({
   };
 
   return (
-    <div className="vibe-card" style={{ width:"100%", margin:"0 auto" }}>
+    <div className="vibe-card" style={{ width: "100%", margin: "0 auto" }}>
       {/* Background layer */}
       <div className="vibe-card__bg" aria-hidden="true" />
 
-      {/* Share button */}
-      {canShare && (
-        <button
-          type="button"
-          className="btn vibe-card__share-btn"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onShareClick(e);
-          }}
-          title={t("vibe.share", "Share")}
-          aria-label={t("vibe.share", "Share")}
-        >
-          <span className="vibe-card__share-icn">
-            <Share2 size={20} aria-hidden="true" />
-          </span>
-        </button>
-      )}
+      {/* Top Actions: Visibility & Share */}
+      {(canOwnerActions || canShare) && (
+        <div className={`vibe-card__top-actions ${!canOwnerActions ? "is-public" : ""}`}>
+          {canOwnerActions && (
+            <div className="vibe-card__visibility">
+              <div className="vibe-card__visibility-label">
+                {t("vibe.visibility", "Visibility")}
+              </div>
 
-      {/* Visibility + Share code */}
-      {canOwnerActions && (
-        <div className="vibe-card__visibility">
-          <div className="vibe-card__visibility-label">
-            {t("vibe.visibility", "Visibility")}
-          </div>
+              <div className="vibe-card__visibility-controls">
+                {visibilityToggleUI}
 
-          <div className="vibe-card__visibility-controls">
-            {visibilityToggleUI}
+                {vibeVisible && code && (
+                  <>
+                    <button
+                      type="button"
+                      className="vibe-card__code"
+                      onClick={() => handleCopyCode(code)}
+                      title={t("Click to copy", { defaultValue: "Click to copy" })}
+                      aria-label={t("Click to copy", { defaultValue: "Click to copy" })}
+                    >
+                      <span>{t("vibe.share_code", "Share code")}</span>
+                      <strong>{code}</strong>
+                    </button>
 
-            {vibeVisible && code && (
-              <>
-                <button
-                  type="button"
-                  className="vibe-card__code"
-                  onClick={() => handleCopyCode(code)}
-                  title={t("Click to copy", { defaultValue: "Click to copy" })}
-                  aria-label={t("Click to copy", { defaultValue: "Click to copy" })}
-                >
-                  <span>{t("vibe.share_code", "Share code")}</span>
-                  <strong>{code}</strong>
-                </button>
-
-                {codeCopied && (
-                  <span
-                    className="vibe-card__copied"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    {t("Copied!", { defaultValue: "Copied!" })}
-                  </span>
+                    {codeCopied && (
+                      <span
+                        className="vibe-card__copied"
+                        role="status"
+                        aria-live="polite"
+                      >
+                        {t("Copied!", { defaultValue: "Copied!" })}
+                      </span>
+                    )}
+                  </>
                 )}
-              </>
-            )}
-          </div>
+              </div>
+            </div>
+          )}
+
+          {canShare && (
+            <button
+              type="button"
+              className="vibe-card__share-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onShareClick(e);
+              }}
+              title={t("vibe.share", "Share")}
+              aria-label={t("vibe.share", "Share")}
+            >
+              <span className="vibe-card__share-icn">
+                <Share2 size={20} aria-hidden="true" />
+              </span>
+            </button>
+          )}
         </div>
       )}
 

@@ -3,36 +3,46 @@ import { useTranslation } from "react-i18next";
 
 import VibeCard from "@/features/vibes/card/components/VibeCard";
 import VibeContent from "@/features/vibes/tools/VibeContent";
+import "./BusinessVibeDemo.css";
 
 export default function BusinessVibeDemo() {
   const { t } = useTranslation("home");
 
   const demo = useMemo(
     () => ({
-      id: "demo-business",
+      id: "demo-pizzeria",
       type: "BUSINESS",
-      name: t("demo.business.name", { defaultValue: "YouMeKnow" }),
-      description: t("demo.business.description", {
-        defaultValue:
-          "A next-gen platform for digital identities and smart Vibes — connect, share, and grow your presence effortlessly.",
+
+      name: t("demo.pizza.name", {
+        defaultValue: "Napoli Slice",
       }),
-      photo: "/demo/business.jpg",
+
+      description: t("demo.pizza.description", {
+        defaultValue:
+          "Authentic Neapolitan pizza made with fresh ingredients. Fast, cozy, and unforgettable taste.",
+      }),
+
+      photo: "/demo/pizza.png",
       contacts: [
-        { type: "website", value: t("demo.business.website", { defaultValue: "youmeknow.com" }) },
-        { type: "github", value: t("demo.business.github", { defaultValue: "youmeknow" }) },
-        { type: "email", value: t("demo.business.email", { defaultValue: "help.youmeknow@gmail.com" }) },
-      ],
-      extraBlocks: [
         {
-          label: t("demo.business.mission_label", { defaultValue: "Our Mission" }),
-          value: t("demo.business.mission_value", {
-            defaultValue:
-              "Empowering individuals and businesses to express identity beyond platforms — through one smart link.",
-          }),
+          type: "website",
+          value: "napolislice.ca",
         },
         {
-          label: t("demo.business.hq_label", { defaultValue: "Headquarters" }),
-          value: t("demo.business.hq_value", { defaultValue: "Toronto, Canada" }),
+          type: "instagram",
+          value: "napolislice",
+        },
+        {
+          type: "email",
+          value: "help@napolislice.ca",
+        },
+        // {
+        //   type: "phone",
+        //   value: "+1 (647) 555-1234",
+        // },
+        {
+          type: "twitter",
+          value: "napolislice",
         },
       ],
     }),
@@ -40,10 +50,11 @@ export default function BusinessVibeDemo() {
   );
 
   return (
-    <div style={{ maxWidth: 420, margin: "0 auto" }}>
+    <div className="vibe-scale" style={{ maxWidth: 420, margin: "0 auto" }}>
       <VibeCard
         id={demo.id}
         name={demo.name}
+        shareUrl="https://youmeknow.com"
         description={demo.description}
         photo={demo.photo}
         contacts={demo.contacts}
@@ -56,6 +67,7 @@ export default function BusinessVibeDemo() {
         cardBody={
           <VibeContent
             id={demo.id}
+            shareUrl="https://youmeknow.com"
             name={demo.name}
             description={demo.description}
             photo={demo.photo}

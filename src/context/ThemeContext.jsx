@@ -23,6 +23,11 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", resolved);
+    if (resolved === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, [resolved]);
 
   useEffect(() => {
@@ -30,7 +35,13 @@ export function ThemeProvider({ children }) {
 
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = () => {
-      document.documentElement.setAttribute("data-theme", getSystemThemeSafe());
+      const isDark = getSystemThemeSafe() === "dark";
+      document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+      if (isDark) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     };
 
     mq.addEventListener?.("change", handler);

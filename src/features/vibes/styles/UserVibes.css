@@ -1,172 +1,170 @@
-/* =========================
-   MyVibes.css 
-   - dark/light friendly (tokens)
-   - no blur+transform smearing
-   - keeps "glass" look via ::before
-   ========================= */
-
-main {
-  min-height: 70vh;
-}
-
-.myvibes,
-.container.myvibes {
-  padding-left: max(16px, env(safe-area-inset-left));
-  padding-right: max(16px, env(safe-area-inset-right));
-  padding-bottom: max(16px, env(safe-area-inset-bottom));
-}
-
-/* ====== grid ====== */
-.vibes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-}
-
-@media (max-width: 768px) {
-  .vibes-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-}
-
-/* ==========================================================
-   CARD (glass without "blurry on hover")
-   Key idea: blur lives on ::before, not on the moving element
-   ========================================================== */
+/* ==========================================================================
+   UserVibes.css - Optimized Compact Cards
+   ========================================================================== */
 
 .myvibe-card {
   position: relative;
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--text) 6%, transparent);
+  border-radius: 20px;
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  min-height: 200px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
 
+.myvibe-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--ymk-primary, #6366f1);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.2);
+}
+
+/* Header within card: Avatar + Actions */
+.myvibe-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.myvibe-card__avatar-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  /* Changed from 16px to 50% */
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.myvibe-card__avatar {
   width: 100%;
-  max-width: 460px;
-  min-height: 180px;
-  margin-inline: auto;
-
-  padding: 22px 20px 18px;
-  border-radius: 18px;
-
-  border: 1px solid var(--stroke);
-  color: var(--text);
-
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-  opacity: 1;
-
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-
-  will-change: transform, box-shadow;
-  transition:
-    transform 0.18s cubic-bezier(.48, .07, .75, .95),
-    box-shadow 0.20s cubic-bezier(.48, .07, .75, .95),
-    border-color 0.18s ease;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* glass layer */
-.myvibe-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background: var(--surface);
-  -webkit-backdrop-filter: blur(var(--blur));
-  backdrop-filter: blur(var(--blur));
-
-  z-index: 0;
+.myvibe-card__avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--ymk-primary, #6366f1);
+  background: color-mix(in srgb, var(--ymk-primary, #6366f1) 8%, var(--bg0));
 }
 
-/* content above glass */
-.myvibe-card>* {
+.myvibe-card__quick-actions {
+  display: flex;
+  gap: 8px;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
-/* hover/focus (NO rotate, optional tiny scale) */
-@media (hover: hover) and (pointer: fine) {
-
-  .myvibe-card:hover,
-  .myvibe-card:focus {
-    transform: translateY(-8px) scale(1.01);
-    box-shadow: var(--shadow-md);
-    outline: none;
-    border-color: color-mix(in oklab, rgb(var(--accent-to)) 18%, var(--stroke));
-  }
+.myvibe-card__icon-btn {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+  color: var(--text-weak, #a1a1aa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
 }
 
-/* touch */
-@media (hover: none) {
-  .myvibe-card:active {
-    transform: scale(0.995);
-  }
+.myvibe-card__icon-btn svg {
+  /* Using global SVG reset from index.css base layer */
+  stroke-width: 2.5;
+  overflow: visible;
+  pointer-events: none;
 }
 
-.myvibe-card:focus-visible {
-  outline: none;
-  box-shadow: var(--shadow-md);
-  outline: 2px solid color-mix(in oklab, rgb(var(--accent-to)) 55%, transparent);
-  outline-offset: 3px;
+.myvibe-card__icon-btn:hover {
+  background: var(--ymk-primary, #6366f1);
+  color: white;
+  border-color: var(--ymk-primary, #6366f1);
 }
 
-/* ====== mobile settings ====== */
-@media (max-width: 768px) {
-  .myvibe-card {
-    padding: 16px 12px 14px;
-    font-size: 15px;
-    border-radius: 16px;
-  }
+.myvibe-card__icon-btn:hover svg {
+  stroke: white;
 }
 
-@media (max-width: 360px) {
-  .myvibe-card {
-    padding: 14px 10px 12px;
-    font-size: 14px;
-    border-radius: 14px;
-  }
+
+.myvibe-card__icon-btn.delete:hover {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .myvibe-card {
-    transition: none;
-  }
+.myvibe-card__icon-btn.delete:hover svg {
+  stroke: white;
 }
 
-/* ==========================================================
-   (Optional) Helpers for inner content if you want them here
-   Keep tokens; avoid hardcoded light colors
-   ========================================================== */
+/* Info Section */
+.myvibe-card__info {
+  flex-grow: 1;
+}
 
-/* Headings inside card */
-.myvibe-card h5 {
+.myvibe-card__name {
+  font-size: 1.15rem;
+  font-weight: 800;
   color: var(--text);
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Bootstrap .text-muted override inside card */
-.myvibe-card .text-muted {
-  color: var(--text-weak) !important;
+.myvibe-card__description {
+  font-size: 0.85rem;
+  color: var(--text-weak);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Type label (use accent rgb var) */
-.myvibe-card__type {
-  color: rgb(var(--accent-from));
+.myvibe-card__badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ymk-primary, #6366f1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ymk-primary, #6366f1) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ymk-primary, #6366f1) 20%, transparent);
 }
 
-.myvibes-page {
-  max-width: 980px;
-  min-height: 60vh;
-  padding-top: 24px;
-  padding-bottom: max(16px, env(safe-area-inset-bottom));
-  padding-left: max(16px, env(safe-area-inset-left));
-  padding-right: max(16px, env(safe-area-inset-right));
+/* Specific styling for the skeleton in Profile.css */
+.profile-vibe-skeleton {
+  min-height: 200px;
+  border-radius: 20px;
+  padding: 20px;
+  background: color-mix(in srgb, var(--text) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 6%, transparent);
 }
 
-.myvibes-empty {
-  margin-top: 24px;
-}
-
-@media (max-width: 768px) {
-  .myvibes-page {
-    padding-top: 16px;
+/* Responsive */
+@media (max-width: 576px) {
+  .myvibe-card {
+    padding: 16px;
   }
 }

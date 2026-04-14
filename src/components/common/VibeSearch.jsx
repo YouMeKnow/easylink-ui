@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/services/amplitude";
+import { Hash, Search } from "lucide-react";
 import "./VibeSearch.css";
 
 export default function VibeSearch({ autoFocus = false }) {
@@ -61,49 +62,50 @@ export default function VibeSearch({ autoFocus = false }) {
       noValidate
       aria-label={t("label", "Vibe code search")}
     >
-      <div className="vibe-search__panel">
-        <div className="vibe-search__row">
-          <input
-            id="vibeCode"
-            ref={inputRef}
-            className="vibe-search__input" 
-            type="tel"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            maxLength={5}
-            placeholder={t("placeholder")}
-            value={code}
-            onChange={onChange}
-            aria-describedby="vibeSearchHint"
-            aria-invalid={!!error}
-            autoComplete="off"
-          />
-
-          <button
-            type="submit"
-            className="vibe-search__btn"     
-            disabled={loading || !isValid}
-            aria-busy={loading ? "true" : "false"}
-          >
-            {loading ? (
-              <>
-                <span className="vibe-search__spinner" aria-hidden="true" />
-                {t("searching", "Searching…")}
-              </>
-            ) : (
-              t("button", "Search")
-            )}
-          </button>
+      <div className="vibe-search__integrated-bar">
+        <div className="vibe-search__icon-wrapper">
+          <Hash size={22} className="vibe-search__hash-icon" />
         </div>
 
+        <input
+          id="vibeCode"
+          ref={inputRef}
+          className="vibe-search__input" 
+          type="tel"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          maxLength={5}
+          placeholder={t("placeholder", "Enter 5-digit code")}
+          value={code}
+          onChange={onChange}
+          aria-describedby="vibeSearchHint"
+          aria-invalid={!!error}
+          autoComplete="off"
+        />
+
+        <button
+          type="submit"
+          className="vibe-search__submit-btn"     
+          disabled={loading || !isValid}
+          aria-busy={loading ? "true" : "false"}
+        >
+          {loading ? (
+            <span className="vibe-search__spinner" />
+          ) : (
+            <Search size={24} strokeWidth={2.5} />
+          )}
+        </button>
+      </div>
+
+      {error && (
         <div
           id="vibeSearchHint"
-          className={`vibe-search__hint ${error ? "is-error" : ""}`}
+          className="vibe-search__error"
           aria-live="polite"
         >
           {error}
         </div>
-      </div>
+      )}
     </form>
   );
 }
