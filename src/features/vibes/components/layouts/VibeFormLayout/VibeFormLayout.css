@@ -1,7 +1,7 @@
 /* VibeFormLayout.css — mobile stable + desktop centered card + right near card */
 
 :root{
-  --card-max: 420px;   /* реальная ширина VibeCard */
+  --card-max: 480px;   /* реальная ширина VibeCard */
   --side-gap: 16px;    /* насколько правее появляется right */
 }
 

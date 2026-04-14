@@ -36,20 +36,22 @@ export default function VibeContent({
   const pretty = slug ? slug.charAt(0).toUpperCase() + slug.slice(1) : t("default_type");
   const typeLabel = slug ? t(`types.${slug}`, { defaultValue: pretty }) : t("default_type");
 
+  const MAX_DESC_LENGTH = 200;
+
   return (
     <div className="vibe-content">
-      {/* LEFT */}
-      <div className="vibe-content__avatar">
-        <AvatarPicker
-          name={name}
-          photo={photo}
-          editMode={editMode}
-          onChangePhoto={onChangePhoto}
-        />
-      </div>
+      <div className="vibe-content__top-row">
+        {/* LEFT */}
+        <div className="vibe-content__avatar">
+          <AvatarPicker
+            name={name}
+            photo={photo}
+            editMode={editMode}
+            onChangePhoto={onChangePhoto}
+          />
+        </div>
 
-      {/* RIGHT */}
-      <div className="vibe-content__main">
+        {/* RIGHT */}
         <div className="vibe-content__head">
           <div className="vibe-content__title">
             {editMode ? (
@@ -66,24 +68,44 @@ export default function VibeContent({
               </h3>
             )}
           </div>
-
-          <div className="vibe-content__type text-primary">{typeLabel}</div>
+          <div className={`vibe-content__type vibe-content__type--${slug || "other"}`}>          
+            {typeLabel}
+          </div>
         </div>
+      </div>
 
-        <div className="vibe-content__desc">
-          {editMode ? (
-            <textarea
-              value={description}
-              placeholder={t("default_description")}
-              onChange={(e) => onChangeDescription?.(e.target.value)}
-              rows={2}
-              className="form-control vibe-content__desc-input"
-            />
-          ) : (
-            <p className={`vibe-content__desc-text ${description ? "" : "is-empty"}`}>
-              {description || t("default_description")}
-            </p>
-          )}
+      <div className="vibe-content__main">
+
+        <div className="vibe-content__desc-container">
+          <div className="vibe-content__desc-header">
+            <span className="vibe-content__desc-label">{t("labels.about", "About")}</span>
+            {editMode && (
+              <span className={`vibe-content__desc-counter ${(description?.length || 0) > MAX_DESC_LENGTH ? "is-limit" : ""}`}>
+                {description?.length || 0}/{MAX_DESC_LENGTH}
+              </span>
+            )}
+          </div>
+
+          <div className="vibe-content__desc">
+            {editMode ? (
+              <textarea
+                value={description}
+                placeholder={t("default_description")}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val.length <= MAX_DESC_LENGTH + 50) { // allow slight overflow for typing then trim/warn
+                    onChangeDescription?.(val);
+                  }
+                }}
+                rows={2}
+                className="form-control vibe-content__desc-input"
+              />
+            ) : (
+              <p className={`vibe-content__desc-text ${description ? "" : "is-empty"}`}>
+                {description || t("default_description")}
+              </p>
+            )}
+          </div>
         </div>
 
         {(contacts?.length > 0 || editMode) && (

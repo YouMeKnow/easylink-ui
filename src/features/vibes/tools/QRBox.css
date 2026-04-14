@@ -1,3 +1,5 @@
+/* QRBox.css */
+
 .qr-box {
   display: flex;
   flex-direction: column;
@@ -14,10 +16,11 @@
   line-height: 0;
   cursor: pointer;
   border-radius: 0;
+  transition: transform 0.2s ease;
 }
 
 .qr-box__trigger:hover {
-  transform: none;
+  transform: scale(1.03);
   border: 0;
 }
 
@@ -58,15 +61,16 @@
   max-width: 180px;
   font-size: 11px;
   line-height: 1.35;
-  color: #98a2b3;
+  color: var(--text-weak);
+  opacity: 0.6;
 }
 
 /* placeholder */
 .qr-box--placeholder .qr-preview {
   position: relative;
   border-radius: 12px;
-  border: 1.5px dashed #d9dce3;
-  background: linear-gradient(180deg, #fafafa 0%, #f3f4f6 100%);
+  border: 1.5px dashed color-mix(in srgb, var(--text) 12%, transparent);
+  background: color-mix(in srgb, var(--text) 2%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,7 +94,8 @@
   font-size: 18px;
   font-weight: 800;
   letter-spacing: 0.06em;
-  color: #a0a7b5;
+  color: var(--text-weak);
+  opacity: 0.4;
 }
 
 /* modal */

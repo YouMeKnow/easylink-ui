@@ -1,144 +1,219 @@
-.vibe-content__type {
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: .02em;
-  text-transform: uppercase;
+/* VibeContent.css — Content Layout & Typography */
+
+.vibe-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Side-by-side top row (Avatar + Name&Type) */
+.vibe-content__top-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.vibe-content__avatar {
+  flex-shrink: 0;
+}
+
+.vibe-content__main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header Area (Text next to avatar) */
+.vibe-content__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.vibe-content__name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Type Pill */
 .vibe-content__type {
-  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-weak);
+}
+
+.vibe-content__type--business {
+  color: #3b82f6;
+}
+
+.vibe-content__type--personal {
+  color: #ff6b8b;
+}
+
+.vibe-content__type--other {
+  color: #8b5cf6;
+}
+
+:root[data-theme="dark"] .vibe-content__type--business {
+  color: #60a5fa;
+}
+
+:root[data-theme="dark"] .vibe-content__type--personal {
+  color: #ff6b8b;
+}
+
+:root[data-theme="dark"] .vibe-content__type--other {
+  color: #a78bfa;
+}
+
+/* Description / Bio */
+.vibe-content__desc-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vibe-content__desc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.vibe-content__desc-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-weak);
+  opacity: 0.5;
+}
+
+.vibe-content__desc-counter {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-weak);
+  opacity: 0.3;
+}
+
+.vibe-content__desc-counter.is-limit {
+  color: #ef4444;
+  opacity: 0.8;
 }
 
 .vibe-content__desc-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  font-weight: 400;
+  color: var(--text);
   margin: 0;
-  padding-left: 12px;
-
-  border-left: 3px solid rgba(99, 102, 241, .45);
-
-  color: rgba(15, 23, 42, .78);
-  font-size: 14px;
-  line-height: 1.55;
-  letter-spacing: .01em;
+  text-align: left;
+  border-left: 2px solid color-mix(in srgb, var(--ymk-primary, #6366f1) 20%, transparent);
+  padding-left: 16px;
 }
 
 .vibe-content__desc-text.is-empty {
-  color: rgba(15, 23, 42, .35);
+  opacity: 0.3;
   font-style: italic;
 }
 
-.vibe-content__qr {
-  margin-top: 16px;
+/* Sections */
+.vibe-content__section {
+  width: 100%;
+}
 
+.vibe-content__section-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.vibe-content__section-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-weak);
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.vibe-content__section-line {
+  flex-grow: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+/* Editable fields */
+.vibe-content__name-input,
+.vibe-content__desc-input {
+  background: color-mix(in srgb, var(--text) 4%, transparent) !important;
+  color: var(--text) !important;
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent) !important;
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: none !important;
+}
+
+.vibe-content__name-input::placeholder,
+.vibe-content__desc-input::placeholder {
+  color: var(--text-weak) !important;
+  opacity: 0.5;
+}
+
+.vibe-content__desc-input {
+  background: color-mix(in srgb, var(--text) 3%, transparent) !important;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100px;
+  resize: none;
+}
+
+/* QR Integration */
+.vibe-content__qr {
+  margin-top: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-/* === Editable fields (name + description) === */
-.vibe-content__name-input,
-.vibe-content__desc-input {
-  background: var(--ct-chip-bg, rgba(255, 255, 255, 0.06)) !important;
-  color: var(--ct-text, rgba(255, 255, 255, 0.92)) !important;
-
-  border: 1px solid var(--ct-border, rgba(255, 255, 255, 0.14)) !important;
-  border-radius: 14px;
-  padding: 10px 12px;
-
-  /* bootstrap adds shadows sometimes */
-  box-shadow: none !important;
+/* Dark mode refinements */
+:root[data-theme="dark"] .vibe-content__section-line {
+  background: rgba(255, 255, 255, 0.08);
 }
 
-/* placeholder */
-.vibe-content__name-input::placeholder,
-.vibe-content__desc-input::placeholder {
-  color: var(--ct-muted, rgba(255, 255, 255, 0.45)) !important;
-  opacity: 1;
-}
-
-/* focus ring */
-.vibe-content__name-input:focus,
-.vibe-content__desc-input:focus {
-  border-color: rgba(99, 102, 241, 0.8) !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.22) !important;
-  outline: none;
-}
-
-/* textarea behavior */
-.vibe-content__desc-input {
-  resize: none;
-  line-height: 1.25;
-}
-
-/* optional: keep it nice on light theme too (if you use data-theme) */
-[data-theme="light"] .vibe-content__name-input,
-[data-theme="light"] .vibe-content__desc-input {
-  background: rgba(0, 0, 0, 0.04) !important;
-  color: rgba(15, 23, 42, 0.95) !important;
-  border-color: rgba(15, 23, 42, 0.12) !important;
-}
-
-[data-theme="light"] .vibe-content__name-input::placeholder,
-[data-theme="light"] .vibe-content__desc-input::placeholder {
-  color: rgba(15, 23, 42, 0.45) !important;
-}
-
-[data-theme="light"] .vibe-content__name-input:focus,
-[data-theme="light"] .vibe-content__desc-input:focus {
-  border-color: rgba(99, 102, 241, 0.65) !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18) !important;
-}
-
-/* общий отступ между секциями */
-.vibe-content__main {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-/* секция */
-.vibe-content__section {
-  margin-top: 2px;
-  padding-top: 14px;
-}
-
-/* чтобы первая секция не имела линию сверху */
-.vibe-content__section:first-of-type {
-  padding-top: 0;
-}
-
-/* header секции */
-.vibe-content__section-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(0, 0, 0, .08);
-}
-
-/* заголовок */
-.vibe-content__section-title {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: rgba(0, 0, 0, .55);
-}
-
-/* dark */
 :root[data-theme="dark"] .vibe-content__section-head {
-  border-bottom-color: rgba(255, 255, 255, .10);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 :root[data-theme="dark"] .vibe-content__section-title {
-  color: rgba(255, 255, 255, .60);
+  color: rgba(255, 255, 255, 0.5);
 }
 
-@media (max-width: 992px) {
-  .public-vibe-layout__card {
-    min-height: auto !important;
-    align-self: start !important;
+:root[data-theme="dark"] .vibe-content__desc-text {
+  border-left-color: rgba(129, 140, 248, 0.3);
+  color: var(--white-90, rgba(255, 255, 255, 0.9));
+}
+
+@media (max-width: 480px) {
+  .vibe-content__name {
+    font-size: 1.5rem;
   }
 }

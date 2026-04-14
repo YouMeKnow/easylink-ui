@@ -6,6 +6,7 @@ import NotificationsPage from "@/features/notifications/NotificationsPage";
 
 // pages
 import Home from "@/pages/Home/Home";
+import ExplorePage from "@/pages/Explore/ExplorePage";
 import About from "@/pages/About";
 import Terms from "@/pages/legal/Terms";
 import Privacy from "@/pages/legal/Privacy";
@@ -50,6 +51,7 @@ export default function AppRoutes({ questions, setQuestions }) {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/explore" element={<ExplorePage />} />
       <Route path="/about" element={<About />} />
 
       <Route path="/profile" element={<ProfilePage />} />

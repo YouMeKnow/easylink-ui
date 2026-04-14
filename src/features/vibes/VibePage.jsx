@@ -115,6 +115,7 @@ export default function VibePage() {
 
   return (
     <div className={`route-shell ${editing ? "is-editing" : ""}`}>
+      <div className="vibe-page-ambient" aria-hidden="true" />
       <div className="container py-4 vibe-container">
         <header className="vibe-topbar">
           <div className="vibe-topbar__left">

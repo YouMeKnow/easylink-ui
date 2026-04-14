@@ -27,13 +27,13 @@ const iconMap = {
   telegram: <FaTelegram color="#229ED9" />,
   facebook: <FaFacebook color="#1877f3" />,
   // vk: <FaVk color="#4C75A3" />,
-  tiktok: <FaTiktok color="#010101" />,
+  tiktok: <FaTiktok />,  // uses currentColor — adapts to theme
   linkedin: <FaLinkedin color="#0A66C2" />,
   youtube: <FaYoutube color="#FF0000" />,
-  twitter: <SiX color="#000" />,
+  twitter: <SiX />,       // uses currentColor — adapts to theme
   snapchat: <FaSnapchat color="#FFFC00" />,
   discord: <FaDiscord color="#5865F2" />,
-  github: <FaGithub color="#333" />,
+  github: <FaGithub />,   // uses currentColor — adapts to theme
   phone: <FaPhone color="#007bff" />,
   email: <FaEnvelope color="#007bff" />,
 };

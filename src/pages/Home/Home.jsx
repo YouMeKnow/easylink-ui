@@ -1,402 +1,295 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import "../styles/Home.css"
+import BusinessVibeDemo from '@/features/vibes/forms/business/BusinessVibeDemo';
 import { useAuth } from "@/context/AuthContext";
-import { useTranslation } from "react-i18next";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
-import SegmentedTabs from "./components/SegmentedTabs";
-import PanelPersonal from "./components/PanelPersonal";
-import PanelBusiness from "./components/PanelBusiness";
-import PanelOther from "./components/PanelOther";
-
-import useTiltOnHover from "./hooks/useTiltOnHover";
-import "../styles/Home.css";
-
-import BusinessVibeDemo from "@/features/vibes/forms/business/BusinessVibeDemo";
-import PersonalVibeDemo from "@/features/vibes/forms/personal/PersonalVibeDemo";
-import EventVibeDemo from "@/features/vibes/forms/events/EventVibeDemo";
-import VibeSearch from "@/components/common/VibeSearch";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 120, damping: 18 } },
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
 };
-const scaleTap = { whileTap: { scale: 0.985 } };
 
-export default function Home() {
-  const { isAuthenticated = false } = useAuth();
-  const navigate = useNavigate();
-  const { t } = useTranslation("home");
-  const reduce = useReducedMotion();
-  const shouldReduce = useReducedMotion();
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 }
+  }
+};
 
-  const [tab, setTab] = useState("business");
-  const TabPanel = useMemo(() => {
-    if (tab === "personal") return PanelPersonal;
-    if (tab === "business") return PanelBusiness;
-    return PanelOther;
-  }, [tab]);
+const Home = () => {
+  const t = (text) => text;
+  const [scrolled, setScrolled] = useState(false);
+  const { isAuthenticated } = useAuth();
 
-  const [showDemo, setShowDemo] = useState(false);
-  const cardMouse = useTiltOnHover({ maxDeg: 2, liftPx: 2 });
-
-  // --- helpers ---
-  const tabToType = (tt) =>
-    tt === "personal" ? "PERSONAL" : tt === "event" ? "EVENT" : "BUSINESS";
-
-  // --- get started button ---
-  const handleGetStarted = useCallback(() => {
-    if (isAuthenticated) {
-      navigate("/create-vibe");
-    } else {
-      navigate(`/signin?redirectTo=${encodeURIComponent("/create-vibe")}`);
-    }
-  }, [isAuthenticated, navigate]);
-
-  const handleCreateThisVibe = useCallback(() => {
-    const type = tabToType(tab);
-    const target = `/create-vibe?type=${type}`;
-    if (isAuthenticated) {
-      navigate(target);
-    } else {
-      navigate(`/signin?redirectTo=${encodeURIComponent(target)}`);
-    }
-  }, [isAuthenticated, navigate, tab]);
-
-  // close drawer if tab changes from business
   useEffect(() => {
-    if (tab !== "business") setShowDemo(false);
-  }, [tab]);
-
-  // lock body scroll when drawer is open
-  useEffect(() => {
-    if (!showDemo) return;
-    const { body } = document;
-    const prev = body.style.overflow;
-    body.style.overflow = "hidden";
-    return () => {
-      body.style.overflow = prev;
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
     };
-  }, [showDemo]);
-
-  // ESC closes drawer
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape") setShowDemo(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const features = [
+    {
+      id: "all-in-one",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+      ),
+      title: t("A mini-website, not a menu"),
+      description: t("Basic link trees just show buttons. We let you create a fully interactive page where your audience can deeply engage with your content."),
+    },
+    {
+      id: "privacy",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      ),
+      title: t("You control the access"),
+      description: t("Share public links with everyone, but keep personal contact info gated behind interactions. Decide exactly who sees what."),
+    },
+    {
+      id: "analytics",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      ),
+      title: t("Powerful Insights"),
+      description: t("Track who engages with your Vibe in real-time. Understand your audience and optimize your outreach."),
+    },
+    {
+      id: "qr-sharing",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
+      ),
+      title: t("Built for the real world"),
+      description: t("Generate sleek, auto-updating QR codes that you can drop on presentations, business cards, or store fronts instantly."),
+    }
+  ];
+
   return (
-    <main className="home" role="main">
-      {/* HERO (instagram-like: left copy, right device preview) */}
-      <motion.section
-        className="hero hero--ig"
-        initial="hidden"
-        animate="visible"
-        variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
-        aria-labelledby="hero-title"
-      >
-        <div className="hero-inner">
-          <div className="hero-ig">
-            {/* LEFT */}
-            <div className="hero-ig__left">
-              <motion.h1 id="hero-title" className="hero-ig__title" variants={fadeUp}>
-                {t("headline_prefix", "Your digital identity,")}
-                <br className="hide-sm" />
-                <span className="hero__title-gradient">
-                  {t("headline_suffix", "beautifully simple")}
-                </span>
-              </motion.h1>
-              <motion.p className="hero-ig__sub" variants={fadeUp}>
-                {t(
-                  "subheadline",
-                  "Create a Vibe — a shareable profile with passwordless login and built-in analytics."
-                )}
-              </motion.p>
+    <main className={`ymk-home-page ${scrolled ? 'is-scrolled' : ''}`}>
+      <div className="ymk-page-journey-bg"></div>
 
-              <motion.div className="hero-ig__actions" variants={fadeUp}>
-                <button
-                  type="button"
-                  className="btn-cta btn-cta--pill btn-cta--lg"
-                  onClick={handleGetStarted}
-                >
-                  {t("get_started", "Get started")} →
-                </button>
-
-                <button
-                  type="button"
-                  className="btn-link-ghost btn-link-ghost--pill"
-                  onClick={() => navigate("/about")}
-                >
-                  {t("learn_more", "How it works")}
-                </button>
-              </motion.div>
-            </div>
-
-            {/* RIGHT */}
-            <motion.div className="hero-ig__right" variants={fadeUp} aria-hidden="true">
-              <div className="hero-media">
-                <img
-                  src="/home_page/example3.png"
-                  alt=""
-                  className="hero-media__img"
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
-            </motion.div>
-          </div>
+      {/* 1. HERO SECTION */}
+      <section className="hero-section">
+        <div className="hero-background">
+          <div className="glow-blob top-left"></div>
+          <div className="glow-blob bottom-right"></div>
+          <div className="grid-pattern"></div>
         </div>
-      </motion.section>
 
-      {/* Search */}
-      <section className="search-stage">
-        <div className="search-stage__shell">
-          <div className="search-stage__inner">
-            {/* LEFT */}
-            <div className="search-stage__left">
-              <h2 className="search-stage__title">
-                {t("search.title")}
-              </h2>
+        <div className="container hero-container">
+          <motion.div
+            className="hero-content"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.h1 className="hero-title text-gradient" variants={fadeInUp}>
+              {t("All your contacts. ")}
+              <br className="desktop-break" />
+              {t("One simple link.")}
+            </motion.h1>
 
-              <p className="search-stage__desc">
-                {t("search.description")}
-              </p>
+            <motion.p className="hero-subtitle" variants={fadeInUp}>
+              {t("Consolidate your social links, contact info, and portfolio into one premium profile. Share it anywhere with a tap or scan.")}
+            </motion.p>
 
-              <VibeSearch autoFocus={false} />
-            </div>
+            <motion.div className="hero-actions" variants={fadeInUp}>
+              <Link to={isAuthenticated ? "/create-vibe" : "/signin"} className="btn btn-primary btn-xl">
+                {t("Create your Vibe")}
+                <svg
+                  className="hero-btn-arrow"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="4" y1="12" x2="18" y2="12" />
+                  <polyline points="11 5 18 12 11 19" />
+                </svg>
+              </Link>
+              <Link to="/explore" className="btn btn-secondary btn-xl">
+                {t("See examples")}
+              </Link>
+            </motion.div>
+          </motion.div>
 
-            {/* RIGHT */}
-            <div className="search-stage__right" aria-hidden="true">
-              <img
-                className="search-stage__img"
-                src="/home_page/search/hero.png"
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
+          <motion.div
+            className="hero-visual"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <BusinessVibeDemo />
+          </motion.div>
         </div>
       </section>
 
-      {/* Visual divider between sections */}
-      <div className="home__divider" aria-hidden="true" />
+      {/* 2 & 3. SHOWCASE SECTIONS (Airy, deep spacing) */}
+      <div className="showcases-wrapper">
+        <div className="showcase-glow-1"></div>
+        <div className="showcase-glow-2"></div>
 
-      {/* Tabs section */}
-      <motion.section
-        className="container-xxl px-3 px-md-4 home__explore"
-        initial="hidden"
-        animate="visible"
-        variants={fadeUp}
-      >
-        <div className="glass p-3 p-md-4">
-          <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3">
-            <h2 className="m-0">{t("explore_types", "Explore Vibe types")}</h2>
-            <SegmentedTabs
-              value={tab}
-              onChange={setTab}
-              ariaLabel={t("explore_types", "Explore Vibe types")}
-              labels={{
-                personal: t("tab_personal", "Personal"),
-                business: t("tab_business", "Business"),
-                other: t("tab_other", "Other"),
-              }}
-            />
+        {/* SHOWCASE SECTION A (Text Left, Image Right) */}
+        <section className="showcase-section">
+          <div className="container showcase-container">
+            <motion.div
+              className="showcase-content"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={staggerContainer}
+            >
+              <motion.div className="eyebrow" variants={fadeInUp}>{t("Limitless Design")}</motion.div>
+              <motion.h2 className="section-title showcase-title" variants={fadeInUp}>
+                {t("Stop reducing your identity to a boring list of plain buttons.")}
+              </motion.h2>
+              <motion.p className="section-description showcase-desc" variants={fadeInUp}>
+                {t("Basic link trees are dead. YouMeKnow lets you create a fully interactive landing page where your audience can deeply engage with your content. Access premium themes, custom colors, soft glassmorphism, and dynamic animations instantly.")}
+              </motion.p>
+            </motion.div>
+
+            <motion.div
+              className="showcase-image-wrapper"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <div className="image-placeholder">
+                <img src="/home_page/showcase-1.png" alt="Rich interactive profile UI" className="placeholder-img" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
+                <div className="placeholder-fallback">
+                  <span>[Insert Image: /images/home/showcase-1.jpg]</span>
+                </div>
+              </div>
+            </motion.div>
           </div>
+        </section>
 
-          <div className="mt-3 mt-md-4">
-            <AnimatePresence mode="wait">
+        {/* SHOWCASE SECTION B (Image Left, Text Right) */}
+        <section className="showcase-section reverse-layout">
+          <div className="container showcase-container">
+            <motion.div
+              className="showcase-image-wrapper"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <div className="image-placeholder">
+                <img src="/home_page/showcase-2.png" alt="Multiple vibes for different purposes" className="placeholder-img" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
+                <div className="placeholder-fallback">
+                  <span>[Insert Image: /images/home/showcase-2.jpg]</span>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="showcase-content"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={staggerContainer}
+            >
+              <motion.div className="eyebrow" variants={fadeInUp}>{t("Context is Everything")}</motion.div>
+              <motion.h2 className="section-title showcase-title" variants={fadeInUp}>
+                {t("One account. Multiple Vibes.")}
+              </motion.h2>
+              <motion.p className="section-description showcase-desc" variants={fadeInUp}>
+                {t("You play different roles. Keep a 'Business Vibe' for professional contacts, a 'Creator Vibe' for your audience, and a 'Personal Vibe' for close friends. Switch between them instantly. Seamlessly control who gets access to your private phone number.")}
+              </motion.p>
+            </motion.div>
+          </div>
+        </section>
+      </div>
+
+      {/* 4. FEATURES CARDS (Restored Glass UI) */}
+      <section className="features-section">
+        <div className="container">
+          <motion.div
+            className="features-header text-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={fadeInUp}
+          >
+            <h2 className="section-title">{t("Way more than just a link-in-bio")}</h2>
+            <p className="section-description mx-auto max-w-2xl">
+              {t("Everything you need to grow your network, embedded right into your Vibe.")}
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="features-cards modern-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={staggerContainer}
+          >
+            {features.map((feature) => (
               <motion.div
-                key={tab}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                key={feature.id}
+                className="feature-block glass-panel glass-hover"
+                variants={fadeInUp}
               >
-                <TabPanel cardMouse={cardMouse} />
+                <div className="feature-icon-wrapper">
+                  {feature.icon}
+                </div>
+                <h3 className="feature-title">{feature.title}</h3>
+                <p className="feature-description">{feature.description}</p>
               </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <div className="cta-row">
-            <motion.button
-              {...scaleTap}
-              onClick={handleCreateThisVibe}
-              className="btn-cta btn-cta--pill btn-cta--lg"
-              whileHover={!shouldReduce ? { y: -1 } : undefined}
-            >
-              {t("cta_build", "Create this Vibe")}
-            </motion.button>
-
-            <button
-              type="button"
-              className="btn-link-ghost btn-link-ghost--pill"
-              onClick={() => setShowDemo(true)}
-            >
-              {t("cta_demo", "See a live demo")} →
-            </button>
-          </div>
+            ))}
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
 
-      {/* Drawer demo for Business */}
-      <AnimatePresence>
-        {tab === "business" && showDemo && (
-          <>
-            <motion.div
-              key="demo-backdrop"
-              className="demo-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setShowDemo(false)}
-              aria-hidden
-            />
-
-            <motion.aside
-              key="demo-panel"
-              className="demo-panel"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Business Vibe live demo"
-            >
-              <div className="demo-panel__header">
-                <h3 className="m-0">Business Vibe — Live demo</h3>
-                <button
-                  className="demo-close"
-                  onClick={() => setShowDemo(false)}
-                  aria-label="Close"
-                  autoFocus
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      d="M6 6l12 12M18 6L6 18"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
+      {/* 5. FINAL CTA SECTION (Premium Island) */}
+      <section className="final-cta-section">
+        <div className="container">
+          <motion.div
+            className="cta-burst-wrapper"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={fadeInUp}
+          >
+            <div className="cta-glow-bg"></div>
+            <div className="cta-burst-content text-center">
+              <h2 className="cta-title">{t("Ready to upgrade your identity?")}</h2>
+              <p className="cta-description">
+                {t("Join other top creators and professionals. Get your interactive profile live in less than a minute. No credit card required.")}
+              </p>
+              <div className="cta-actions">
+                <Link to={isAuthenticated ? "/create-vibe" : "/signin"} className="btn btn-primary btn-xl">
+                  {t("Create your Vibe for Free")}
+                  <svg
+                    className="hero-btn-arrow"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <line x1="4" y1="12" x2="18" y2="12" />
+                    <polyline points="11 5 18 12 11 19" />
                   </svg>
-                </button>
+                </Link>
+                <Link to="/explore" className="btn btn-secondary btn-xl">
+                  {t("Explore Examples")}
+                </Link>
               </div>
-              <div className="demo-panel__body">
-                <BusinessVibeDemo />
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Drawer demo for Personal */}
-      <AnimatePresence>
-        {tab === "personal" && showDemo && (
-          <>
-            <motion.div
-              key="demo-backdrop-personal"
-              className="demo-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setShowDemo(false)}
-              aria-hidden
-            />
-
-            <motion.aside
-              key="demo-panel-personal"
-              className="demo-panel"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Personal Vibe live demo"
-            >
-              <div className="demo-panel__header">
-                <h3 className="m-0">Personal Vibe — Live demo</h3>
-                <button
-                  className="demo-close"
-                  onClick={() => setShowDemo(false)}
-                  aria-label="Close"
-                  autoFocus
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      d="M6 6l12 12M18 6L6 18"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="demo-panel__body">
-                <PersonalVibeDemo />
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Drawer demo for Other */}
-      <AnimatePresence>
-        {tab === "other" && showDemo && (
-          <>
-            <motion.div
-              key="demo-backdrop-event"
-              className="demo-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setShowDemo(false)}
-              aria-hidden
-            />
-
-            <motion.aside
-              key="demo-panel-event"
-              className="demo-panel"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Other Vibe live demo"
-            >
-              <div className="demo-panel__header">
-                <h3 className="m-0">Other Vibe — Live demo</h3>
-                <button
-                  className="demo-close"
-                  onClick={() => setShowDemo(false)}
-                  aria-label="Close"
-                  autoFocus
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      d="M6 6l12 12M18 6L6 18"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="demo-panel__body">
-                <EventVibeDemo />
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </main>
   );
-}
+};
+
+export default Home;

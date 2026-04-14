@@ -1,283 +1,235 @@
-  /* ===== Visibility / Share code block (VibeCard.jsx markup) ===== */
+/* VibeCard.css — Premium Card Shell */
 
-  .vibe-card__visibility {
-    margin: 0 0 12px;
-  }
+/* ===== Card shell ===== */
+.vibe-card {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
 
-  .vibe-card__visibility-label {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #8a8fa3;
-    margin-bottom: 6px;
-  }
+  border-radius: 28px;
+  padding: 28px;
 
-  .vibe-card__visibility-controls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
+  /* Soft premium surface — NOT transparent glass to avoid blur issues */
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 6px 16px rgba(0, 0, 0, 0.06),
+    0 20px 40px -12px rgba(0, 0, 0, 0.08);
 
-  /* Bootstrap form-check inside visibilityButton */
-  .vibe-card__visibility-controls .form-check {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  color: var(--text);
+  /* NO hover transform — per user request */
+}
 
-  .vibe-card__visibility-controls .form-check-input {
-    transform: scale(0.92);
-  }
-
-  .vibe-card__visibility-controls .form-check-label {
-    margin: 0;
-    font-weight: 600;
-    color: #334155;
-  }
-
-  /* Share code "button" */
-  .vibe-card__code {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 8px;
-
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-
-    cursor: pointer;
-  }
-
-  .vibe-card__code:hover {
-    filter: brightness(0.98);
-  }
-
-  .vibe-card__code>span {
-    font-size: 16px;
-    color: #4f46e5;
-    font-weight: 600;
-  }
-
-  .vibe-card__code>strong {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
-      monospace;
-    font-size: 22px;
-    color: #3730a3;
-  }
-
-  /* ===== Card shell ===== */
-
+@media (max-width: 520px) {
   .vibe-card {
-    border: none;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .12);
-    background: linear-gradient(135deg, #f6fafe 65%, #f8f4fd 100%);
-    max-width: 400px;
-    margin: 0 auto;
-    position: relative;
+    max-width: 100%;
+    border-radius: 24px;
+    padding: 20px;
   }
+}
 
-  .vibe-card__visibility {
-    margin-bottom: 16px;
-    padding: 0 16px;
+/* ===== Top Actions (Visibility + Share) ===== */
+.vibe-card__top-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.vibe-card__top-actions.is-public {
+  margin-bottom: 0;
+  height: 0;
+  overflow: visible;
+}
+
+.vibe-card__top-actions.is-public .vibe-card__share-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* ===== Visibility block ===== */
+.vibe-card__visibility {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--text) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.vibe-card__visibility-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-weak);
+  margin-bottom: 6px;
+}
+
+.vibe-card__visibility-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Bootstrap form-check inside visibilityButton */
+.vibe-card__visibility-controls .form-check {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vibe-card__visibility-controls .form-check-input {
+  transform: scale(0.92);
+}
+
+.vibe-card__visibility-controls .form-check-label {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ===== Share Code Button ===== */
+.vibe-card__code {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--ymk-primary, #6366f1) 18%, transparent);
+  background: color-mix(in srgb, var(--ymk-primary, #6366f1) 6%, transparent);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.vibe-card__code:hover {
+  background: color-mix(in srgb, var(--ymk-primary, #6366f1) 12%, transparent);
+}
+
+.vibe-card__code > span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ymk-primary, #6366f1);
+}
+
+.vibe-card__code > strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ymk-primary, #6366f1);
+}
+
+/* ===== Share button ===== */
+.vibe-card__share-btn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+
+  background: color-mix(in srgb, var(--text) 4%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  line-height: 0 !important;
+  font-size: 0 !important;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.vibe-card__share-btn:hover {
+  background: color-mix(in srgb, var(--ymk-primary, #6366f1) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--ymk-primary, #6366f1) 25%, transparent);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+  transform: translateY(-2px);
+}
+
+.vibe-card__share-btn:active {
+  transform: scale(0.95);
+}
+
+.vibe-card__share-icn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vibe-card__share-icn > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: var(--ymk-primary, #6366f1);
+}
+
+/* ===== Copied pill ===== */
+.vibe-card__copied {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  color: #16a34a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  animation: copiedPop 1.2s ease-out forwards;
+}
+
+@keyframes copiedPop {
+  0% {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.98);
   }
-
-  /* ===== Share button (clean, centered, good UX) ===== */
-  /* Share button — flush, circular, not floating */
-  .vibe-card__share-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    z-index: 5;
-
-    width: 40px;
-    height: 40px;
-    padding: 0;
-
-    /* perfect circle */
-    border-radius: 9999px !important;
-    overflow: hidden;
-    /* so background stays circular */
-    display: grid;
-    place-items: center;
-
-    /* looks embedded */
-    background: rgba(255, 255, 255, 0.45);
-    border: 1px solid rgba(15, 18, 34, .10);
-
-    /* minimal shadow (no floating) */
-    box-shadow: 0 2px 10px rgba(15, 18, 34, .10);
-
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-
-    line-height: 0 !important;
-    font-size: 0 !important;
-
-    cursor: pointer;
-    transition: background .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+  15% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
-
-  .vibe-card__share-btn:hover {
-    background: rgba(255, 255, 255, 0.60);
-    border-color: rgba(15, 18, 34, .14);
-    box-shadow: 0 3px 12px rgba(15, 18, 34, .12);
-    transform: none;
-    /* no lift */
+  80% {
+    opacity: 1;
   }
-
-  .vibe-card__share-btn:active {
-    transform: scale(.97);
-    /* press, not float */
+  100% {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.99);
   }
+}
 
-  .vibe-card__share-btn:focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 3px rgba(100, 108, 255, .22),
-      0 3px 12px rgba(15, 18, 34, .12);
-  }
+/* ===== Dark mode ===== */
+:root[data-theme="dark"] .vibe-card {
+  background: var(--surface);
+  border-color: var(--stroke);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 10px 24px rgba(0, 0, 0, 0.2),
+    0 30px 60px -15px rgba(0, 0, 0, 0.3);
+}
 
-  /* wrapper we can shift precisely */
-  .vibe-card__share-icn {
-    width: 20px;
-    height: 20px;
-    display: block;
-    transform: translateX(-2px);
-  }
+:root[data-theme="dark"] .vibe-card__share-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.10);
+}
 
-  .vibe-card__share-icn>svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-    color: var(--share-icon, #627bf7);
-  }
+:root[data-theme="dark"] .vibe-card__share-btn:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+}
 
-  /* ===== Copied pill ===== */
-
-  .vibe-card__copied {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-
-    padding: 6px 10px;
-    border-radius: 999px;
-
-    background: rgba(34, 197, 94, .12);
-    border: 1px solid rgba(34, 197, 94, .28);
-    color: #16a34a;
-
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .01em;
-
-    animation: copiedPop 1.2s ease-out forwards;
-  }
-
-  @keyframes copiedPop {
-    0% {
-      opacity: 0;
-      transform: translateY(-3px) scale(.98);
-    }
-
-    15% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    80% {
-      opacity: 1;
-    }
-
-    100% {
-      opacity: 0;
-      transform: translateY(-2px) scale(.99);
-    }
-  }
-
-  .dark .vibe-card__copied {
-    background: rgba(34, 197, 94, .14);
-    border-color: rgba(34, 197, 94, .35);
-    color: #22c55e;
-  }
-
-  /* ===== Optional constrained width helper ===== */
-
-  .vibe-card--constrained {
-    width: 100%;
-    max-width: var(--vibeCardMax, 420px);
-    margin: 0 auto;
-  }
-
-  @media (max-width: 600px) {
-    .vibe-card--constrained {
-      max-width: 100%;
-    }
-  }
-
-  :root[data-theme="dark"] .vibe-card {
-    background:
-      linear-gradient(180deg,
-        color-mix(in srgb, var(--surface) 92%, transparent),
-        color-mix(in srgb, var(--bg1) 88%, transparent));
-
-    border-color: var(--stroke);
-    box-shadow: var(--shadow-md);
-  }
-
-  .vibe-card {
-    color: var(--text);
-  }
-
-  /* make Hidden / Visible text lighter in dark theme */
-  :root[data-theme="dark"] .vibe-card__visibility-controls .form-check-label {
-    color: var(--text);
-  }
-
-  .pvf-shell {
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .pvf-layout {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 16px;
-    align-items: start;
-  }
-
-  .pvf-left {
-    min-width: 0;
-  }
-
-  .pvf-right {
-    position: sticky;
-    top: 12px;
-  }
-
-  @media (max-width: 980px) {
-    .pvf-layout {
-      grid-template-columns: 1fr;
-    }
-
-    .pvf-right {
-      position: static;
-    }
-  }
-
-  .vibe-card {
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto;
-  }
+:root[data-theme="dark"] .vibe-card__copied {
+  background: rgba(34, 197, 94, 0.14);
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #22c55e;
+}

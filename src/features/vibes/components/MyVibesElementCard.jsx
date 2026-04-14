@@ -4,7 +4,7 @@ import { trackEvent } from "@/services/amplitude";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import SmartImage from "@/shared/ui/SmartImage";
-import "./MyVibesElementCard.css";
+import "../styles/UserVibes.css";
 
 export default function MyVibesElementCard({ vibe, onDelete, onShare }) {
   const navigate = useNavigate();
@@ -29,162 +29,83 @@ export default function MyVibesElementCard({ vibe, onDelete, onShare }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.23, type: "tween" }}
-      className="vibe-card position-relative myvibe-card"
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="myvibe-card"
       role="button"
       tabIndex={0}
       onClick={handleOpen}
       onKeyDown={handleCardKeyDown}
       aria-label={vibe?.name || t("untitled")}
     >
-      {/* Delete */}
-      <div style={{ position: "absolute", top: 58, right: 12, zIndex: 12 }}>
-        <button
-          type="button"
-          className="d-flex align-items-center delete-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete?.(vibe.id);
-          }}
-          title={t("delete")}
-          aria-label={t("delete")}
-          style={{
-            background: "rgba(248, 65, 65, 0.09)",
-            border: "none",
-            borderRadius: "50%",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
-            padding: 8,
-            cursor: "pointer",
-            transition: "box-shadow .18s, background .18s, transform .13s",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onMouseOver={(e) => (e.currentTarget.style.background = "rgba(255,70,70,0.18)")}
-          onMouseOut={(e) => (e.currentTarget.style.background = "rgba(255, 70, 70, 0.09)")}
-          onFocus={(e) => (e.currentTarget.style.background = "rgba(255,70,70,0.18)")}
-          onBlur={(e) => (e.currentTarget.style.background = "rgba(255, 70, 70, 0.09)")}
-        >
-          <svg width="20" height="20" fill="none" viewBox="0 0 20 20" aria-hidden="true">
-            <g>
-              <rect x="6" y="8" width="1.3" height="5" rx="0.5" fill="#ff4747" />
-              <rect x="9.35" y="8" width="1.3" height="5" rx="0.5" fill="#ff4747" />
-              <rect x="12.7" y="8" width="1.3" height="5" rx="0.5" fill="#ff4747" />
-              <path d="M4.5 6.5h11M8 6.5V5.5C8 4.67 8.67 4 9.5 4h1c.83 0 1.5.67 1.5 1.5v1" stroke="#ff4747" strokeWidth="1" />
-              <rect x="5.5" y="6.5" width="9" height="10" rx="2" stroke="#ff4747" strokeWidth="1" />
-            </g>
-          </svg>
-        </button>
-      </div>
-
-      {/* Share */}
-      <div style={{ position: "absolute", top: 8, right: 12, zIndex: 12 }}>
-        <button
-          type="button"
-          className="myvibe-card__share"
-          onClick={(e) => {
-            e.stopPropagation();
-            trackEvent("Share Button Clicked", { location: "UserVibes", vibeId: vibe.id });
-            onShare?.(vibe);
-          }}
-          title={t("share")}
-          aria-label={t("share")}
-        >
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          aria-hidden="true"
-        >
-          <circle cx="5" cy="10" r="2.1" />
-          <circle cx="15" cy="5" r="2.1" />
-          <circle cx="15" cy="15" r="2.1" />
-          <path d="M6.7 9l5.6-3.2M6.7 11l5.6 3.2" />
-        </svg>
-          {t("share")}
-        </button>
-      </div>
-
-      {/* Avatar */}
-      <div className="d-flex justify-content-center mb-2 mt-1">
-        {vibe?.photo && !imgErr ? (
-         <SmartImage
-          src={vibe.photo}
-          alt={t("avatar_alt", { name: vibe?.name })}
-          fallback={
-            <div className="avatar-fallback">
+      <div className="myvibe-card__top">
+        <div className="myvibe-card__avatar-box">
+          {vibe?.photo && !imgErr ? (
+            <SmartImage
+              src={vibe.photo}
+              alt={vibe.name}
+              className="myvibe-card__avatar"
+              onError={() => setImgErr(true)}
+            />
+          ) : (
+            <div className="myvibe-card__avatar-placeholder">
               {vibe?.name?.[0]?.toUpperCase() || "?"}
             </div>
-          }
-          style={{
-            width: 62,
-            height: 62,
-            borderRadius: "50%",
-            objectFit: "cover",
-          }}
-        />
-        ) : (
-          <div
-            style={{
-              width: 62,
-              height: 62,
-              borderRadius: "50%",
-              background: "#eaf2ff",
-              color: "#748cb3",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 27,
-              fontWeight: 700,
-              boxShadow: "0 1px 6px rgba(0,0,0,0.04)",
+          )}
+        </div>
+
+        <div className="myvibe-card__quick-actions">
+          <button
+            type="button"
+            className="myvibe-card__icon-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              trackEvent("Share Button Clicked", { location: "UserVibes", vibeId: vibe.id });
+              onShare?.(vibe);
             }}
-            aria-hidden="true"
+            title={t("share")}
+            aria-label={t("share")}
           >
-            {vibe?.name ? vibe.name[0].toUpperCase() : "?"}
-          </div>
-        )}
+            <svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: 16, height: 16, display: 'block' }}>
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+              <polyline points="16 6 12 2 8 6" />
+              <line x1="12" y1="2" x2="12" y2="15" />
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            className="myvibe-card__icon-btn delete"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.(vibe.id);
+            }}
+            title={t("delete")}
+            aria-label={t("delete")}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: 16, height: 16, display: 'block' }}>
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              <line x1="10" y1="11" x2="10" y2="17" />
+              <line x1="14" y1="11" x2="14" y2="17" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Name + Type + Description */}
-      <h5
-        className="fw-semibold text-center mb-1"
-        style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
-      >
-        {vibe?.name || t("untitled")}
-      </h5>
-
-      <div
-        style={{
-          textAlign: "center",
-          color: "#6574fd",
-          fontSize: 14,
-          fontWeight: 500,
-          marginBottom: 8,
-          letterSpacing: ".01em",
-        }}
-      >
-        {typeLabel}
+      <div className="myvibe-card__info">
+        <h5 className="myvibe-card__name">
+          {vibe?.name || t("untitled")}
+        </h5>
+        <p className="myvibe-card__description">
+          {vibe?.description || t("no_description")}
+        </p>
+        <div className="myvibe-card__badge">
+          {typeLabel}
+        </div>
       </div>
-
-      <p
-        className="text-muted text-center mb-0"
-        style={{
-          fontSize: 14,
-          lineHeight: "1.4",
-          minHeight: 20,
-          maxHeight: 46,
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        }}
-      >
-        {vibe?.description || <span style={{ color: "#adb5bd" }}>{t("no_description")}</span>}
-      </p>
     </motion.div>
   );
 }

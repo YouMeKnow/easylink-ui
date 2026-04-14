@@ -1,32 +1,15 @@
-/* shared avatar fallback */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: linear-gradient(135deg, #e6f0fc 70%, #f6eaff 100%);
-  color: #748cb3;
-
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 1;
-
-  user-select: none;
-}
+/* src/features/vibes/styles/Avatar.css */
 
 .avatar {
   width: 100%;
   height: 100%;
-  border-radius: 999px;
+  border-radius: 50%;
   overflow: hidden;
   display: grid;
   place-items: center;
   user-select: none;
   background: linear-gradient(135deg, #e6f0fc 70%, #f6eaff 100%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .avatar img {
@@ -34,4 +17,30 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* shared avatar fallback */
+.avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e6f0fc 70%, #f6eaff 100%);
+  color: #748cb3;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  user-select: none;
+}
+
+:root[data-theme="dark"] .avatar {
+  background: linear-gradient(135deg, #1a1b2e, #251a2e);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+:root[data-theme="dark"] .avatar-fallback {
+  background: linear-gradient(135deg, #1a1b2e, #251a2e);
+  color: #818cf8;
 }

@@ -68,10 +68,39 @@ export default function Profile() {
 
   return (
     <main className="profile">
-      <div className="profile__bg" aria-hidden="true" />
+      <div className="profile__ambient" aria-hidden="true"></div>
 
       <div className="profile__container">
-        {isInitialLoading ? null : !hasVibes ? (
+        {/* Dashboard Header - Always Visible */}
+        <header className="profile__header animate-fadeIn">
+          <div className="profile__header-content">
+            <h1 className="profile__title">{t("title", "Dashboard")}</h1>
+            <p className="profile__subtitle">
+              {t("vibes_subtitle", { defaultValue: "Manage your digital identity." })}
+            </p>
+          </div>
+
+          {user?.email && (
+            <div className="profile__user-chip" title={user.email}>
+              <div className="profile__user-status"></div>
+              <span className="profile__user-email">{user.email}</span>
+            </div>
+          )}
+        </header>
+
+        {(loading && vibes.length === 0) ? (
+          <section className="profile__section animate-fadeIn">
+            <div className="profile__vibes-grid">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="profile-vibe-skeleton">
+                  <div className="skeleton-image"></div>
+                  <div className="skeleton-text-lg"></div>
+                  <div className="skeleton-text-sm"></div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : vibes.length === 0 ? (
           <section
             className="profile__hero profile-hero glass animate-slideUp"
             role="region"
@@ -91,13 +120,6 @@ export default function Profile() {
                       "Create a vibe, customize your profile, and share it with people through a link or QR code.",
                   })}
                 </p>
-
-                {user?.email && (
-                  <div className="profile-hero__userchip" title={user.email}>
-                    <span className="profile-hero__userdot" />
-                    <span className="profile-hero__usertext">{user.email}</span>
-                  </div>
-                )}
               </div>
 
               <div className="profile-hero__panel">
@@ -105,118 +127,60 @@ export default function Profile() {
                   <h2 className="profile-hero__panel-title">
                     {t("how_it_works", { defaultValue: "How it works" })}
                   </h2>
-                  <p className="profile-hero__panel-subtitle">
-                    {t("start_here", { defaultValue: "Start here" })}
-                  </p>
                 </div>
 
                 <div className="profile-hero__steps">
-                  <div className="profile-hero__step">
-                    <div className="profile-hero__step-number">1</div>
-                    <div className="profile-hero__step-body">
-                      <div className="profile-hero__step-title">
-                        {t("step_create_title", {
-                          defaultValue: "Create your first vibe",
-                        })}
-                      </div>
-                      <div className="profile-hero__step-text">
-                        {t("step_create_text", {
-                          defaultValue: "Choose a type and add your basic info.",
-                        })}
+                  {[
+                    { n: 1, t: "step_create_title", d: "Choose a type and add your info." },
+                    { n: 2, t: "step_customize_title", d: "Add contacts and customize design." },
+                    { n: 3, t: "step_share_title", d: "Send your vibe by link or QR code." }
+                  ].map((step) => (
+                    <div key={step.n} className="profile-hero__step">
+                      <div className="profile-hero__step-number">{step.n}</div>
+                      <div className="profile-hero__step-body">
+                        <div className="profile-hero__step-title">{t(step.t)}</div>
+                        <div className="profile-hero__step-text">{step.d}</div>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="profile-hero__step">
-                    <div className="profile-hero__step-number">2</div>
-                    <div className="profile-hero__step-body">
-                      <div className="profile-hero__step-title">
-                        {t("step_customize_title", {
-                          defaultValue: "Customize your page",
-                        })}
-                      </div>
-                      <div className="profile-hero__step-text">
-                        {t("step_customize_text", {
-                          defaultValue:
-                            "Add contacts, details, and make it look like you.",
-                        })}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="profile-hero__step">
-                    <div className="profile-hero__step-number">3</div>
-                    <div className="profile-hero__step-body">
-                      <div className="profile-hero__step-title">
-                        {t("step_share_title", {
-                          defaultValue: "Share it anywhere",
-                        })}
-                      </div>
-                      <div className="profile-hero__step-text">
-                        {t("step_share_text", {
-                          defaultValue:
-                            "Send your vibe by link, QR code, or in person.",
-                        })}
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
           </section>
         ) : (
-          <section className="profile__vibes-section animate-slideUp" aria-labelledby="profile-vibes-title">
-            <div className="profile__vibes-top">
-              <div className="profile__vibes-copy">
-                <h2 id="profile-vibes-title" className="profile__vibes-title">
-                  {t("title", "Profile")}
-                </h2>
-                <p className="profile__vibes-subtitle">
-                  {t("vibes_subtitle", {
-                    defaultValue: "Your vibes, all in one place.",
-                  })}
-                </p>
-              </div>
+          <section className="profile__section animate-slideUp">
+            <div
+              className="profile__vibes-grid"
+              role="list"
+              aria-label={tMyVibes("list_aria", "Your vibes")}
+            >
+              <VibesList
+                vibes={vibes}
+                onDelete={handleDelete}
+                onShare={handleShare}
+              />
 
-              {user?.email && (
-                <div className="profile__vibes-userchip" title={user.email}>
-                  <span className="profile__vibes-userdot" />
-                  <span className="profile__vibes-usertext">{user.email}</span>
-                </div>
-              )}
-            </div>
-
-            {loading ? (
-              <Loader />
-            ) : (
-              <div
-                className="profile__vibes-grid"
-                role="list"
-                aria-label={tMyVibes("list_aria", "Your vibes")}
-              >
-                <VibesList
-                  vibes={vibes}
-                  onDelete={handleDelete}
-                  onShare={handleShare}
-                />
-
+              {vibes.length < 5 && (
                 <button
                   type="button"
-                  className="profile-create-vibe-card"
+                  className="profile-create-card-btn"
                   onClick={() => navigate("/create-vibe")}
+                  title={t("create_new", "Create new Vibe")}
                 >
-                  <span className="profile-create-vibe-card__plus">+</span>
+                  <span className="profile-create-card-btn__plus">+</span>
+                  <span className="profile-create-card-btn__text">{t("add_vibe", "Add Vibe")}</span>
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </section>
         )}
 
-        <section className="profile__search animate-fadeIn" role="search">
+        <section className="profile__search-section animate-slideUp">
+          <h3 className="profile__search-title">{t("search_vibe_title", { defaultValue: "Find a Vibe by Code" })}</h3>
           <VibeSearch />
         </section>
 
-        <section className="profile__cards animate-stagger">
+        <section className="profile__extra animate-stagger">
           <ProfileCards cards={profileCards} />
         </section>
 
