@@ -1,9 +1,297 @@
 .nav.tabs-narrow {
-  width: fit-content;       
-  margin: 0 auto 1rem;      
-
+  width: fit-content;
+  margin: 0 auto 14px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
-@supports not (width: fit-content) {
-  .nav.tabs-narrow { width: max-content; }
+.nav.tabs-narrow.nav-tabs {
+  border-bottom: 1px solid color-mix(in srgb, var(--stroke) 95%, transparent);
+}
+
+.nav.tabs-narrow .nav-link {
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  margin: 0 8px -1px 0;
+  padding: 10px 12px;
+
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text-weak);
+
+  border-radius: 12px 12px 0 0 !important;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  white-space: nowrap;
+}
+
+.nav.tabs-narrow .nav-link:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+
+/* active = looks attached to content */
+.nav.tabs-narrow .nav-link.active {
+  color: var(--text);
+  background: var(--surface) !important;
+  border-color: var(--stroke) !important;
+  border-bottom-color: transparent !important; /* merges with underline */
+  box-shadow: var(--shadow-sm);
+}
+
+.nav.tabs-narrow .nav-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, rgb(var(--accent-to)) 28%, transparent);
+}
+
+@media (max-width: 560px) {
+  .nav.tabs-narrow {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav.tabs-narrow::-webkit-scrollbar { height: 0; }
+}
+
+/* locked tabs */
+.nav.tabs-narrow .nav-link.is-locked {
+  opacity: 0.75;
+  position: relative;
+}
+
+.nav.tabs-narrow .nav-link.is-locked:hover {
+  opacity: 1;
+}
+
+.business-tab__lock {
+  margin-left: 6px;
+  font-size: 12px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.business-tabs__hint {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-weak);
+
+  margin-top: -6px;
+  margin-bottom: 16px;
+
+  padding: 6px 12px;
+
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stroke) 85%, transparent);
+
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.business-tabs {
+  position: relative;
+}
+
+.nav.tabs-narrow .business-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav.tabs-narrow .business-tab.is-locked {
+  opacity: 0.88;
+  cursor: pointer;
+}
+
+.nav.tabs-narrow .business-tab.is-locked:hover {
+  opacity: 1;
+}
+
+.business-tab__label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.business-tab__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-weak);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stroke) 88%, transparent);
+  white-space: nowrap;
+}
+
+.business-tab__lockIcon {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+  color: var(--text-weak);
+  opacity: 0.9;
+}
+
+.business-tabs__hint {
+  width: min(100%, 620px);
+  margin: -2px auto 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-align: center;
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stroke) 90%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.business-tabs__hintTitle {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-weak);
+  margin-bottom: 4px;
+}
+
+.business-tabs__hintText {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+@media (max-width: 560px) {
+  .nav.tabs-narrow .business-tab {
+    gap: 6px;
+  }
+
+  .business-tab__badge {
+    padding: 2px 7px;
+    font-size: 10px;
+  }
+
+  .business-tab__lockIcon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .business-tabs__hint {
+    padding: 11px 12px;
+    margin-bottom: 14px;
+  }
+
+  .business-tabs__hintTitle {
+    font-size: 11px;
+  }
+
+  .business-tabs__hintText {
+    font-size: 13px;
+  }
+}
+
+.business-tabs__hint {
+  position: relative;
+  width: min(100%, 560px);
+  margin: -2px auto 16px;
+  padding: 12px 42px 12px 14px;
+
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--stroke) 90%, transparent);
+  box-shadow: var(--shadow-sm);
+
+  animation: businessHintIn 180ms ease-out;
+}
+
+.business-tabs__hintText {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+  text-align: center;
+}
+
+.business-tabs__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-weak);
+
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.business-tabs__close:hover {
+  background: color-mix(in srgb, var(--surface) 65%, transparent);
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--stroke) 80%, transparent);
+}
+
+.business-tabs__close:active {
+  transform: scale(0.96);
+}
+
+.business-tabs__closeIcon {
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+@keyframes businessHintIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .business-tabs__hint {
+    width: 100%;
+    padding: 11px 40px 11px 12px;
+    margin-bottom: 14px;
+    border-radius: 10px;
+  }
+
+  .business-tabs__hintText {
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .business-tabs__close {
+    top: 7px;
+    right: 7px;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+  }
+
+  .business-tabs__closeIcon {
+    width: 13px;
+    height: 13px;
+  }
 }

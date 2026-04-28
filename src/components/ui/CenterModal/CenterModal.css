@@ -1,0 +1,60 @@
+.cm{
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: grid;
+  place-items: center;
+
+  padding: 18px; /* safe edges */
+}
+
+.cm__backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  border: 0;
+  padding: 0;
+}
+
+/* centered card */
+.cm__panel{
+  position: relative;
+  width: min(520px, 100%);
+  border-radius: 22px;
+
+  background: var(--surface, #fff);
+  color: var(--text, #0f172a);
+
+  box-shadow: 0 22px 70px rgba(0,0,0,0.28);
+
+  padding: 14px;
+  animation: cmPop .18s ease-out;
+}
+
+@keyframes cmPop{
+  from{ transform: translateY(6px) scale(0.98); opacity: .9; }
+  to{ transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.cm__title{
+  font-weight: 900;
+  font-size: 14px;
+  text-align: center;
+  margin: 2px 0 10px;
+}
+
+.cm__body{
+  overflow: visible;
+}
+
+@media (max-height: 720px){
+  .cm__panel{
+    max-height: 86vh;
+  }
+  .cm__body{
+    overflow: auto;           
+    max-height: calc(86vh - 46px);
+    -webkit-overflow-scrolling: touch;
+  }
+}

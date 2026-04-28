@@ -1,82 +1,115 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import isUuid from "@/shared/lib/isUuid";
 
-const isUUID = (s) =>
-  typeof s === "string" &&
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(s);
-
-/**
- * useVisibilityToggle
- * @param {string|undefined} vibeId
- * @param {boolean} initialVisible
- * @param {string|null} initialCode
- * @param {{enabled?: boolean, labels?: {visible?: string, hidden?: string}}} options
- *   enabled — разрешить сетевые вызовы и клики (по умолчанию true)
- *   labels  — подписи для свитча
- */
 export default function useVisibilityToggle(
   vibeId,
   initialVisible = false,
   initialCode = null,
   options = {}
 ) {
-  const { enabled = true, labels = {} } = options;
-  const token = typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
+  const {
+    enabled = true,
+    labels = {},
+    tokenKey = "jwt",
+    fetchCodeOnMount = true,
+    getVibeUrl = (id) => `/api/v3/vibes/${id}`,
+  } = options;
 
-  // локальное состояние
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem(tokenKey) : null;
+
+  const canUseId = isUuid(vibeId);
+  const canCallApi = enabled && canUseId && !!token;
+
   const [visible, setVisible] = useState(!!initialVisible);
   const [code, setCode] = useState(initialCode ?? null);
 
-  const canUseId = isUUID(vibeId);
-  const canCallApi = enabled && canUseId && !!token;
+  // sync when props arrive later
+  useEffect(() => {
+    setVisible(!!initialVisible);
+  }, [initialVisible]);
 
-  const toggle = async () => {
-    // если нельзя — просто игнорим клик
+  useEffect(() => {
+    setCode(initialCode ?? null);
+  }, [initialCode]);
+
+  // fetch code on mount if visible=true but code missing
+  useEffect(() => {
+    if (!fetchCodeOnMount) return;
+    if (!canCallApi) return;
+    if (!visible) return;
+    if (code) return;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch(getVibeUrl(vibeId), {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+
+        const data = await res.json().catch(() => null);
+        const fetchedCode = data?.publicCode ?? data?.code ?? null;
+
+        if (!cancelled && fetchedCode) setCode(fetchedCode);
+      } catch (e) {
+        console.warn("Could not fetch vibe code on mount:", e);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchCodeOnMount, canCallApi, visible, code, vibeId, token, getVibeUrl]);
+
+  const toggle = useCallback(async () => {
     if (!canCallApi) return;
 
     const next = !visible;
-    // оптимистично переключаем
     setVisible(next);
 
     try {
-      const res = await fetch(`/api/v3/vibes/visibility/${vibeId}?visible=${next}`, {
-        method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `/api/v3/vibes/visibility/${vibeId}?visible=${next}`,
+        {
+          method: "PATCH",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (!res.ok) throw new Error(`Visibility update failed: ${res.status}`);
 
       const data = await res.json().catch(() => ({}));
-      // при включении публичности сервер может вернуть код
+
       if (next) {
-        const newCode = data?.code ?? data?.publicCode ?? code ?? null;
+        const newCode = data?.publicCode ?? data?.code ?? code ?? null;
         setCode(newCode);
       } else {
         setCode(null);
       }
     } catch (err) {
-      // откат видимости при ошибке
       console.error("Failed to update visibility:", err);
       setVisible(!next);
     }
-  };
+  }, [canCallApi, token, vibeId, visible, code]);
 
-  const button = useMemo(
-    () => (
-      <label className="d-flex align-items-center gap-1" style={{ cursor: "pointer" }}>
+  const ui = useMemo(() => {
+    return (
+      <label className="form-check form-switch m-0 d-flex align-items-center gap-2">
         <input
+          className="form-check-input"
           type="checkbox"
           checked={visible}
           onChange={toggle}
-          className="form-check-input"
-          disabled={!enabled} 
+          disabled={!canCallApi}
         />
-        <span>
+        <span className="form-check-label">
           {visible ? labels.visible ?? "Visible" : labels.hidden ?? "Hidden"}
         </span>
       </label>
-    ),
-    [visible, toggle, enabled, labels.visible, labels.hidden]
-  );
+    );
+  }, [visible, toggle, canCallApi, labels.visible, labels.hidden]);
 
-  return [visible, code, button];
+  return [visible, code, ui];
 }

@@ -1,0 +1,203 @@
+:root {
+    --ctm-bg: rgba(255, 255, 255, .94);
+    --ctm-border: rgba(15, 23, 42, .14);
+    /* темнее */
+    --ctm-border-strong: rgba(15, 23, 42, .22);
+    --ctm-text: #0f172a;
+    --ctm-muted: rgba(15, 23, 42, .68);
+    --ctm-shadow: 0 30px 90px rgba(0, 0, 0, .28);
+    --ctm-tile-bg: rgba(255, 255, 255, .98);
+    --ctm-tile-hover: rgba(255, 255, 255, 1);
+    --ctm-badge-bg: rgba(16, 185, 129, .14);
+    /* зелёный, но читаемый */
+    --ctm-badge-border: rgba(16, 185, 129, .35);
+    --ctm-badge-text: #065f46;
+}
+
+/* если у тебя есть dark theme класс — можно так */
+[data-theme="dark"] {
+    --ctm-bg: rgba(17, 24, 39, .92);
+    --ctm-border: rgba(255, 255, 255, .12);
+    --ctm-border-strong: rgba(255, 255, 255, .20);
+    --ctm-text: rgba(255, 255, 255, .92);
+    --ctm-muted: rgba(255, 255, 255, .64);
+    --ctm-shadow: 0 30px 90px rgba(0, 0, 0, .52);
+    --ctm-tile-bg: rgba(17, 24, 39, .92);
+    --ctm-tile-hover: rgba(17, 24, 39, .98);
+    --ctm-badge-bg: rgba(16, 185, 129, .18);
+    --ctm-badge-border: rgba(16, 185, 129, .40);
+    --ctm-badge-text: rgba(236, 253, 245, .95);
+}
+
+.ctm-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .42);
+    backdrop-filter: blur(7px);
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+}
+
+.ctm-dialog {
+    width: min(760px, 100%);
+    outline: none;
+}
+
+.ctm-card {
+    background: var(--ctm-bg);
+    border: 1px solid var(--ctm-border);
+    border-radius: 18px;
+    box-shadow: var(--ctm-shadow);
+    overflow: hidden;
+    animation: ctmPop .14s ease-out;
+}
+
+@keyframes ctmPop {
+    from {
+        transform: translateY(10px) scale(.985);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.ctm-header {
+    padding: 16px 16px 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--ctm-border);
+}
+
+.ctm-title {
+    color: var(--ctm-text);
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1.15;
+}
+
+.ctm-subtitle {
+    margin-top: 4px;
+    color: var(--ctm-muted);
+    font-size: 13px;
+}
+
+.ctm-x {
+    border: 1px solid var(--ctm-border);
+    background: transparent;
+    color: var(--ctm-text);
+    border-radius: 12px;
+    padding: 6px 10px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: .9;
+}
+
+.ctm-x:hover {
+    border-color: var(--ctm-border-strong);
+    opacity: 1;
+}
+
+.ctm-body {
+    padding: 14px 16px 8px;
+    max-height: min(64vh, 560px);
+    overflow: auto;
+}
+
+.ctm-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 720px) {
+    .ctm-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.ctm-tile {
+    position: relative;
+    border: 1px solid var(--ctm-border);
+    background: var(--ctm-tile-bg);
+    border-radius: 16px;
+    min-height: 96px;
+    padding: 12px 10px;
+    display: grid;
+    place-items: center;
+    gap: 8px;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.ctm-tile:hover {
+    transform: translateY(-1px);
+    border-color: var(--ctm-border-strong);
+    background: var(--ctm-tile-hover);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, .14);
+}
+
+.ctm-tile:focus-visible {
+    outline: 3px solid rgba(59, 130, 246, .28);
+    outline-offset: 2px;
+}
+
+.ctm-icon {
+    font-size: 26px;
+    color: var(--ctm-text);
+    /* если иконки из react-icons, станет виднее */
+    display: grid;
+    place-items: center;
+}
+
+.ctm-label {
+    color: var(--ctm-text);
+    font-size: 13px;
+    font-weight: 750;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.ctm-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--ctm-badge-text);
+    background: var(--ctm-badge-bg);
+    border: 1px solid var(--ctm-badge-border);
+}
+
+.ctm-tile.is-disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.ctm-footer {
+    padding: 12px 16px 16px;
+    border-top: 1px solid var(--ctm-border);
+}
+
+.ctm-cancel {
+    width: 100%;
+    border-radius: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--ctm-border-strong);
+    background: transparent;
+    color: var(--ctm-text);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.ctm-cancel:hover {
+    border-color: var(--ctm-text);
+}

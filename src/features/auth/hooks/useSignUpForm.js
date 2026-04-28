@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { signUpAPI } from "../../../api/authService";
 
-export function useSignUpForm(navigate, t) {
+export function useSignUpForm(navigate, t, redirectTo, subscribe) {
   const [email, setEmail] = useState("");
   const [questions, setQuestions] = useState([]);
   const [questionTemplates, setQuestionTemplates] = useState([]);
   const [step, setStep] = useState(1);
-  const [totalQuestions, setTotalQuestions] = useState(3);
+  const [totalQuestions, setTotalQuestions] = useState(null);
 
   const [selectedQuestion, setSelectedQuestion] = useState("");
   const [customQuestionVisible, setCustomQuestionVisible] = useState(false);
@@ -90,15 +90,23 @@ export function useSignUpForm(navigate, t) {
   };
 
   const handleSignup = async () => {
-  if (!email.trim()) {
-    toast.error(t("signup.toast_email_required"), { position: "top-right" });
-    return;
-  }
-  try {
-    const message = await signUpAPI(email, entriesList);
-    toast.success(message, { position: "top-right" });
-    navigate("/email-verification-sent?email=" + encodeURIComponent(email));
-  } catch (error) {
+    if (!email.trim()) {
+      toast.error(t("signup.toast_email_required"), { position: "top-right" });
+      return;
+    }
+
+    try {
+      const message = await signUpAPI(email, entriesList);
+      toast.success(message, { position: "top-right" });
+
+      const u = new URL("/email-verification-sent", window.location.origin);
+      u.searchParams.set("email", email);
+
+      if (redirectTo) u.searchParams.set("next", redirectTo); 
+      if (subscribe === "true") u.searchParams.set("subscribe", "true");
+
+      navigate(u.pathname + u.search, { replace: true });
+    } catch (error) {
       const messageKey = error.response?.data?.message || error.message;
 
       if (messageKey?.startsWith("signup.")) {
@@ -107,7 +115,8 @@ export function useSignUpForm(navigate, t) {
         toast.error(messageKey || t("auth.general_error"), { position: "top-right" });
       }
     }
-};
+  };
+
 
   return {
     email,

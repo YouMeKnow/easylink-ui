@@ -1,11 +1,16 @@
 {
   "back": "Back to Profile",
-  "back_short" : "Back",
-  "title": "Create Your Digital Card",
+  "back_short": "Back",
+  "title": "Create Your Vibe",
   "type_label": "Card Type",
   "types": {
     "business": "Business",
     "personal": "Personal",
     "event": "Other"
+  },
+  "types_hint": {
+    "business": "for shops & services",
+    "personal": "your profile & contacts",
+    "event": "schedule, location, guests"
   }
 }

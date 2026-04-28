@@ -8,7 +8,7 @@
   "step1_placeholder": "you@example.com",
   "step1_next": "Suivant",
   "step2_info": "Combien de memory locks voulez-vous ajouter ? Plus = plus sûr !",
-  "step2_label": "Choisissez le nombre de memory locks :",
+  "step2_label": "Choisissez le nombre de memory locks",
   "step3_info": "Inventez une question dont vous seul connaissez la réponse. Elle sera utilisée pour une connexion sans mot de passe !",
   "step3_question": "Question",
   "step3_custom": "Écrire la vôtre",
@@ -32,5 +32,28 @@
   "toast_fail": "Échec de l’inscription",
   "unknown_error": "Un problème est survenu. Veuillez réessayer.",
   "verification_already_sent": "L’email de vérification a déjà été envoyé. Veuillez vérifier votre boîte mail.",
-  "account_already_exists": "Ce compte existe déjà. Essayez de vous connecter."
+  "account_already_exists": "Ce compte existe déjà. Essayez de vous connecter.",
+  "finish_title": "Vérifiez et créez votre compte",
+  "finish_info": "Ces questions serviront à une connexion sécurisée sans mot de passe. Vous pourrez les modifier ultérieurement.",
+    "password_signup": {
+    "title": "Créer un compte",
+    "subtitle": "Inscris-toi avec un mot de passe. Tu pourras activer les Memory Locks plus tard.",
+    "email_label": "E-mail",
+    "email_placeholder": "ymk@example.com",
+    "password_label": "Mot de passe",
+    "password_placeholder": "Au moins 8 caractères",
+    "password_hint": "Utilise 8+ caractères.",
+    "cta": "Créer un compte",
+    "cta_loading": "Création...",
+    "footer_have_account": "Tu as déjà un compte ?",
+    "footer_login": "Se connecter",
+    "hero_alt": "Inscription",
+    "toast": {
+      "verify_email": "Vérifie ton e-mail pour confirmer ton compte !",
+      "signup_failed": "Échec de l’inscription"
+    },
+    "errors": {
+      "signup_failed_status": "Échec de l’inscription : {{status}}"
+    }
+  }
 }

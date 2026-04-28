@@ -1,0 +1,255 @@
+/* ContactTypePanel.css */
+
+/* ---------- tokens ---------- */
+:root {
+  --ctp-surface: rgba(255, 255, 255, 0.85);
+  --ctp-border: rgba(15, 23, 42, 0.08);
+  --ctp-border-strong: rgba(15, 23, 42, 0.15);
+  --ctp-text: rgba(15, 23, 42, 0.92);
+  --ctp-muted: rgba(15, 23, 42, 0.62);
+  --ctp-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
+
+  --ctp-tile: rgba(255, 255, 255, 0.6);
+  --ctp-tile-hover: rgba(255, 255, 255, 0.95);
+
+  --ctp-active-border: rgba(16, 185, 129, 0.4);
+  --ctp-active-shadow: 0 12px 32px -8px rgba(16, 185, 129, 0.25);
+
+  --ctp-meta-bg: rgba(255, 255, 255, 0.5);
+  --ctp-meta-border: rgba(0, 0, 0, 0.06);
+  --ctp-meta-text: #111827;
+
+  --ctp-meta-active-bg: #10b981;
+  --ctp-meta-active-border: #059669;
+  --ctp-meta-active-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  --ctp-surface: rgba(17, 24, 39, 0.8);
+  --ctp-border: rgba(255, 255, 255, 0.08);
+  --ctp-border-strong: rgba(255, 255, 255, 0.15);
+  --ctp-text: rgba(255, 255, 255, 0.92);
+  --ctp-muted: rgba(255, 255, 255, 0.62);
+  --ctp-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.5);
+
+  --ctp-tile: rgba(255, 255, 255, 0.03);
+  --ctp-tile-hover: rgba(255, 255, 255, 0.08);
+
+  --ctp-meta-bg: rgba(255, 255, 255, 0.05);
+  --ctp-meta-border: rgba(255, 255, 255, 0.08);
+  --ctp-meta-text: rgba(255, 255, 255, 0.86);
+
+  --ctp-meta-active-bg: rgba(16, 185, 129, 0.9);
+  --ctp-meta-active-border: rgba(16, 185, 129, 1);
+  --ctp-meta-active-text: #082f23;
+}
+
+/* ---------- panel ---------- */
+.ctp {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 18px;
+  border: 1px solid var(--ctp-border);
+  background: var(--ctp-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--ctp-shadow);
+  padding: 12px; /* compact */
+  color: var(--ctp-text);
+}
+
+.ctp__head {
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+
+.ctp__title {
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  color: var(--ctp-text);
+}
+
+.ctp__sub {
+  font-size: 11.5px;
+  color: var(--ctp-muted);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* ---------- grid ---------- */
+.ctp__grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr)); 
+  gap:6px;
+}
+
+/* ---------- tile ---------- */
+.ctp__tile {
+  position: relative;
+  border: 1px solid var(--ctp-border);
+  background: var(--ctp-tile);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  padding:8px 6px 7px;
+  min-height:78px;    
+  border-radius:14px;
+
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  color: var(--ctp-text);
+
+  opacity: 0;
+  animation: tileFadeIn 0.65s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes tileFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* stagger delays */
+.ctp__tile:nth-child(1) { animation-delay: 0.05s; }
+.ctp__tile:nth-child(2) { animation-delay: 0.09s; }
+.ctp__tile:nth-child(3) { animation-delay: 0.13s; }
+.ctp__tile:nth-child(4) { animation-delay: 0.17s; }
+.ctp__tile:nth-child(5) { animation-delay: 0.21s; }
+.ctp__tile:nth-child(6) { animation-delay: 0.25s; }
+.ctp__tile:nth-child(7) { animation-delay: 0.29s; }
+.ctp__tile:nth-child(8) { animation-delay: 0.33s; }
+.ctp__tile:nth-child(9) { animation-delay: 0.37s; }
+
+.ctp__tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px -10px rgba(0, 0, 0, 0.14);
+  border-color: var(--ctp-border-strong);
+  background: var(--ctp-tile-hover);
+  z-index: 1;
+}
+
+.ctp__tile:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 2px;
+}
+
+.ctp__tile.is-active {
+  border-color: var(--ctp-active-border);
+  box-shadow: var(--ctp-active-shadow);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="dark"] .ctp__tile.is-active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- icon ---------- */
+.ctp__icon {
+  font-size: 22px;
+  display: grid;
+  place-items: center;
+  color: var(--ctp-text);
+  margin-top: 2px;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ctp__tile:hover .ctp__icon {
+  transform: scale(1.08);
+}
+
+.ctp__icon svg {
+  color: currentColor;
+  fill: currentColor;
+}
+
+/* ---------- label ---------- */
+.ctp__label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.1;
+  color: var(--ctp-text);
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* ---------- meta ---------- */
+.ctp__meta {
+  position: static;
+  margin-top: 6px;
+
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 999px;
+
+  background: var(--ctp-meta-bg);
+  border: 1px solid var(--ctp-meta-border);
+  color: var(--ctp-meta-text);
+
+  transition: all 0.3s ease;
+}
+
+.ctp__tile.is-active .ctp__meta {
+  background: var(--ctp-meta-active-bg);
+  border-color: var(--ctp-meta-active-border);
+  color: var(--ctp-meta-active-text);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 980px){
+  .ctp__grid{ grid-template-columns:repeat(6,minmax(0,1fr)); }
+}
+
+@media (max-width: 640px){
+  .ctp__grid{ grid-template-columns:repeat(4,minmax(0,1fr)); }
+}
+
+/* --- balanced 4-col layout (not squished) --- */
+
+.ctp__grid{
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;                
+}
+
+.ctp__tile{
+  padding: 10px 7px 9px;    
+  min-height: 92px;        
+  border-radius: 15px;
+}
+
+.ctp__icon{
+  font-size: 24px;       
+  margin-top: 2px;
+}
+
+.ctp__label{
+  font-size: 10.75px;      
+  margin-top: 3px;
+  line-height: 1.1;
+}
+
+.ctp__meta{
+  margin-top: 7px;
+  font-size: 9.5px;
+  padding: 3px 9px;       
+}
+
+.ctp__tile:hover{
+  transform: translateY(-2px);
+}
+
+/* ContactTypePicker.css */
+.ctp-drawer{
+  width: 340px; 
+}

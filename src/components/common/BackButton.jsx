@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import "./BackButton.css";
 
 export default function BackButton({
   to = "/",
@@ -10,6 +11,7 @@ export default function BackButton({
   style = {},
 }) {
   const navigate = useNavigate();
+
   let nsName = ns;
   let tKey = labelKey;
 
@@ -31,31 +33,28 @@ export default function BackButton({
   return (
     <button
       type="button"
-      className={`btn btn-outline-secondary d-flex align-items-center ${className}`}
-      style={{
-        borderRadius: 12,
-        fontWeight: 500,
-        boxShadow: "0 2px 8px rgba(70,110,255,0.06)",
-        gap: 6,
-        ...style,
-      }}
+      className={`backbtn ${className}`}
+      style={style}
       onClick={() => navigate(to)}
-      aria-label={text}
+      aria-label={typeof text === "string" ? text : undefined}
     >
       <svg
-        width="18"
-        height="18"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
+        className="backbtn__icon"
         viewBox="0 0 20 20"
-        style={{ marginRight: 6, marginLeft: -3 }}
         aria-hidden="true"
         focusable="false"
       >
-        <path d="M13 5l-5 5 5 5" />
+        <path
+          d="M12.5 4.5L7 10l5.5 5.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
-      {text}
+
+      <span className="backbtn__text">{text}</span>
     </button>
   );
 }

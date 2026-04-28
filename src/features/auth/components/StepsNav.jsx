@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import "./StepsNav.css";
 
 export default function StepsNav({
   questions = [],

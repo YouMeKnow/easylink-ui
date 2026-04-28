@@ -1,0 +1,25 @@
+<svg width="1440" height="520" viewBox="0 0 1440 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- wave 1 -->
+  <path d="M0 260
+       C 180 200, 360 340, 540 260
+       C 720 180, 900 340, 1080 260
+       C 1260 180, 1440 300, 1440 300" stroke="white" stroke-opacity="0.22" stroke-width="1.2" fill="none"></path>
+
+  <!-- wave 2 -->
+  <path d="M0 300
+       C 180 240, 360 380, 540 300
+       C 720 220, 900 380, 1080 300
+       C 1260 220, 1440 340, 1440 340" stroke="white" stroke-opacity="0.16" stroke-width="1" fill="none"></path>
+
+  <!-- wave 3 -->
+  <path d="M0 340
+       C 180 280, 360 420, 540 340
+       C 720 260, 900 420, 1080 340
+       C 1260 260, 1440 380, 1440 380" stroke="white" stroke-opacity="0.12" stroke-width="0.9" fill="none"></path>
+
+  <!-- wave 4 (subtle depth) -->
+  <path d="M0 380
+       C 180 320, 360 460, 540 380
+       C 720 300, 900 460, 1080 380
+       C 1260 300, 1440 420, 1440 420" stroke="white" stroke-opacity="0.08" stroke-width="0.8" fill="none"></path>
+</svg>

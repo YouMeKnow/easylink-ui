@@ -3,24 +3,35 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { usePersonalVibeForm } from "./usePersonalVibeForm";
+import VibeCard from "@/features/vibes/card/components/VibeCard";
 
-import { VibePreviewPane } from "@/components/common/preview";
+import InfoBlockTypeModal from "@/features/vibes/components/modals/InfoBlockTypeModal";
+import PERSONAL_BLOCK_TYPES from "@/data/infoBlockTypes/personal"; 
 
-import ContactTypeModal from "@/features/vibes/components/Modals/ContactTypeModal";
-import PersonalInfoBlockModal from "@/features/vibes/components/Modals/PersonalInfoBlockModal";
+import useContactTypePicker from "@/features/vibes/contacts/hooks/useContactTypePicker";
+import ContactTypePicker from "@/features/vibes/contacts/components/ContactTypePicker/ContactTypePicker";
+import CenterModal from "@/components/ui/CenterModal/CenterModal";
+
+import VibeFormLayout from "@/features/vibes/components/layouts/VibeFormLayout/VibeFormLayout";
+
+// helper: UUID v1-5
+const isUUID = (s) =>
+  typeof s === "string" &&
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    s
+  );
 
 export default function PersonalVibeForm({
   initialData = {},
   mode = "create",
   onSave,
   onCancel,
+  maxCardWidth = 420
 }) {
   const navigate = useNavigate();
-  const { t } = useTranslation("personal_form");
+  const { t } = useTranslation(["personal_form", "common"]);
 
-  const [typeIndex, setTypeIndex] = React.useState(null);
   const [refocusIndex, setRefocusIndex] = React.useState(null);
-  const [showModal, setShowModal] = React.useState(false);
   const [showBlockModal, setShowBlockModal] = React.useState(false);
 
   const {
@@ -41,106 +52,133 @@ export default function PersonalVibeForm({
     removeBlock,
     handleSubmit,
   } = usePersonalVibeForm({ navigate, initialData, mode, onSave, onCancel });
-  const isUUID = (s) =>
-    typeof s === "string" &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-      s
-    );
+
+  const safeId =
+    mode === "edit" && isUUID(initialData?.id) ? initialData.id : undefined;
+  const ownerActionsEnabled = Boolean(safeId);
+
+  // ----- refocus helper -----
+  const refocusAt = React.useCallback((index) => {
+    setRefocusIndex({ index, nonce: Date.now() });
+    Promise.resolve().then(() => setRefocusIndex(null));
+  }, []);
+
+  // ----- shared contact picker (open/close/toggle/pick) -----
+  const contactPicker = useContactTypePicker({
+    contacts,
+    setContacts,
+    onRefocus: refocusAt,
+  });
+
   return (
-    <div
-      className="d-flex flex-column gap-3 align-items-center justify-content-start w-100"
-      style={{
-        maxWidth: 1200,
-        width: "100%",
-        margin: "0 auto",
-        padding: "0 20px",
-      }}
-    >
-      <div className="d-flex gap-2 w-100" style={{ maxWidth: 420 }}>
-        {mode === "edit" && (
+    <VibeFormLayout
+      maxWidth={1200}
+      rightOpen={contactPicker.open}
+      rightWidth={320}
+      gap={12}
+      topActions={
+        <div className="cv-top-actions">
+          {mode === "edit" && (
+            <button
+              type="button"
+              className="cv-btn cv-btn--ghost"
+              onClick={onCancel}
+              disabled={loading}
+            >
+              {t("cancel")}
+            </button>
+          )}
+
           <button
             type="button"
-            className="btn btn-outline-secondary w-50"
-            onClick={onCancel}
+            className="cv-btn cv-btn--primary"
+            onClick={handleSubmit}
             disabled={loading}
           >
-            {t("cancel")}
+            {loading
+              ? mode === "edit"
+                ? t("saving")
+                : t("creating")
+              : mode === "edit"
+                ? t("save_button")
+                : t("create_button")}
           </button>
-        )}
-        <button
-          type="button"
-          className="btn btn-primary w-100"
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {loading
-            ? mode === "edit"
-              ? t("saving")
-              : t("creating")
-            : mode === "edit"
-            ? t("save_button")
-            : t("create_button")}
-        </button>
-      </div>
-      {/* editing — preview in editMode */}
-      <VibePreviewPane
-        id={mode === "edit" ? initialData?.id : undefined}
-        name={name}
-        description={description}
-        photo={photo}
-        contacts={contacts}
-        extraBlocks={extraBlocks}
-        type="PERSONAL"
-        editMode={true}
-        ownerActionsEnabled={isUUID(initialData?.id)}
-        onChangeName={setName}
-        onChangeDescription={setDescription}
-        onChangePhoto={setPhoto}
-        resumeEditAt={refocusIndex}
-        onOpenContactPicker={(idx) => {
-          setTypeIndex(Number.isInteger(idx) ? idx : null);
-          setShowModal(true);
-        }}
-        onRemoveContact={(idx) => removeContact(idx)}
-        onChangeContactValue={(idx, val) => handleContactChange(idx, val)}
-        onBlockChange={(i, v) => handleBlockChange(i, v)}
-        onBlockRemove={(i) => removeBlock(i)}
-        onOpenBlockPicker={() => setShowBlockModal(true)}
-      />
-      {/* contacts */}
-      {showModal && (
-        <ContactTypeModal
+        </div>
+      }
+      right={
+        /* DESKTOP ONLY */
+        <div className="only-desktop">
+          <ContactTypePicker
+            open={contactPicker.open}
+            mode={contactPicker.mode}                
+            typeIndex={contactPicker.typeIndex}
+            contacts={contacts}
+            onToggleType={contactPicker.onSelectType}
+            onClose={contactPicker.closePicker}
+            titlePick={t("common:pick_type_for_contact")}
+            titleToggle={t("common:toggle_contacts")}
+            doneText={t("common:done")}
+          />
+        </div>
+      }
+    >
+      {/* CARD */}
+      <div style={{ minWidth: 0 }}>
+        <VibeCard
+          id={safeId}
+          name={name}
+          description={description}
+          photo={photo}
           contacts={contacts}
-          onClose={() => {
-            setShowModal(false);
-            setTypeIndex(null);
-          }}
-          onSelect={(typeKey) => {
-            if (typeIndex != null) {
-              // contact type
-              setContacts((prev) => {
-                const updated = [...prev];
-                updated[typeIndex] = { ...updated[typeIndex], type: typeKey };
-                return updated;
-              });
-              setRefocusIndex({ index: typeIndex, nonce: Date.now() });
-              Promise.resolve().then(() => setRefocusIndex(null));
-            } else {
-              const newIndex = contacts.length;
-              setContacts((prev) => [...prev, { type: typeKey, value: "" }]);
-              setRefocusIndex({ index: newIndex, nonce: Date.now() });
-              Promise.resolve().then(() => setRefocusIndex(null));
-            }
-            setShowModal(false);
-            setTypeIndex(null);
-          }}
+          extraBlocks={extraBlocks}
+          type="PERSONAL"
+          editMode={true}
+          ownerActionsEnabled={ownerActionsEnabled}
+          resumeEditAt={refocusIndex}
+          onChangeName={setName}
+          onChangeDescription={setDescription}
+          onChangePhoto={setPhoto}
+          onOpenContactPicker={contactPicker.openPicker}
+          onRemoveContact={(idx) => removeContact(idx)}
+          onChangeContactValue={(idx, val) => handleContactChange(idx, val)}
+          onBlockChange={(i, v) => handleBlockChange(i, v)}
+          onBlockRemove={(i) => removeBlock(i)}
+          onOpenBlockPicker={() => setShowBlockModal(true)}
+          maxCardWidth={maxCardWidth} 
         />
-      )}
-      {/* extra blocks */}
+      </div>
+
+      <div className="only-mobile">
+        <CenterModal
+          open={contactPicker.open}
+          onClose={contactPicker.closePicker}
+          title={
+            contactPicker.typeIndex != null
+              ? t("common:pick_type_for_contact")
+              : t("common:toggle_contacts")
+          }
+        >
+          <ContactTypePicker
+            open={true}
+            mode={contactPicker.mode}
+            typeIndex={contactPicker.typeIndex}
+            contacts={contacts}
+            onToggleType={contactPicker.onSelectType}
+            onClose={contactPicker.closePicker}
+            titlePick={t("common:pick_type_for_contact")}
+            titleToggle={t("common:toggle_contacts")}
+            doneText={t("common:done")}
+          />
+        </CenterModal>
+      </div>
+      
+      {/* EXTRA BLOCK MODAL */}
       {showBlockModal && (
-        <PersonalInfoBlockModal
+        <InfoBlockTypeModal
+          types={PERSONAL_BLOCK_TYPES}
           extraBlocks={extraBlocks}
           onClose={() => setShowBlockModal(false)}
+          singletons={PERSONAL_BLOCK_TYPES.map((x) => String(x.key).trim().toLowerCase())}
           onSelect={(block) => {
             setExtraBlocks((prev) => [
               ...prev,
@@ -155,6 +193,6 @@ export default function PersonalVibeForm({
           }}
         />
       )}
-    </div>
+    </VibeFormLayout>
   );
 }

@@ -1,0 +1,54 @@
+.myvibe-card {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+}
+
+.myvibe-card h5 { color: var(--text); }
+
+.myvibe-card .text-muted {
+  color: var(--text-weak) !important;
+}
+
+/* type label */
+.myvibe-card__type {
+  color: var(--accent-from);
+}
+
+/* share button */
+.myvibe-card__share {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  border-radius: 999px;
+  padding: 6px 10px;
+
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  border: 1px solid color-mix(in oklab, var(--stroke) 70%, transparent);
+
+  color: var(--accent-from);
+  box-shadow: var(--shadow-sm);
+  transition: transform .14s, background .14s, box-shadow .14s;
+}
+
+.myvibe-card__share svg {
+  stroke: var(--accent-from);
+  fill: none;
+  stroke-width: 2;
+}
+
+.myvibe-card__share:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, var(--surface) 85%, transparent);
+}
+.myvibe-card__share svg,
+.myvibe-card__share svg * {
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+.myvibe-card__share svg {
+  color: var(--share-icon);  
+}

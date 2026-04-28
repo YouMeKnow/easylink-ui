@@ -1,0 +1,140 @@
+/* overlay */
+.subs-modal__overlay {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* гарантированно перебиваем bootstrap modal-content */
+.subs-modal__content.modal-content {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--stroke) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius) !important;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  overflow: hidden;
+}
+
+/* header/footer sticky */
+.subs-modal__header.modal-header,
+.subs-modal__footer.modal-footer {
+  background: transparent !important;
+  border-color: var(--stroke) !important;
+}
+
+.subs-modal__body {
+  max-height: 72vh;
+  overflow: auto;
+}
+
+/* title helpers */
+.subs-modal__count {
+  color: var(--text-weak);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.subs-modal__sub {
+  color: var(--text-weak);
+  font-size: 12px;
+}
+
+/* search */
+.subs-modal__search {
+  width: 320px;
+  max-width: 46vw;
+}
+
+/* input group pieces */
+.subs-modal__searchIcon.input-group-text {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--text-weak) !important;
+  border: 1px solid var(--stroke) !important;
+}
+
+:root[data-theme="light"] .subs-modal__searchIcon.input-group-text {
+  background: rgba(15, 18, 34, 0.04) !important;
+}
+
+.subs-modal__searchInput.form-control {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--stroke) !important;
+}
+
+:root[data-theme="light"] .subs-modal__searchInput.form-control {
+  background: rgba(15, 18, 34, 0.03) !important;
+}
+
+.subs-modal__searchInput.form-control::placeholder {
+  color: var(--text-weak);
+  opacity: 0.75;
+}
+
+/* clear button */
+.subs-modal__clearBtn.btn {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--text-weak) !important;
+  border: 1px solid var(--stroke) !important;
+  padding: 0.25rem 0.55rem;
+  line-height: 1;
+}
+
+:root[data-theme="light"] .subs-modal__clearBtn.btn {
+  background: rgba(15, 18, 34, 0.04) !important;
+}
+
+/* focus */
+.subs-modal__searchInput.form-control:focus,
+.subs-modal__searchIcon.input-group-text:focus-within {
+  box-shadow: 0 0 0 0.2rem rgba(var(--accent-to), 0.18) !important;
+}
+
+/* grid compact */
+.subs-modal__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 980px;
+  margin: 0 auto;
+  gap: 14px 12px;
+}
+
+.subs-modal__cell {
+  flex: 0 1 220px;
+}
+
+/* make btn-close visible in dark */
+:root[data-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%);
+  opacity: 0.8;
+}
+:root[data-theme="dark"] .btn-close:hover {
+  opacity: 1;
+}
+
+@media (max-width: 575px) {
+  .subs-modal__search {
+    width: 100%;
+    max-width: 100%;
+  }
+  .subs-modal__cell {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .subs-modal__content.modal-content {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .subs-modal__content.modal-content {
+    background: rgba(18, 20, 28, 0.92) !important;
+  }
+
+  :root[data-theme="light"] .subs-modal__content.modal-content {
+    background: rgba(255, 255, 255, 0.96) !important;
+  }
+}

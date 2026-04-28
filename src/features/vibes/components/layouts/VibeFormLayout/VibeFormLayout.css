@@ -1,0 +1,102 @@
+/* VibeFormLayout.css — mobile stable + desktop centered card + right near card */
+
+:root{
+  --card-max: 480px;   /* реальная ширина VibeCard */
+  --side-gap: 16px;    /* насколько правее появляется right */
+}
+
+.vfl{
+  width: 100%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  /* ВАЖНО: stretch, иначе могут быть shrink-эффекты */
+  align-items: stretch;
+}
+
+/* top actions */
+.vfl__top{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* ===== MOBILE FIRST ===== */
+.vfl__grid{
+  width: 100%;
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--vfl-gap, 12px);
+  align-items: start;
+}
+
+.vfl__main,
+.vfl__right{
+  min-width: 0;
+}
+
+/* MOBILE: не flex! иначе на некоторых вложенных flex/tab структурах схлопывается */
+.vfl__main{
+  width: 100%;
+  display: block;
+}
+
+/* пусть главный контент занимает ширину контейнера */
+.vfl__main > *{
+  width: 100%;
+  min-width: 0;
+}
+
+/* mobile: right hidden (ты открываешь CenterModal) */
+.vfl__right{
+  display: none;
+}
+
+/* small phones padding */
+@media (max-width: 480px){
+  .vfl{
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 992px){
+  .vfl__grid{
+    /* тут уже можно flex, т.к. right позиционируем рядом */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .vfl__main{
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    justify-content: center;
+  }
+
+  .vfl__right{
+    display: block;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+
+    /* рядом с карточкой: центр + половина карточки + gap */
+    left: 50%;
+    transform: translateX(calc((var(--card-max) / 2) + var(--side-gap)));
+
+    width: var(--vfl-right, 320px);
+  }
+
+  .vfl__grid[data-right-open="0"] .vfl__right{
+    display: none;
+  }
+}

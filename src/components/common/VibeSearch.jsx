@@ -1,18 +1,21 @@
-// VibeSearch.jsx
-import React, { useState, useEffect, useRef } from "react"; // + useEffect, useRef
+// src/features/.../VibeSearch.jsx
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { trackEvent } from "@/services/amplitude";
+import { Hash, Search } from "lucide-react";
+import "./VibeSearch.css";
 
 export default function VibeSearch({ autoFocus = false }) {
   const { t } = useTranslation("vibe_search");
   const navigate = useNavigate();
+
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const inputRef = useRef(null);
 
+  const inputRef = useRef(null);
   const isValid = /^\d{4,5}$/.test(code);
 
   useEffect(() => {
@@ -29,15 +32,19 @@ export default function VibeSearch({ autoFocus = false }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
     if (!isValid) {
       setError(t("invalid_code"));
       trackEvent("Vibe Search Failed", { reason: "invalid_format", code });
       return;
     }
+
     try {
       setLoading(true);
       trackEvent("Vibe Search Submit", { code_length: code.length });
+
       const res = await axios.get(`/api/v3/vibes/visibility/${code}`);
+
       trackEvent("Vibe Search Success", { code, id: res?.data?.id });
       navigate(`/view/${res.data.id}`);
     } catch (err) {
@@ -51,54 +58,54 @@ export default function VibeSearch({ autoFocus = false }) {
   return (
     <form
       onSubmit={onSubmit}
-      className="w-100"
-      style={{ maxWidth: 600, margin: "0 auto" }}
+      className="vibe-search"
       noValidate
       aria-label={t("label", "Vibe code search")}
     >
-      <div className="d-flex justify-content-center align-items-stretch" style={{ gap: 12 }}>
+      <div className="vibe-search__integrated-bar">
+        <div className="vibe-search__icon-wrapper">
+          <Hash size={22} className="vibe-search__hash-icon" />
+        </div>
+
         <input
           id="vibeCode"
-          ref={inputRef}                
-          className="form-control"
+          ref={inputRef}
+          className="vibe-search__input" 
           type="tel"
           inputMode="numeric"
           pattern="[0-9]*"
           maxLength={5}
-          placeholder={t("placeholder")}
+          placeholder={t("placeholder", "Enter 5-digit code")}
           value={code}
           onChange={onChange}
           aria-describedby="vibeSearchHint"
           aria-invalid={!!error}
-          style={{ minWidth: 0 }}
           autoComplete="off"
         />
+
         <button
           type="submit"
-          className="btn btn-primary"
+          className="vibe-search__submit-btn"     
           disabled={loading || !isValid}
           aria-busy={loading ? "true" : "false"}
-          style={{ whiteSpace: "nowrap" }}
         >
           {loading ? (
-            <>
-              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
-              {t("searching", "Searching…")}
-            </>
+            <span className="vibe-search__spinner" />
           ) : (
-            t("button")
+            <Search size={24} strokeWidth={2.5} />
           )}
         </button>
       </div>
 
-      <div
-        id="vibeSearchHint"
-        className={`mt-2 small ${error ? "text-danger" : "text-muted"}`}
-        style={{ minHeight: "1.2em" }}
-        aria-live="polite"
-      >
-        {error}
-      </div>
+      {error && (
+        <div
+          id="vibeSearchHint"
+          className="vibe-search__error"
+          aria-live="polite"
+        >
+          {error}
+        </div>
+      )}
     </form>
   );
 }

@@ -3,16 +3,39 @@ import { FaGlobe } from "react-icons/fa";
 import iconMap from "../../../data/contactIcons";
 import { getContactLink } from "../../../data/contactLinks";
 
-const getButtonColor = (type) => {
-  switch (type) {
-    case "instagram": return "linear-gradient(45deg, #fd5, #f54394, #fc6736)";
-    case "whatsapp":  return "#eaffea";
-    case "telegram":  return "#e8f7fe";
-    case "phone":     return "#e9f0fd";
-    case "website":   return "#f7f8fa";
-    case "email":     return "#f7f8fa";
-    default:          return "#f5f5f5";
-  }
+const CONTACT_INPUT_META = {
+  phone: {
+    placeholder: "+1 647 123 4567",
+    hint: "Enter a phone number with country code",
+  },
+  email: {
+    placeholder: "name@example.com",
+    hint: "Enter your email address",
+  },
+  website: {
+    placeholder: "https://yourwebsite.com",
+    hint: "Paste a full website link",
+  },
+  instagram: {
+    placeholder: "@username",
+    hint: "Paste your Instagram username or link",
+  },
+  telegram: {
+    placeholder: "@username",
+    hint: "Paste your Telegram username or link",
+  },
+  whatsapp: {
+    placeholder: "+1 555 123 4567",
+    hint: "Enter phone number for WhatsApp",
+  },
+  linkedin: {
+    placeholder: "linkedin.com/in/username",
+    hint: "Paste your LinkedIn profile link",
+  },
+  github: {
+    placeholder: "github.com/username",
+    hint: "Paste your GitHub profile",
+  },
 };
 
 function toStr(val) {
@@ -21,165 +44,225 @@ function toStr(val) {
   return String(val ?? "");
 }
 
+function formatPhoneForDisplay(value) {
+  const raw = String(value || "").trim();
+  const digits = raw.replace(/\D/g, "");
+
+  if (!digits) return "";
+
+  if (digits.length === 11 && digits.startsWith("1")) {
+    const d = digits.slice(1);
+    return `+1 (${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6, 10)}`;
+  }
+
+  if (digits.length === 10) {
+    return `+1 (${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+  }
+
+  if (digits.length < 10) return raw;
+
+  return raw;
+}
+
+function formatUsername(value) {
+  const v = String(value || "").trim();
+  if (!v) return "";
+  return v.replace(/^@+/, ""); 
+}
+
+function getDisplayValue(type, value) {
+  const raw = toStr(value);
+
+  if (type === "phone") {
+    return formatPhoneForDisplay(raw);
+  }
+
+  if (type === "website") {
+    return formatWebsiteForDisplay(raw);
+  }
+
+  if (
+    type === "instagram" ||
+    type === "telegram" ||
+    type === "twitter" ||
+    type === "x"
+  ) {
+    return formatUsername(raw);
+  }
+
+  return raw;
+}
+
+function formatWebsiteForDisplay(value) {
+  let v = String(value || "").trim();
+  if (!v) return "";
+  v = v.replace(/^https?:\/\//i, "");
+  v = v.replace(/^www\./i, "");
+  v = v.split("/")[0];
+  return v;
+}
+
 export default function ContactButton({
   type,
   value,
   editMode = false,
   isEditing = false,
   editValue = "",
-  inputKey, 
+  inputKey,
   onStartEdit,
   onEditChange,
   onCommitEdit,
   onCancelEdit,
-  onChangeType, 
-  
+  onChangeType,
 }) {
   const icon = iconMap[type] || <FaGlobe />;
-  const color = getButtonColor(type);
-  const displayValue = toStr(value);
+  const displayValue = getDisplayValue(type, value);
   const isEmpty = !displayValue.trim();
-  const placeholder = "enter value";
+  const meta = CONTACT_INPUT_META[type] || {};
+  const placeholder = meta.placeholder || "Enter contact";
 
-  const baseStyle = {
-    minWidth: 140,
-    height: 44,
-    display: "flex",
-    alignItems: "center",
-    background: color,
-    borderRadius: 22,
-    boxShadow: "0 2px 8px #e9e9ee",
-    padding: "0 12px",
-    fontWeight: 500,
-    fontSize: 16,
-    color: "#222",
-    border: "none",
-    textDecoration: "none",
-    gap: 10,
-    overflow: "hidden",
-  };
-  const iconStyle = {
-    display: "flex",
-    alignItems: "center",
-    fontSize: 22,
-    minWidth: 24,
-    justifyContent: "center",
-  };
-  const textStyle = {
-    flex: 1,
-    minWidth: 0,
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-    overflow: "hidden",
-    lineHeight: "1.4",
-    marginLeft: 6,
-  };
+  // Class names for styling
+  const containerClass = [
+    "contact-btn",
+    `contact-btn--${type}`,
+    editMode ? "contact-btn--edit-mode" : "contact-btn--view-mode",
+    isEditing ? "contact-btn--is-editing" : "",
+    isEmpty ? "contact-btn--empty" : "",
+  ].filter(Boolean).join(" ");
 
-  //edit mode
+  // EDIT MODE (active input)
   if (editMode && isEditing) {
     const skipCommitRef = React.useRef(false);
+
     return (
-      <div className="contact-btn" style={{ ...baseStyle, cursor: "text" }}>
-        <span style={iconStyle}>{icon}</span>
+      <div
+        className={containerClass}
+        onMouseDown={() => (skipCommitRef.current = false)}
+      >
+        <span className="contact-btn__icon" aria-hidden="true">
+          {icon}
+        </span>
+
         <input
           key={inputKey}
           autoFocus
           value={editValue ?? ""}
           onChange={(e) => onEditChange?.(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") { e.preventDefault(); onCommitEdit?.(e); }
-            if (e.key === "Escape") { skipCommitRef.current = true; onCancelEdit?.(); }
+            if (e.key === "Enter") {
+              e.preventDefault();
+              onCommitEdit?.(e);
+            }
+            if (e.key === "Escape") {
+              skipCommitRef.current = true;
+              onCancelEdit?.();
+            }
           }}
           onBlur={() => {
-            if (skipCommitRef.current) { skipCommitRef.current = false; return; }
+            if (skipCommitRef.current) {
+              skipCommitRef.current = false;
+              return;
+            }
             onCommitEdit?.();
           }}
           placeholder={placeholder}
-          className="form-control form-control-sm"
-          style={{
-            ...textStyle,
-            border: "none",
-            background: "transparent",
-            boxShadow: "none",
-            padding: 0,
-            outline: "none",
-          }}
+          className="contact-btn__input"
         />
+
         {onChangeType && (
           <button
             type="button"
+            className="contact-btn__type-toggle"
             title="Change type"
-            onMouseDown={(e) => { 
-              e.preventDefault(); 
-              e.stopPropagation(); 
-              skipCommitRef.current = true; 
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              skipCommitRef.current = true;
             }}
             onClick={(e) => {
               e.stopPropagation();
-              onChangeType();  
-              setTimeout(() => { skipCommitRef.current = false; }, 0);
+              onChangeType();
+              setTimeout(() => {
+                skipCommitRef.current = false;
+              }, 0);
             }}
-            className="btn btn-light btn-sm"
-            style={{ padding: "2px 8px", borderRadius: 12, lineHeight: 1, marginLeft: 8 }}
           >
-            ↩
+            ⇄
           </button>
         )}
       </div>
     );
   }
 
+  // EDIT MODE (click to start)
   if (editMode) {
     return (
       <div
         role="button"
         tabIndex={0}
-        className={`contact-btn${isEditing ? " contact-btn--editing" : ""}`}
-        style={{ ...baseStyle, cursor: "text", position: "relative" }}
-        onClick={onStartEdit}
+        className={containerClass}
+        onClick={() => onStartEdit?.()}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") onStartEdit?.();
         }}
       >
-        <span style={iconStyle}>{icon}</span>
-        <span style={{ ...textStyle, color: isEmpty ? "#999" : "#222" }}>
+        <span className="contact-btn__icon" aria-hidden="true">
+          {icon}
+        </span>
+
+        <span className="contact-btn__text" title={isEmpty ? placeholder : displayValue}>
           {isEmpty ? placeholder : displayValue}
         </span>
 
         {onChangeType && (
           <button
             type="button"
-            title="Change type"
-            onClick={(e) => { e.stopPropagation(); onChangeType(); }}
-            className="btn btn-light btn-sm"
-            style={{
-              padding: "2px 8px",
-              borderRadius: 12,
-              lineHeight: 1,
-              position: "absolute",
-              right: 8,
-              top: 8,
+            className="contact-btn__type-toggle"
+            title="Change contact type"
+            aria-label="Change contact type"
+            onClick={(e) => {
+              e.stopPropagation();
+              onChangeType();
             }}
+            onMouseDown={(e) => e.stopPropagation()}
           >
-            ↩
+            ⇄
           </button>
         )}
       </div>
     );
   }
 
-  //view mode with link
-  const href = getContactLink(type, displayValue);
+  // VIEW MODE
+  const href = isEmpty ? null : getContactLink(type, displayValue);
+
+  if (!href) {
+    return (
+      <div className={`${containerClass} contact-btn--disabled`} title={placeholder}>
+        <span className="contact-btn__icon" aria-hidden="true">
+          {icon}
+        </span>
+        <span className="contact-btn__text">
+          {placeholder}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <a
-      className="contact-btn"
-      style={baseStyle}
+      className={containerClass}
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      title={displayValue}
     >
-      <span style={iconStyle}>{icon}</span>
-      <span style={textStyle}>{displayValue}</span>
+      <span className="contact-btn__icon" aria-hidden="true">
+        {icon}
+      </span>
+      <span className="contact-btn__text">
+        {displayValue}
+      </span>
     </a>
   );
 }

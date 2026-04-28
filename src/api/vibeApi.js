@@ -1,24 +1,29 @@
-// src/api/vibeApi.js
 import { apiFetch } from "@/api/apiFetch";
 
-// МОИ вайбы (правильный путь — /api/v3/vibes)
 export async function getUserVibes(init = {}) {
   const res = await apiFetch("/api/v3/vibes", { method: "GET", ...init });
   if (!res.ok) throw new Error("Failed to load vibes");
   return res.json();
 }
 
-// Вайб по ID
-export async function getVibe(id, init = {}) {
+export async function getOwnerVibe(id, init = {}) {
   const res = await apiFetch(`/api/v3/vibes/${encodeURIComponent(id)}`, {
     method: "GET",
     ...init,
   });
-  if (!res.ok) throw new Error("Failed to load vibe");
+  if (!res.ok) throw new Error("Failed to load owner vibe");
   return res.json();
 }
 
-// Создать
+export async function getPublicVibe(id, init = {}) {
+  const res = await apiFetch(`/api/v3/vibes/public/${encodeURIComponent(id)}`, {
+    method: "GET",
+    ...init,
+  });
+  if (!res.ok) throw new Error("Failed to load public vibe");
+  return res.json();
+}
+
 export async function createVibe(data, init = {}) {
   const res = await apiFetch("/api/v3/vibes", {
     method: "POST",
@@ -37,7 +42,6 @@ export async function createVibe(data, init = {}) {
   return res.json();
 }
 
-// Обновить
 export async function updateVibe(id, data, init = {}) {
   const res = await apiFetch(`/api/v3/vibes/${encodeURIComponent(id)}`, {
     method: "PUT",
@@ -48,7 +52,6 @@ export async function updateVibe(id, data, init = {}) {
   return res.json();
 }
 
-// Удалить
 export async function deleteVibe(id, init = {}) {
   const res = await apiFetch(`/api/v3/vibes/${encodeURIComponent(id)}`, {
     method: "DELETE",

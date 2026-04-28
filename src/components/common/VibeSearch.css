@@ -1,0 +1,120 @@
+/* VibeSearch.css - Professional Integrated Search Bar */
+
+.vibe-search {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vibe-search__integrated-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  background: color-mix(in srgb, var(--bg0) 50%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  border-radius: 99px; /* Pill shape */
+  padding: 6px 6px 6px 18px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+.vibe-search__integrated-bar:focus-within {
+  border-color: var(--ymk-primary, #6366f1);
+  background: color-mix(in srgb, var(--bg0) 80%, transparent);
+  box-shadow: 0 15px 40px -12px color-mix(in srgb, var(--ymk-primary, #6366f1) 20%, transparent);
+  transform: translateY(-1px);
+}
+
+.vibe-search__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-weak);
+  margin-right: 12px;
+  opacity: 0.8;
+}
+
+/* No !important needed here thanks to index.css base layer */
+.vibe-search__icon-wrapper svg {
+  color: inherit;
+}
+
+.vibe-search__input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text);
+  padding: 8px 0;
+  outline: none !important;
+}
+
+.vibe-search__input::placeholder {
+  color: var(--text-weak);
+  opacity: 0.5;
+}
+
+.vibe-search__submit-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ymk-primary, #6366f1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 0; 
+}
+
+/* No !important needed here thanks to index.css base layer */
+.vibe-search__submit-btn svg {
+  color: white;
+}
+
+.vibe-search__submit-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--ymk-primary, #6366f1) 30%, transparent);
+}
+
+.vibe-search__submit-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: var(--text-weak);
+}
+
+.vibe-search__error {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ef4444;
+  animation: fadeIn 0.3s ease;
+}
+
+.vibe-search__spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

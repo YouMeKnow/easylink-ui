@@ -1,0 +1,192 @@
+/* ContactTypePicker.css */
+
+.ctp-drawer {
+    /* sticky positioning handled by parent or context */
+    position: sticky;
+    top: 12px;
+
+    width: 300px;
+    border-radius: 24px;
+    /* Softened radius */
+
+    /* Smarter appearance animation */
+    /* IOS-like spring presentation */
+    animation: ctpAppear 0.5s cubic-bezier(0.25, 1, 0.35, 1) forwards;
+    transform-origin: top center;
+    will-change: transform, opacity;
+
+    /* backdrop hint if needed, though panel has it too */
+    /* This container mostly holds the layout, but let's give it a slight identity if separate from panel */
+}
+
+@keyframes ctpAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* header */
+.ctpwrap__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding: 0 4px;
+}
+
+.ctpwrap__hint {
+    font-weight: 700;
+    font-size: 14px;
+    color: rgba(15, 23, 42, 0.75);
+    letter-spacing: -0.01em;
+    transform: translateY(1px);
+    /* optical adjustment */
+}
+
+[data-theme="dark"] .ctpwrap__hint {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Close button (X) */
+.ctpwrap__x {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+    /* softer */
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    /* stronger blur */
+    -webkit-backdrop-filter: blur(8px);
+    color: #64748b;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.ctpwrap__x:hover {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.12);
+    transform: rotate(90deg) scale(1.1);
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ctpwrap__x:active {
+    transform: rotate(90deg) scale(0.92);
+}
+
+[data-theme="dark"] .ctpwrap__x {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .ctpwrap__x:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Done button */
+.ctpwrap__done {
+    width: 100%;
+    margin-top: 18px;
+    border-radius: 18px;
+    padding: 15px;
+
+    border: none;
+    background: #0f172a;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+    opacity: 0.96;
+}
+
+.ctpwrap__done:hover {
+    transform: translateY(-2px);
+    opacity: 1;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.2);
+}
+
+.ctpwrap__done:active {
+    transform: translateY(0);
+    scale: 0.98;
+}
+
+[data-theme="dark"] .ctpwrap__done {
+    background: #f8fafc;
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .ctpwrap__done:hover {
+    background: #ffffff;
+    box-shadow: 0 10px 28px rgba(255, 255, 255, 0.12);
+}
+
+.ctpwrap__x {
+    color: #0f172a;
+}
+
+.ctp-drawer {
+  z-index: 2;
+}
+
+.ctpwrap__x svg {
+  stroke: currentColor;
+}
+/* make header + close button always on top */
+.ctpwrap__top{
+  position: relative;
+  z-index: 50;
+}
+
+.ctpwrap__x{
+  position: relative;
+  z-index: 60;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* reset global button styles for this icon button */
+.ctpwrap__x {
+  padding: 0 !important;       
+  font-size: 0 !important;     
+  background: rgba(255,255,255,.5);
+  border: 1px solid rgba(0,0,0,.06);
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #0f172a;              
+}
+
+.ctpwrap__x svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+}
